@@ -18,6 +18,12 @@ const BOTONES_MANDO := {
 const NOMBRES_TECLAS := {KEY_ESCAPE: "Esc", KEY_SPACE: "Espacio", KEY_ENTER: "Enter"}
 
 var con_mando := false
+## Bloquea las acciones durante el fundido del bote.
+var en_travesia := false:
+	set(valor):
+		en_travesia = valor
+		if is_node_ready():
+			_actualizar_hud()
 var mapa_abierto := false:
 	set(valor):
 		mapa_abierto = valor
@@ -125,7 +131,7 @@ func _process(delta: float) -> void:
 ## Evita reutilizar la misma pulsación al volver a explorar.
 func ocupada() -> bool:
 	var ultimo_cierre := maxi(_ultimo_cierre, maxi(dialogo.cerrado_en, combate.cerrado_en))
-	return _en_menu_principal or mapa_abierto or _pausa.visible or dialogo.abierto or combate.visible or Time.get_ticks_msec() - ultimo_cierre < MARGEN_TRAS_CIERRE
+	return en_travesia or _en_menu_principal or mapa_abierto or _pausa.visible or dialogo.abierto or combate.visible or Time.get_ticks_msec() - ultimo_cierre < MARGEN_TRAS_CIERRE
 
 
 ## Suspende los atajos y el HUD hasta que el menú abra el mundo.
@@ -198,7 +204,7 @@ func _anotar_hito(encargo: Encargo, estado: int) -> void:
 
 
 func _actualizar_hud() -> void:
-	_explorando = not (_en_menu_principal or mapa_abierto or _pausa.visible or dialogo.visible or combate.visible)
+	_explorando = not (en_travesia or _en_menu_principal or mapa_abierto or _pausa.visible or dialogo.visible or combate.visible)
 	_atajos.visible = _explorando
 	_seguimiento.visible = _explorando
 	_aviso.visible = _explorando and not _accion.text.is_empty()

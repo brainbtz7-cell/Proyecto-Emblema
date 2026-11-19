@@ -22,7 +22,7 @@ Leé también `AGENTS.md`, `TRASPASO.md` y `LEEME.md`.
   de los Faros, pueblo y muelle (`mundo/salbruma/mision_de_la_voz.gd`,
   `trazado_salbruma.gd`, `elementos_de_salbruma.gd`). Probado con
   `herramientas/prueba_albor.gd`.
-- **Primera tanda de Puerto Albor — HECHA PERO SIN PROBAR A FONDO:**
+- **Primera tanda de Puerto Albor — PROBADA DE PUNTA A PUNTA:**
   - `encargos/puerto_albor_gruta_olvidada.tres` (Habitante de Albor): la gruta
     del Sendero de los Faros, bloqueada hasta aceptar el encargo
     (`mundo/bloqueo_de_encargo.gd`); se cumple al llegar al fondo
@@ -59,3 +59,13 @@ Textos de los encargos de Albor (el documento no trae sus diálogos), cantidad
 de arena (3), nombres "Barquero" y "Pescadora", modelo del Krabchio, la gruta,
 los faros, las casas, el texto de La Voz y los sonidos. Todo eso está anotado
 para reemplazarlo cuando el equipo lo defina.
+
+## Avance de Codex — tarea 1 terminada, 19/11/2026
+
+`herramientas/prueba_albor_encargos.gd` verifica ofertas simultáneas, viaje
+ida y vuelta, bloqueo de controles durante la travesía, arena única tras
+guardar/cargar, cinco cacerías y entregas, y entrada física a la gruta.
+Se corrigieron el duplicado de arena al cargar y la posibilidad de repetir
+la travesía durante su fundido. Importación sin errores ni advertencias,
+movimiento y encargo de Junco comprobados. Las capturas del islote, muelle
+y gruta se generaron con ventana y se revisaron. Sigue la tarea 2.

@@ -17,4 +17,4 @@ func _actualizar() -> void:
 	process_mode = Node.PROCESS_MODE_DISABLED if abierto else Node.PROCESS_MODE_INHERIT
 	for hijo in get_children():
 		if hijo is CollisionShape3D:
-			hijo.disabled = abierto
+			hijo.set_deferred("disabled", abierto)

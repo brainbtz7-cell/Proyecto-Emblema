@@ -211,6 +211,17 @@ El seguimiento mantiene su ancho y ajusta solo el alto al cambiar su mínimo.
 No usar `reset_size()` allí: achica el ancho antes de envolver el texto y deja
 un alto obsoleto que puede llegar al borde inferior de la pantalla.
 
+Prueba de la primera tanda de Albor:
+
+    "$G" --headless --path "$P" -s herramientas/prueba_albor_encargos.gd
+
+Valida el viaje y sus controles, las tres ofertas, recolección persistente,
+cinco cacerías, gruta y entrega. Con ventana y `-- <carpeta_de_salida>` guarda
+las vistas del cayo y la gruta. Estas capturas se revisaron el 19/11/2026.
+Las pruebas de movimiento y encargo terminaron correctamente, con el aviso
+previo de cuatro instancias ObjectDB al cerrar. La importación terminó con
+cero errores y advertencias.
+
 ## 7. Cosas que no son obvias
 
 - **El píxel no pasa de 10 píxeles de pantalla.** Godot limita

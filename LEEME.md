@@ -164,8 +164,24 @@ mientras la misión esté en curso.
 - Prueba: `herramientas/prueba_albor.gd`.
 - **Provisional:** el texto de la visión (solo la descripción funcional del
   documento), los faros y las casas genéricas, y que el encargo se cierre al
-  llegar. Falta la investigación en el pueblo (encargos de Albor, gruta, isla
-  y profeta).
+  llegar. Falta la investigación del profeta posterior a la primera tanda.
+
+## Primera tanda de Puerto Albor
+
+Tras la llegada se ofrecen a la vez **La gruta olvidada**, **Arena de tierras
+lejanas** y **Caparazones de la isla**. El habitante abre la gruta del Sendero
+de los Faros al aceptar. El barquero habilita el bote del muelle al Cayo de
+Salcristal. Allí aparecen los montículos mientras haga falta arena, y cada
+Krabchio vencido entrega un caparazón con su encargo activo. La arena recogida
+se conserva al guardar y continuar. El bote bloquea los controles durante
+el fundido y permite regresar a Albor.
+
+Prueba completa, con preparación de Junco y el resto mediante interacciones:
+
+    godot --headless --path . -s herramientas/prueba_albor_encargos.gd
+
+Para guardar imágenes del cayo, su muelle y la gruta, ejecutarla con ventana
+agregando `-- <carpeta_de_salida>`.
 
 ## Sonido
 
@@ -213,6 +229,11 @@ cazarlo da una Ficha Anómala y queda anotado en la colección.
 - **La presentación de la interfaz es provisional.** La paleta, la tipografía,
   los paneles y las transiciones son propuestas para probar legibilidad y uso.
   El seguimiento usa límites aproximados a partir del trazado jugable.
+- **La primera tanda de Albor usa detalles de prueba.** Los diálogos, los
+  nombres “Barquero” y “Pescadora”, los tres montículos de arena, completar
+  la gruta al alcanzar el fondo, la forma del cayo y sus muelles, y el modelo
+  del Krabchio son provisionales. Las cinco piezas de misión procedentes
+  de cinco Krabchio siguen el Documento Maestro. Su nombre sigue pendiente.
 - **El combate en el lugar es una prueba.** Los patrones, la preparación,
   el contraataque, la vida y los valores de daño sirven para probar el ritmo.
 - **El guardia y los asaltantes son modelos de marcador.** Su apariencia
