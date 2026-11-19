@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Encargo" format=3]
+
+[ext_resource type="Script" path="res://nucleo/encargo.gd" id="1_encargo"]
+
+[resource]
+script = ExtResource("1_encargo")
+id = &"puerto_albor_arena"
+titulo = "Arena de tierras lejanas"
+oferta = "Necesito una arena especial que solo hay en el Cayo de Salcristal. Desde el muelle te llevo en bote. ¿Me traés un poco?"
+objetivo = "Arena especial"
+indicacion = "Tomá el bote en el muelle de Albor hasta el Cayo de Salcristal."
+clave_de_conteo = &"arena_de_salcristal"
+cantidad = 3
+entregar_a = "el barquero"
+requisitos = Array[StringName]([&"la_voz_desenmascara_al_impostor"])

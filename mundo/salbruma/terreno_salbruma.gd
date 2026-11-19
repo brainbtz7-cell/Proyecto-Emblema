@@ -72,6 +72,9 @@ func _calcular_altura(ruido: FastNoiseLite, x: float, z: float) -> float:
 		ancho_rio += 5.7 * exp(-pow((z + 55.0) / 8.5, 2.0))
 	var distancia_rio := absf(x - eje_rio) - ancho_rio
 	distancia_rio += detalle * 1.3
+	var cayo := _cayo(punto, detalle)
+	if cayo > -10.0:
+		return cayo
 	if distancia_rio < 0.0:
 		return lerpf(-5.6, 0.0, smoothstep(-13.0, 0.0, distancia_rio))
 	altura *= smoothstep(0.0, lerpf(18.0, 8.5, maxf(llano, caleta)), distancia_rio)
@@ -123,6 +126,17 @@ func _paso_hacia_albor(punto: Vector2, altura: float, detalle: float) -> float:
 	var bajada := 2.0 + maxf(0.0, largo - 32.0 - medida.y) * 0.22
 	var tope := minf(subida, bajada) + detalle * 0.2
 	return lerpf(altura, tope, banda)
+
+
+# Islote bajo en medio del río, con una playa alrededor y un lomo en el centro.
+# Devuelve -10 fuera de la isla.
+func _cayo(punto: Vector2, detalle: float) -> float:
+	var forma := ((punto - TRAZADO.CAYO) / Vector2(11.0, 7.5)).length() + detalle * 0.08
+	if forma > 1.25:
+		return -10.0
+	var tierra := 1.0 - smoothstep(0.55, 1.0, forma)
+	var lomo := 1.4 * (1.0 - smoothstep(0.0, 0.6, forma))
+	return lerpf(-5.6, 0.0, smoothstep(1.25, 1.0, forma)) + tierra * (0.7 + lomo + detalle * 0.2)
 
 
 func _loma(punto: Vector2, centro: Vector2, extension: Vector2) -> float:

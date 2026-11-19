@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Encargo" format=3]
+
+[ext_resource type="Script" path="res://nucleo/encargo.gd" id="1_encargo"]
+
+[resource]
+script = ExtResource("1_encargo")
+id = &"puerto_albor_gruta_olvidada"
+titulo = "La gruta olvidada"
+oferta = "En el Sendero de los Faros hay una cueva que nadie pudo explorar. Ya despejamos la entrada: ¿podrías ver qué hay adentro?"
+objetivo = "Explorar la gruta"
+indicacion = "La entrada está al norte del Sendero de los Faros, entre las rocas."
+clave_de_conteo = &"fondo_de_la_gruta"
+cantidad = 1
+entregar_a = "el habitante de Albor"
+requisitos = Array[StringName]([&"la_voz_desenmascara_al_impostor"])
