@@ -56,6 +56,9 @@ func _crear_uno() -> void:
 		if separacion > 0.0 and not _hay_espacio(sitio):
 			continue
 		var nuevo := animal.instantiate() as Node3D
+		# Cada animal que aparece tira por su cuenta para ser Anómalo.
+		if nuevo is CriaturaDePrueba and FaunaAnomala.tirar():
+			nuevo.anomala = true
 		nuevo.position = to_local(sitio)
 		nuevo.rotation.y = randf() * TAU
 		add_child(nuevo)

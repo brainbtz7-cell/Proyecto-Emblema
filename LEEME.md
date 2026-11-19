@@ -122,6 +122,23 @@ Cuando una copa tapa al protagonista, el follaje abre una ventana redonda
 para que no se pierda de vista. El radio se ajusta en `ventana_en_el_follaje`,
 en el nodo `Camara` del jugador.
 
+## Fauna Anómala
+
+Regla del Documento Maestro (4.3): cada animal que aparece tiene un 0,25 % de
+ser Anómalo. Se ve de otro color, con cristales en el lomo y destellos. Al
+cazarlo da una Ficha Anómala y queda anotado en la colección.
+
+- Reglas y datos: `nucleo/fauna_anomala.gd` (estático, sin autoload). Para el
+  guardado: `FaunaAnomala.a_diccionario()` / `desde_diccionario(datos)`.
+- Aspecto: `fauna/rasgo_anomalo.gd`. Cada especie puede tener su propio tono
+  (`tono_anomalo`) y su propio rasgo (`rasgo_anomalo`) en el Inspector.
+- Para probarlo, lanzar el juego con `-- --anomalia-forzada`: todos los
+  animales salen Anómalos.
+- **Provisional / pendiente:** la paleta y el rasgo de cada especie (hoy son
+  genéricos), el canje de 10 fichas por el objeto que sube un atributo, y la
+  experiencia y objetos ordinarios dobles: el juego todavía no tiene
+  atributos, experiencia ni objetos ordinarios.
+
 ## Qué es provisional
 
 - **El tramo de Salbruma es de prueba.** Sigue las ubicaciones del anexo

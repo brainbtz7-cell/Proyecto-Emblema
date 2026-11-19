@@ -46,6 +46,8 @@ func _correr() -> void:
 				return
 		"retrato":
 			await _retrato(jugador)
+		"anomala":
+			await _anomala(escena, jugador)
 		"arboles":
 			await _arboles(escena, jugador)
 		"arranque":
@@ -535,6 +537,44 @@ func _encargo_del_guardia(escena: Node, jugador: CharacterBody3D) -> bool:
 	await _accion("interactuar")
 	print("GUARDIA: estado ", encargos.estado_de(encargo), "  asaltantes repuestos ", grupo.get_child_count())
 	return encargos.estado_de(encargo) == encargos.Estado.COMPLETADO
+
+
+# Lanzar con "--anomalia-forzada" para que todos los animales sean Anómalos.
+func _anomala(escena: Node, jugador: CharacterBody3D) -> void:
+	await _esperar_fisica(20)
+	var lista := _uscitas(escena)
+	var anomalos := lista.filter(func(a): return a.anomala)
+	print("ANÓMALOS: %d de %d  probabilidad %.4f" % [anomalos.size(), lista.size(), FaunaAnomala.probabilidad])
+	if lista.is_empty():
+		return
+	var presa: CharacterBody3D = lista[0]
+	print("  nombre en combate: ", presa.nombre_de_combate, "  rasgo: ", presa.get_node_or_null("Modelo/RasgoAnomalo") != null)
+	# Retrato del animal.
+	var camara: Node3D = jugador.get_node("Camara")
+	jugador.teletransportar(presa.global_position + Vector3(0.0, 0.3, 4.0))
+	presa.set_physics_process(false)
+	var lente := Camera3D.new()
+	escena.add_child(lente)
+	lente.global_position = presa.global_position + Vector3(2.4, 1.6, 2.4)
+	lente.look_at(presa.global_position + Vector3.UP * 0.7)
+	lente.fov = 40.0
+	lente.current = true
+	await _esperar_fisica(30)
+	await _guardar("anomala_1_retrato")
+	lente.queue_free()
+	await _esperar(2)
+	presa.set_physics_process(true)
+	# Cazarlo.
+	var antes := FaunaAnomala.fichas
+	var gano := await _cazar_uno(escena, jugador)
+	await _esperar(3)
+	var aviso := root.get_node_or_null("AvisoAnomalo")
+	print("CAZA: ganó %s  fichas %d -> %d  colección %s  aviso visible %s" % [gano, antes, FaunaAnomala.fichas, FaunaAnomala.coleccion, aviso != null and aviso.get_child(0).visible])
+	await _guardar("anomala_2_aviso")
+	var datos := FaunaAnomala.a_diccionario()
+	FaunaAnomala.desde_diccionario({})
+	FaunaAnomala.desde_diccionario(datos)
+	print("GUARDADO ida y vuelta: ", FaunaAnomala.a_diccionario() == datos, "  ", datos)
 
 
 func _retrato(jugador: CharacterBody3D) -> void:

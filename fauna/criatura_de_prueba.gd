@@ -16,6 +16,14 @@ extends CharacterBody3D
 ## Para oponentes de un encargo que se cuentan una sola vez.
 @export var clave_de_derrota_unica: StringName
 
+@export_group("Fauna Anómala")
+## Lo decide la manada al hacerlo aparecer (ver nucleo/fauna_anomala.gd).
+@export var anomala := false
+## Cuánto se desplaza el tono de sus colores si es Anómalo (0 a 1).
+@export_range(0.0, 1.0) var tono_anomalo := 0.5
+## Rasgo físico extra si es Anómalo. Vacío: cristales provisionales en el lomo.
+@export var rasgo_anomalo: PackedScene
+
 @export_group("Paseo")
 ## Velocidad al caminar, en metros por segundo.
 @export var velocidad := 1.5
@@ -53,6 +61,9 @@ func _ready() -> void:
 	_patas = _modelo.find_children("Pata*", "Node3D", false, false)
 	if _zona:
 		_zona.usado.connect(entrar_en_combate)
+	if anomala:
+		nombre_de_combate = "%s Anómalo" % nombre_de_combate
+		RasgoAnomalo.aplicar(_modelo, tono_anomalo, rasgo_anomalo)
 
 
 func _physics_process(delta: float) -> void:
@@ -150,6 +161,10 @@ func entrar_en_combate(jugador: Jugador) -> void:
 	_en_combate = false
 	if not victoria:
 		return
+	if anomala:
+		var especie := nombre_de_combate.trim_suffix(" Anómalo")
+		FaunaAnomala.registrar_caza(especie)
+		AvisoAnomalo.mostrar(get_tree(), especie)
 	if derrota_que_cuenta != &"":
 		Encargos.contar(derrota_que_cuenta, clave_de_derrota_unica)
 	if objeto_de_encargo != &"" and Encargos.hace_falta(objeto_de_encargo):
