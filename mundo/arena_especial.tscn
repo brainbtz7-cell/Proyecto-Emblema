@@ -1,0 +1,52 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://mundo/recolectable.gd" id="1"]
+[ext_resource type="Script" path="res://nucleo/interactuable.gd" id="2"]
+[ext_resource type="Shader" path="res://shaders/toon.gdshader" id="3"]
+
+[sub_resource type="ShaderMaterial" id="mat_arena"]
+shader = ExtResource("3")
+shader_parameter/color = Color(0.93, 0.9, 0.98, 1)
+shader_parameter/luz_propia = 0.35
+
+[sub_resource type="ShaderMaterial" id="mat_cristal"]
+shader = ExtResource("3")
+shader_parameter/color = Color(0.62, 0.92, 1, 1)
+shader_parameter/luz_propia = 0.6
+
+[sub_resource type="SphereMesh" id="malla_monticulo"]
+material = SubResource("mat_arena")
+radius = 0.45
+height = 0.4
+radial_segments = 8
+rings = 3
+
+[sub_resource type="PrismMesh" id="malla_cristal"]
+material = SubResource("mat_cristal")
+size = Vector3(0.1, 0.24, 0.1)
+
+[sub_resource type="SphereShape3D" id="forma"]
+radius = 1.1
+
+[node name="ArenaEspecial" type="Node3D"]
+script = ExtResource("1")
+clave = &"arena_de_salcristal"
+accion = "Juntar arena"
+
+[node name="Monticulo" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0)
+mesh = SubResource("malla_monticulo")
+
+[node name="Cristal1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.12, 0.28, 0.05)
+mesh = SubResource("malla_cristal")
+
+[node name="Cristal2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.94, 0.34, 0, -0.34, 0.94, 0, 0, 0, 1, -0.14, 0.24, -0.08)
+mesh = SubResource("malla_cristal")
+
+[node name="Interactuable" type="Area3D" parent="."]
+script = ExtResource("2")
+
+[node name="Forma" type="CollisionShape3D" parent="Interactuable"]
+shape = SubResource("forma")

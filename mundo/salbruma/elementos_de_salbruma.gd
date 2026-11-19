@@ -49,6 +49,8 @@ func _construir() -> void:
 	_campamento_de_prueba()
 	_sendero_de_los_faros()
 	_puerto_albor()
+	_cayo_de_salcristal()
+	_gruta_olvidada()
 
 
 func _puerto() -> void:
@@ -201,6 +203,44 @@ func _puerto_albor() -> void:
 	_puesto(Vector2(84.0, -156.0), deg_to_rad(180))
 	_poste_con_luz(Vector2(66.0, -163.5))
 	_poste_con_luz(Vector2(92.0, -164.5))
+
+
+func _cayo_de_salcristal() -> void:
+	var orilla := _suelo(Vector2(110.0, -181.5), 0.05)
+	_pasarela(orilla, Vector3(110.0, 1.4, -176.0), 2.4, true)
+	_bote(Vector3(112.6, 0.25, -175.5), 0.1)
+	_cartel_en(Vector2(106.5, -183.0), "Cayo de Salcristal", deg_to_rad(20))
+	_roca_en(Vector2(117.0, -190.0), Vector3(2.4, 1.3, 1.8), 0.6)
+	_roca_en(Vector2(104.5, -188.5), Vector3(1.8, 1.0, 1.5), -0.5)
+
+
+# PROVISIONAL: el documento no describe la gruta; es una cámara de roca con
+# la boca hacia el sendero.
+func _gruta_olvidada() -> void:
+	var boca := _suelo(TRAZADO.GRUTA)
+	var gruta := _soporte(boca)
+	var largo := 11.0
+	var ancho := 3.4
+	var alto := 3.2
+	for lado in [-1.0, 1.0]:
+		_bloque(gruta, Vector3(lado * (ancho * 0.5 + 0.6), alto * 0.5, -largo * 0.5), Vector3(1.2, alto + 1.0, largo), _piedra, true)
+	_bloque(gruta, Vector3(0, alto + 0.5, -largo * 0.5), Vector3(ancho + 2.4, 1.0, largo), _piedra, true)
+	_bloque(gruta, Vector3(0, alto * 0.5, -largo - 0.5), Vector3(ancho + 2.4, alto + 1.0, 1.0), _piedra, true)
+	_bloque(gruta, Vector3(0, -0.05, -largo * 0.5), Vector3(ancho + 1.2, 0.1, largo), _madera_oscura, true)
+	# Montículo de tierra sobre la cámara para que parezca metida en la ladera.
+	var loma := SphereMesh.new()
+	loma.radius = 0.5
+	loma.height = 1.0
+	loma.radial_segments = 7
+	loma.rings = 3
+	var monte := _mostrar(gruta, loma, Vector3(0, alto + 0.4, -largo * 0.55), _verde)
+	monte.scale = Vector3(ancho + 6.0, 3.0, largo + 4.0)
+	var luz := OmniLight3D.new()
+	luz.light_color = Color("7fd8ff")
+	luz.light_energy = 0.9
+	luz.omni_range = 5.0
+	gruta.add_child(luz)
+	luz.position = Vector3(0, 1.4, -largo + 1.5)
 
 
 func _hojas_flotantes(centro: Vector2, radio: float, semilla: int) -> void:

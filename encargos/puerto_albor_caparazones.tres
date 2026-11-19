@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Encargo" format=3]
+
+[ext_resource type="Script" path="res://nucleo/encargo.gd" id="1_encargo"]
+
+[resource]
+script = ExtResource("1_encargo")
+id = &"puerto_albor_caparazones"
+titulo = "Caparazones de la isla"
+oferta = "En el cayo viven unos cangrejos, los Krabchio. Si me conseguís cinco caparazones, te lo voy a agradecer."
+objetivo = "Caparazones de Krabchio"
+indicacion = "Los Krabchio viven en el Cayo de Salcristal."
+clave_de_conteo = &"caparazon_de_krabchio"
+cantidad = 5
+entregar_a = "la pescadora"
+requisitos = Array[StringName]([&"la_voz_desenmascara_al_impostor"])

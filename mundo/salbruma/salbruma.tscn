@@ -38,6 +38,14 @@
 [ext_resource type="PackedScene" path="res://personajes/capitan_klaimyr.tscn" id="34_capitan"]
 [ext_resource type="Script" path="res://mundo/salbruma/mision_de_la_voz.gd" id="35_voz"]
 [ext_resource type="Resource" path="res://encargos/la_voz_desenmascara_al_impostor.tres" id="36_impostor"]
+[ext_resource type="Resource" path="res://encargos/puerto_albor_gruta_olvidada.tres" id="37_gruta"]
+[ext_resource type="Resource" path="res://encargos/puerto_albor_arena.tres" id="38_arena"]
+[ext_resource type="Resource" path="res://encargos/puerto_albor_caparazones.tres" id="39_caparazones"]
+[ext_resource type="Script" path="res://mundo/bote_de_viaje.gd" id="40_bote"]
+[ext_resource type="PackedScene" path="res://mundo/arena_especial.tscn" id="41_arena_especial"]
+[ext_resource type="PackedScene" path="res://fauna/krabchio.tscn" id="42_krabchio"]
+[ext_resource type="Script" path="res://mundo/bloqueo_de_encargo.gd" id="43_bloqueo"]
+[ext_resource type="Script" path="res://mundo/salbruma/fondo_de_la_gruta.gd" id="44_fondo"]
 
 [sub_resource type="ShaderMaterial" id="mat_cielo"]
 shader = ExtResource("3_cielo")
@@ -91,6 +99,23 @@ shader_parameter/color = Color(1, 1, 1, 1)
 
 [sub_resource type="BoxShape3D" id="forma_poblado"]
 size = Vector3(40, 12, 34)
+
+[sub_resource type="SphereShape3D" id="forma_bote"]
+radius = 1.6
+
+[sub_resource type="BoxShape3D" id="forma_boca_gruta"]
+size = Vector3(3.6, 3.2, 1.2)
+
+[sub_resource type="BoxShape3D" id="forma_fondo_gruta"]
+size = Vector3(3.2, 3.0, 2.0)
+
+[sub_resource type="ShaderMaterial" id="mat_escombro"]
+shader = ExtResource("6_toon")
+shader_parameter/color = Color(0.5, 0.5, 0.55, 1)
+
+[sub_resource type="BoxMesh" id="malla_escombro"]
+material = SubResource("mat_escombro")
+size = Vector3(1.4, 1.1, 1.0)
 
 [sub_resource type="BoxShape3D" id="forma_albor"]
 size = Vector3(34, 12, 28)
@@ -391,6 +416,129 @@ separacion = 3.8
 altura_minima = 0.31
 altura_maxima = 18.0
 
+[node name="HabitanteDeAlbor" parent="." instance=ExtResource("10_aldeano")]
+position = Vector3(74, 2, -157)
+rotation_degrees = Vector3(0, 90, 0)
+nombre = "Habitante de Albor"
+encargos = Array[ExtResource("11_encargo")]([ExtResource("37_gruta")])
+
+[node name="Nombre" type="Label3D" parent="HabitanteDeAlbor"]
+position = Vector3(0, 2.47, 0)
+billboard = 1
+pixel_size = 0.005
+font_size = 28
+outline_size = 8
+text = "Habitante de Albor"
+visibility_range_end = 15.0
+
+[node name="Barquero" parent="." instance=ExtResource("10_aldeano")]
+position = Vector3(91, 1, -157)
+rotation_degrees = Vector3(0, 120, 0)
+nombre = "Barquero"
+encargos = Array[ExtResource("11_encargo")]([ExtResource("38_arena")])
+
+[node name="Nombre" type="Label3D" parent="Barquero"]
+position = Vector3(0, 2.47, 0)
+billboard = 1
+pixel_size = 0.005
+font_size = 28
+outline_size = 8
+text = "Barquero"
+visibility_range_end = 15.0
+
+[node name="Pescadora" parent="." instance=ExtResource("10_aldeano")]
+position = Vector3(84, 2, -155.5)
+rotation_degrees = Vector3(0, 160, 0)
+nombre = "Pescadora"
+encargos = Array[ExtResource("11_encargo")]([ExtResource("39_caparazones")])
+
+[node name="Nombre" type="Label3D" parent="Pescadora"]
+position = Vector3(0, 2.47, 0)
+billboard = 1
+pixel_size = 0.005
+font_size = 28
+outline_size = 8
+text = "Pescadora"
+visibility_range_end = 15.0
+
+[node name="BoteAlCayo" type="Node3D" parent="." node_paths=PackedStringArray("destino")]
+position = Vector3(110, 1.4, -168)
+script = ExtResource("40_bote")
+destino = NodePath("../LlegadaCayo")
+habilitado_por = ExtResource("38_arena")
+
+[node name="Interactuable" type="Area3D" parent="BoteAlCayo"]
+script = ExtResource("33_interactuar")
+
+[node name="Forma" type="CollisionShape3D" parent="BoteAlCayo/Interactuable"]
+shape = SubResource("forma_bote")
+
+[node name="BoteAAlbor" type="Node3D" parent="." node_paths=PackedStringArray("destino")]
+position = Vector3(110, 1.4, -177)
+script = ExtResource("40_bote")
+destino = NodePath("../LlegadaAlbor")
+
+[node name="Interactuable" type="Area3D" parent="BoteAAlbor"]
+script = ExtResource("33_interactuar")
+
+[node name="Forma" type="CollisionShape3D" parent="BoteAAlbor/Interactuable"]
+shape = SubResource("forma_bote")
+
+[node name="LlegadaCayo" type="Marker3D" parent="."]
+position = Vector3(110, 1.5, -179)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="LlegadaAlbor" type="Marker3D" parent="."]
+position = Vector3(108, 1.5, -161)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="Krabchios" type="Node3D" parent="."]
+position = Vector3(112, 0, -187)
+script = ExtResource("15_manada")
+animal = ExtResource("42_krabchio")
+cantidad = 6
+radio = 7.0
+separacion = 1.8
+altura_minima = 0.3
+altura_maxima = 4.0
+
+[node name="Arena1" parent="." instance=ExtResource("41_arena_especial")]
+position = Vector3(104.5, 0.6, -184)
+
+[node name="Arena2" parent="." instance=ExtResource("41_arena_especial")]
+position = Vector3(119, 0.55, -185.5)
+
+[node name="Arena3" parent="." instance=ExtResource("41_arena_especial")]
+position = Vector3(112, 0.5, -192)
+
+[node name="BloqueoGruta" type="StaticBody3D" parent="."]
+position = Vector3(24, 10.72, -146.6)
+script = ExtResource("43_bloqueo")
+encargo = ExtResource("37_gruta")
+
+[node name="Forma" type="CollisionShape3D" parent="BloqueoGruta"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+shape = SubResource("forma_boca_gruta")
+
+[node name="Escombro1" type="MeshInstance3D" parent="BloqueoGruta"]
+transform = Transform3D(0.94, 0.2, 0.28, -0.17, 0.98, -0.1, -0.29, 0.05, 0.95, -0.9, 0.55, 0)
+mesh = SubResource("malla_escombro")
+
+[node name="Escombro2" type="MeshInstance3D" parent="BloqueoGruta"]
+transform = Transform3D(0.9, -0.3, 0.3, 0.32, 0.95, 0, -0.29, 0.1, 0.95, 0.85, 0.6, 0.1)
+mesh = SubResource("malla_escombro")
+
+[node name="Escombro3" type="MeshInstance3D" parent="BloqueoGruta"]
+transform = Transform3D(0.8, 0.1, -0.2, -0.1, 0.8, 0.1, 0.2, -0.1, 0.8, 0, 1.55, 0)
+mesh = SubResource("malla_escombro")
+
+[node name="FondoGruta" type="Area3D" parent="."]
+position = Vector3(24, 12.2, -156.5)
+script = ExtResource("44_fondo")
+
+[node name="Forma" type="CollisionShape3D" parent="FondoGruta"]
+shape = SubResource("forma_fondo_gruta")
+
 [node name="Arboleda" type="Node3D" parent="." node_paths=PackedStringArray("terreno", "dejar_libre")]
 position = Vector3(-3, 0, -20)
 script = ExtResource("18_arboleda")
@@ -404,7 +552,7 @@ altura_maxima = 23.0
 pendiente_maxima = 0.48
 agrupamiento = 0.72
 tamano_de_los_manchones = 29.0
-dejar_libre = [NodePath("../Jugador"), NodePath("../Guardia"), NodePath("../Pescador"), NodePath("../Poblado"), NodePath("../Asaltantes"), NodePath("../Emboscada"), NodePath("../Rescate"), NodePath("../PuertoAlbor")]
+dejar_libre = [NodePath("../Jugador"), NodePath("../Guardia"), NodePath("../Pescador"), NodePath("../Poblado"), NodePath("../Asaltantes"), NodePath("../Emboscada"), NodePath("../Rescate"), NodePath("../PuertoAlbor"), NodePath("../Krabchios"), NodePath("../BloqueoGruta")]
 radio_libre = 12.5
 
 [node name="Pasto" type="Node3D" parent="." node_paths=PackedStringArray("terreno")]

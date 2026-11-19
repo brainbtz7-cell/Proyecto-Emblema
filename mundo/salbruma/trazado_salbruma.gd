@@ -15,6 +15,12 @@ const RESCATE := Vector2(76.0, -88.0)
 const ULTIMA_MAREA := Vector2(89.0, 12.5)
 ## Segundo pueblo costero, río arriba, pegado a la orilla del lado de Salbruma.
 const PUERTO_ALBOR := Vector2(84.0, -161.0)
+## Cayo de Salcristal: isla en el río, separada de las orillas, del lado de Salbruma.
+const CAYO := Vector2(112.0, -186.0)
+const MUELLE_ALBOR := Vector2(110.0, -169.0)
+const MUELLE_CAYO := Vector2(108.0, -180.5)
+## Entrada de la gruta olvidada, junto al Sendero de los Faros.
+const GRUTA := Vector2(24.0, -147.0)
 ## Sendero de los Faros: a tres cuartos del viaje de Junco a Albor.
 const FAROS := Vector2(36.0, -140.0)
 

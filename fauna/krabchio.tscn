@@ -1,0 +1,185 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://fauna/criatura_de_prueba.gd" id="animal"]
+[ext_resource type="Script" path="res://nucleo/interactuable.gd" id="interactuable"]
+[ext_resource type="Shader" path="res://shaders/toon.gdshader" id="toon"]
+[ext_resource type="PackedScene" path="res://efectos/polvo.tscn" id="polvo"]
+
+[sub_resource type="ShaderMaterial" id="mat_caparazon"]
+shader = ExtResource("toon")
+shader_parameter/color = Color(0.86, 0.45, 0.35, 1)
+
+[sub_resource type="ShaderMaterial" id="mat_claro"]
+shader = ExtResource("toon")
+shader_parameter/color = Color(0.95, 0.74, 0.58, 1)
+
+[sub_resource type="ShaderMaterial" id="mat_pinza"]
+shader = ExtResource("toon")
+shader_parameter/color = Color(0.78, 0.36, 0.3, 1)
+
+[sub_resource type="ShaderMaterial" id="mat_ojo"]
+shader = ExtResource("toon")
+shader_parameter/color = Color(0.08, 0.08, 0.12, 1)
+
+[sub_resource type="BoxMesh" id="malla_caparazon"]
+material = SubResource("mat_caparazon")
+size = Vector3(0.72, 0.22, 0.52)
+
+[sub_resource type="BoxMesh" id="malla_lomo"]
+material = SubResource("mat_claro")
+size = Vector3(0.5, 0.08, 0.36)
+
+[sub_resource type="BoxMesh" id="malla_vientre"]
+material = SubResource("mat_claro")
+size = Vector3(0.62, 0.08, 0.44)
+
+[sub_resource type="BoxMesh" id="malla_brazo"]
+material = SubResource("mat_pinza")
+size = Vector3(0.08, 0.08, 0.26)
+
+[sub_resource type="BoxMesh" id="malla_pinza"]
+material = SubResource("mat_pinza")
+size = Vector3(0.18, 0.13, 0.2)
+
+[sub_resource type="BoxMesh" id="malla_dedo"]
+material = SubResource("mat_claro")
+size = Vector3(0.06, 0.05, 0.13)
+
+[sub_resource type="BoxMesh" id="malla_pedunculo"]
+material = SubResource("mat_claro")
+size = Vector3(0.04, 0.12, 0.04)
+
+[sub_resource type="BoxMesh" id="malla_ojo"]
+material = SubResource("mat_ojo")
+size = Vector3(0.07, 0.07, 0.07)
+
+[sub_resource type="BoxMesh" id="malla_pata"]
+material = SubResource("mat_pinza")
+size = Vector3(0.32, 0.05, 0.05)
+
+[sub_resource type="BoxShape3D" id="forma_cuerpo"]
+size = Vector3(0.8, 0.35, 0.6)
+
+[sub_resource type="SphereShape3D" id="forma_alcance"]
+radius = 1.0
+
+[node name="Krabchio" type="CharacterBody3D"]
+collision_layer = 8
+collision_mask = 19
+script = ExtResource("animal")
+nombre_de_combate = "Krabchio"
+vida_de_combate = 11
+dano_de_combate = 3
+estilo_de_combate = 1
+velocidad = 1.1
+radio_de_paseo = 4.0
+objeto_de_encargo = &"caparazon_de_krabchio"
+efecto_al_ser_cazado = ExtResource("polvo")
+
+[node name="Colision" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+shape = SubResource("forma_cuerpo")
+
+[node name="Modelo" type="Node3D" parent="."]
+
+[node name="Caparazon" type="MeshInstance3D" parent="Modelo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.33, 0)
+mesh = SubResource("malla_caparazon")
+
+[node name="Lomo" type="MeshInstance3D" parent="Modelo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.46, 0)
+mesh = SubResource("malla_lomo")
+
+[node name="Vientre" type="MeshInstance3D" parent="Modelo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.19, 0)
+mesh = SubResource("malla_vientre")
+
+[node name="BrazoIzquierda" type="MeshInstance3D" parent="Modelo"]
+transform = Transform3D(0.906, 0, -0.423, 0, 1, 0, 0.423, 0, 0.906, -0.28, 0.32, -0.36)
+mesh = SubResource("malla_brazo")
+
+[node name="PinzaIzquierda" type="MeshInstance3D" parent="Modelo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.36, 0.34, -0.52)
+mesh = SubResource("malla_pinza")
+
+[node name="DedoIzquierda" type="MeshInstance3D" parent="Modelo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.33, 0.42, -0.6)
+mesh = SubResource("malla_dedo")
+
+[node name="PedunculoIzquierda" type="MeshInstance3D" parent="Modelo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.12, 0.5, -0.22)
+mesh = SubResource("malla_pedunculo")
+
+[node name="OjoIzquierda" type="MeshInstance3D" parent="Modelo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.12, 0.58, -0.22)
+mesh = SubResource("malla_ojo")
+
+[node name="PataIzquierda1" type="Node3D" parent="Modelo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.34, 0.26, -0.12)
+
+[node name="Tramo" type="MeshInstance3D" parent="Modelo/PataIzquierda1"]
+transform = Transform3D(0.819, -0.574, 0, 0.574, 0.819, 0, 0, 0, 1, -0.14, -0.08, 0)
+mesh = SubResource("malla_pata")
+
+[node name="PataIzquierda2" type="Node3D" parent="Modelo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.34, 0.26, 0.04)
+
+[node name="Tramo" type="MeshInstance3D" parent="Modelo/PataIzquierda2"]
+transform = Transform3D(0.819, -0.574, 0, 0.574, 0.819, 0, 0, 0, 1, -0.14, -0.08, 0)
+mesh = SubResource("malla_pata")
+
+[node name="PataIzquierda3" type="Node3D" parent="Modelo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.34, 0.26, 0.2)
+
+[node name="Tramo" type="MeshInstance3D" parent="Modelo/PataIzquierda3"]
+transform = Transform3D(0.819, -0.574, 0, 0.574, 0.819, 0, 0, 0, 1, -0.14, -0.08, 0)
+mesh = SubResource("malla_pata")
+
+[node name="BrazoDerecha" type="MeshInstance3D" parent="Modelo"]
+transform = Transform3D(0.906, 0, 0.423, 0, 1, 0, -0.423, 0, 0.906, 0.28, 0.32, -0.36)
+mesh = SubResource("malla_brazo")
+
+[node name="PinzaDerecha" type="MeshInstance3D" parent="Modelo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.36, 0.34, -0.52)
+mesh = SubResource("malla_pinza")
+
+[node name="DedoDerecha" type="MeshInstance3D" parent="Modelo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.33, 0.42, -0.6)
+mesh = SubResource("malla_dedo")
+
+[node name="PedunculoDerecha" type="MeshInstance3D" parent="Modelo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.12, 0.5, -0.22)
+mesh = SubResource("malla_pedunculo")
+
+[node name="OjoDerecha" type="MeshInstance3D" parent="Modelo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.12, 0.58, -0.22)
+mesh = SubResource("malla_ojo")
+
+[node name="PataDerecha1" type="Node3D" parent="Modelo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.34, 0.26, -0.12)
+
+[node name="Tramo" type="MeshInstance3D" parent="Modelo/PataDerecha1"]
+transform = Transform3D(0.819, 0.574, 0, -0.574, 0.819, 0, 0, 0, 1, 0.14, -0.08, 0)
+mesh = SubResource("malla_pata")
+
+[node name="PataDerecha2" type="Node3D" parent="Modelo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.34, 0.26, 0.04)
+
+[node name="Tramo" type="MeshInstance3D" parent="Modelo/PataDerecha2"]
+transform = Transform3D(0.819, 0.574, 0, -0.574, 0.819, 0, 0, 0, 1, 0.14, -0.08, 0)
+mesh = SubResource("malla_pata")
+
+[node name="PataDerecha3" type="Node3D" parent="Modelo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.34, 0.26, 0.2)
+
+[node name="Tramo" type="MeshInstance3D" parent="Modelo/PataDerecha3"]
+transform = Transform3D(0.819, 0.574, 0, -0.574, 0.819, 0, 0, 0, 1, 0.14, -0.08, 0)
+mesh = SubResource("malla_pata")
+
+[node name="Interactuable" type="Area3D" parent="."]
+script = ExtResource("interactuable")
+accion = "Cazar"
+
+[node name="Forma" type="CollisionShape3D" parent="Interactuable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+shape = SubResource("forma_alcance")
