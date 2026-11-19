@@ -1,10 +1,24 @@
-# Pedido para Codex: parte visual e interfaz
+# Pedido para Codex: guardado de partida, parte visual e interfaz
 
 Trabajás en la carpeta `JUEGO EMI`, rama `main`. Claude trabaja en paralelo
 en `JUEGO EMI-claude` (rama `claude`). Leé primero `AGENTS.md`, `TRASPASO.md`
 y `LEEME.md`.
 
-## Tu área
+## 1. Guardar y cargar partida
+
+- Autoload nuevo `Guardado` en `nucleo/guardado.gd`, con `guardar()`,
+  `cargar()` y `hay_partida()`. Archivo en `user://`, con número de versión.
+- Guardar: estado y avance de cada encargo, posición segura del protagonista
+  y el resto del progreso que ya exista. Para la Fauna Anómala, Claude deja
+  `FaunaAnomala.a_diccionario()` y `FaunaAnomala.desde_diccionario(datos)`
+  (funciones estáticas de la clase `FaunaAnomala`): guardalas y cargalas así.
+- Guardado automático al aceptar, cumplir o entregar un encargo y al cerrar
+  el juego; en el menú de pausa, "Guardar" y "Borrar partida".
+- Cada sistema expone `a_diccionario()` / `desde_diccionario()`; el guardado
+  no conoce sus detalles internos.
+
+## 2. Parte visual e interfaz
+
 
 Todo lo visual y la interfaz:
 
