@@ -19,6 +19,7 @@ var _siguiendo := false
 
 
 func _ready() -> void:
+	add_to_group(&"persistentes")
 	_zona.usado.connect(_liberar)
 	Encargos.cambiado.connect(_actualizar)
 	_actualizar()
@@ -81,3 +82,24 @@ func _jefe_llego() -> bool:
 	var local := poblado.to_local(_jefe.global_position).abs()
 	var mitad := _volumen.size * 0.5
 	return local.x <= mitad.x and local.y <= mitad.y and local.z <= mitad.z
+
+
+## Conserva al acompañante durante el regreso; las huellas se rehacen al cargar.
+func a_diccionario() -> Dictionary:
+	var posicion := _jefe.global_position
+	return {"posicion": [posicion.x, posicion.y, posicion.z]}
+
+
+func desde_diccionario(datos: Dictionary) -> void:
+	var posicion: Variant = datos.get("posicion", [])
+	if posicion is Array and posicion.size() == 3:
+		if posicion.all(func(valor: Variant) -> bool: return valor is float or valor is int):
+			var destino := Vector3(posicion[0], posicion[1], posicion[2])
+			if destino.is_finite():
+				_jefe.global_position = destino
+	if Encargos.estado_de(RESCATE) == Encargos.Estado.ACTIVO and Encargos.contado(RESCATE, &"liberar"):
+		# El protagonista reaparece en su apoyo seguro. El jefe retoma a su lado.
+		_jefe.global_position = jugador.global_position + jugador.global_basis.z * 1.8
+	_huellas.clear()
+	_ultima = jugador.global_position
+	_actualizar()

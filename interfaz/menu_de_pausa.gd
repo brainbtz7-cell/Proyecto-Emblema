@@ -2,11 +2,13 @@ class_name MenuDePausa
 extends Control
 
 signal volver
+signal reiniciar
 
 const DIARIO := 0
 const CONTROLES := 1
+const PARTIDA := 2
 
-var pagina := CONTROLES
+var pagina := PARTIDA
 
 @onready var _diario: VBoxContainer = $Caja/Columna/Cuerpo/Interior/Paginas/Diario
 @onready var _lista: VBoxContainer = $Caja/Columna/Cuerpo/Interior/Paginas/Diario/Lista
@@ -20,6 +22,14 @@ var pagina := CONTROLES
 @onready var _boton_diario: Button = $Caja/Columna/Cuerpo/Menu/Diario
 @onready var _boton_controles: Button = $Caja/Columna/Cuerpo/Menu/Controles
 @onready var _desplazar: Label = $Caja/Columna/Pie/Desplazar
+@onready var _partida: VBoxContainer = $Caja/Columna/Cuerpo/Interior/Paginas/Partida
+@onready var _boton_partida: Button = $Caja/Columna/Cuerpo/Menu/Partida
+@onready var _guardar: Button = _partida.get_node("Acciones/Guardar")
+@onready var _borrar: Button = _partida.get_node("Acciones/Borrar")
+@onready var _estado_partida: Label = _partida.get_node("Estado")
+@onready var _confirmacion: VBoxContainer = _partida.get_node("Confirmacion")
+@onready var _cancelar: Button = _confirmacion.get_node("Botones/Cancelar")
+@onready var _confirmar: Button = _confirmacion.get_node("Botones/Confirmar")
 @onready var _cerrar: Label = $Caja/Columna/Pie/Cerrar
 
 
@@ -31,21 +41,34 @@ func _ready() -> void:
 	_fino.pressed.connect(Pixelado.cambiar_alto.bind(1))
 	Pixelado.cambiado.connect(_actualizar_resolucion)
 	Encargos.cambiado.connect(_actualizar_diario)
+	_boton_partida.pressed.connect(mostrar_pagina.bind(PARTIDA))
+	_guardar.icon = preload("res://interfaz/iconos/guardar.svg")
+	_guardar.pressed.connect(_guardar_partida)
+	_borrar.pressed.connect(_pedir_borrado)
+	_cancelar.pressed.connect(cancelar_borrado)
+	_confirmar.pressed.connect(_borrar_partida)
+	Guardado.cambiado.connect(_actualizar_partida)
 	_actualizar_resolucion()
 
 
 func mostrar_pagina(destino: int) -> void:
+	cancelar_borrado()
 	pagina = destino
 	_diario.visible = pagina == DIARIO
 	_controles.visible = pagina == CONTROLES
+	_partida.visible = pagina == PARTIDA
+	_boton_partida.set_pressed_no_signal(pagina == PARTIDA)
 	_boton_diario.set_pressed_no_signal(pagina == DIARIO)
 	_boton_controles.set_pressed_no_signal(pagina == CONTROLES)
 	if pagina == DIARIO:
 		_actualizar_diario()
-	else:
+	elif pagina == CONTROLES:
 		_actualizar_controles()
+	else:
+		_actualizar_partida()
 	_interior.scroll_vertical = 0
-	(_boton_diario if pagina == DIARIO else _boton_controles).grab_focus()
+	var botones: Array[Button] = [_boton_diario, _boton_controles, _boton_partida]
+	botones[pagina].grab_focus()
 	actualizar_atajos()
 
 
@@ -82,8 +105,14 @@ func _actualizar_diario() -> void:
 	if historial.is_empty():
 		_lista.add_child(_rotulo("Todavía no aceptaste encargos. Hablá con el pescador para empezar.", &"Secundario"))
 		return
-	for encargo in Encargos.en_curso():
+	var en_curso := Encargos.en_curso()
+	if not en_curso.is_empty():
+		_lista.add_child(_rotulo("En curso · %d" % en_curso.size(), &"Etiqueta"))
+	for encargo in en_curso:
 		_agregar_encargo(encargo)
+	var entregados := historial.size() - en_curso.size()
+	if entregados > 0:
+		_lista.add_child(_rotulo("Entregados · %d" % entregados, &"Etiqueta"))
 	for encargo in historial:
 		if Encargos.estado_de(encargo) == Encargos.Estado.COMPLETADO:
 			_agregar_encargo(encargo)
@@ -112,6 +141,14 @@ func _agregar_encargo(encargo: Encargo) -> void:
 			nota = encargo.cierre
 	columna.add_child(nombre)
 	columna.add_child(resumen)
+	if estado == Encargos.Estado.ACTIVO:
+		var progreso := ProgressBar.new()
+		progreso.custom_minimum_size.y = 5.0
+		progreso.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		progreso.show_percentage = false
+		progreso.max_value = encargo.cantidad
+		progreso.value = Encargos.avance_de(encargo)
+		columna.add_child(progreso)
 	if not nota.is_empty():
 		columna.add_child(_rotulo(nota, &"Secundario"))
 	ficha.add_child(columna)
@@ -161,3 +198,41 @@ func _vaciar(contenedor: Container) -> void:
 	for hijo in contenedor.get_children():
 		contenedor.remove_child(hijo)
 		hijo.queue_free()
+
+
+func _guardar_partida() -> void:
+	Guardado.guardar()
+	_actualizar_partida()
+
+
+func _actualizar_partida() -> void:
+	_estado_partida.text = Guardado.ultimo_mensaje
+	if not Guardado.fecha.is_empty():
+		_estado_partida.text += "\nÚltimo guardado: " + Guardado.fecha
+	_borrar.disabled = not Guardado.hay_partida()
+
+
+func _pedir_borrado() -> void:
+	_confirmacion.show()
+	_guardar.disabled = true
+	_borrar.disabled = true
+	_cancelar.grab_focus()
+
+
+## Esc primero cancela el borrado; otro toque vuelve al juego.
+func cancelar_borrado() -> bool:
+	if not is_node_ready() or not _confirmacion.visible:
+		return false
+	_confirmacion.hide()
+	_guardar.disabled = false
+	_actualizar_partida()
+	_borrar.grab_focus()
+	return true
+
+
+func _borrar_partida() -> void:
+	if Guardado.borrar():
+		cancelar_borrado()
+		reiniciar.emit()
+	else:
+		cancelar_borrado()

@@ -60,6 +60,7 @@ var _ultimo_lugar_seguro := Vector3.ZERO
 
 
 func _ready() -> void:
+	add_to_group(&"persistentes")
 	_ultimo_lugar_seguro = global_position
 
 
@@ -166,3 +167,20 @@ func _levantar_polvo() -> void:
 		return
 	polvo.global_position = global_position + Vector3.UP * 0.1
 	polvo.restart()
+
+
+## Se guarda el último apoyo seguro, nunca la posición en pleno salto o caída.
+func a_diccionario() -> Dictionary:
+	return {"posicion": [_ultimo_lugar_seguro.x, _ultimo_lugar_seguro.y, _ultimo_lugar_seguro.z],
+		"doble_salto": doble_salto, "nivel": nivel_de_prueba}
+
+
+func desde_diccionario(datos: Dictionary) -> void:
+	var posicion_guardada: Variant = datos.get("posicion", [])
+	if posicion_guardada is Array and posicion_guardada.size() == 3:
+		if posicion_guardada.all(func(valor: Variant) -> bool: return valor is float or valor is int):
+			var destino := Vector3(posicion_guardada[0], posicion_guardada[1], posicion_guardada[2])
+			if destino.is_finite() and destino.y > altura_minima + margen_seguro:
+				teletransportar(destino + Vector3.UP * 0.05)
+	doble_salto = bool(datos.get("doble_salto", doble_salto))
+	nivel_de_prueba = maxi(1, int(datos.get("nivel", nivel_de_prueba)))

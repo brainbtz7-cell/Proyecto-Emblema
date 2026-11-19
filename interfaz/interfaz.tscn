@@ -28,6 +28,7 @@ theme_override_constants/separation = 5
 
 [node name="Ubicacion" type="Label" parent="Seguimiento/Columna"]
 layout_mode = 2
+autowrap_mode = 3
 theme_type_variation = &"Nombre"
 text = "Isla de pruebas"
 
@@ -155,6 +156,24 @@ theme_type_variation = &"Atajo"
 layout_mode = 2
 focus_mode = 0
 theme_type_variation = &"Atajo"
+
+[node name="EstadoGuardado" type="PanelContainer" parent="."]
+visible = false
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = -24.0
+offset_right = 405.0
+offset_bottom = -24.0
+grow_vertical = 0
+mouse_filter = 2
+theme_type_variation = &"PanelHUD"
+theme = ExtResource("6")
+
+[node name="Texto" type="Label" parent="EstadoGuardado"]
+layout_mode = 2
+autowrap_mode = 3
+theme_type_variation = &"Confirmado"
 
 [node name="Dialogo" parent="." instance=ExtResource("3")]
 

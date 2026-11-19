@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 
 Pixelado="*res://nucleo/pixelado.gd"
 Encargos="*res://nucleo/encargos.gd"
+Guardado="*res://nucleo/guardado.gd"
 Interfaz="*res://interfaz/interfaz.tscn"
 
 [display]

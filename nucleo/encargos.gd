@@ -105,3 +105,58 @@ func entregar(encargo: Encargo) -> void:
 	_en_curso.erase(encargo)
 	cambiado.emit()
 	hito.emit(encargo, Estado.COMPLETADO)
+
+
+## Estado público de los encargos, con recursos identificados por su ID.
+func a_diccionario() -> Dictionary:
+	var registros: Array[Dictionary] = []
+	for encargo in _historial:
+		var elementos: Dictionary = _elementos_contados.get(encargo.id, {})
+		registros.append({"id": String(encargo.id), "estado": estado_de(encargo),
+			"avance": avance_de(encargo), "elementos": elementos.keys()})
+	return {"encargos": registros}
+
+
+## Restaura solamente encargos conocidos; no carga recursos desde el archivo.
+func desde_diccionario(datos: Dictionary) -> void:
+	var catalogo: Dictionary[String, Encargo] = {}
+	for archivo in DirAccess.get_files_at("res://encargos"):
+		if archivo.ends_with(".tres") or archivo.ends_with(".tres.remap"):
+			var ruta := "res://encargos/" + archivo.trim_suffix(".remap")
+			var encargo := load(ruta) as Encargo
+			if encargo:
+				catalogo[String(encargo.id)] = encargo
+	_estados.clear()
+	_avances.clear()
+	_elementos_contados.clear()
+	_en_curso.clear()
+	_historial.clear()
+	var registros: Variant = datos.get("encargos", [])
+	if registros is Array:
+		for registro: Variant in registros:
+			if not registro is Dictionary:
+				continue
+			var encargo: Encargo = catalogo.get(str(registro.get("id", "")))
+			if encargo == null or _estados.has(encargo.id):
+				continue
+			var estado := clampi(int(registro.get("estado", 0)), Estado.DISPONIBLE, Estado.COMPLETADO)
+			if estado == Estado.DISPONIBLE:
+				continue
+			var avance := clampi(int(registro.get("avance", 0)), 0, encargo.cantidad)
+			if estado >= Estado.CUMPLIDO:
+				avance = encargo.cantidad
+			elif avance == encargo.cantidad:
+				estado = Estado.CUMPLIDO
+			_estados[encargo.id] = estado as Estado
+			_avances[encargo.id] = avance
+			var elementos: Variant = registro.get("elementos", [])
+			if elementos is Array:
+				var contados: Dictionary = {}
+				for elemento: Variant in elementos:
+					if elemento is String and not elemento.is_empty():
+						contados[StringName(elemento)] = true
+				_elementos_contados[encargo.id] = contados
+			_historial.append(encargo)
+			if estado != Estado.COMPLETADO:
+				_en_curso.append(encargo)
+	cambiado.emit()

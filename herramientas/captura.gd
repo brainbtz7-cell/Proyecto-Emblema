@@ -713,6 +713,9 @@ func _esperar_fisica(cuadros: int) -> void:
 
 
 func _guardar(nombre: String) -> void:
+	if DisplayServer.get_name() == "headless":
+		print("Sin ventana: se omite la captura ", nombre)
+		return
 	await RenderingServer.frame_post_draw
 	var imagen := root.get_texture().get_image()
 	# Se reduce para que el archivo sea liviano y fácil de revisar.

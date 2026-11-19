@@ -2,6 +2,9 @@ class_name Seguimiento
 extends PanelContainer
 ## Deja a la vista el siguiente paso. El diario muestra todos los encargos.
 
+## Ancho del seguimiento en la resolución de referencia de la interfaz.
+@export_range(260.0, 420.0, 1.0) var ancho := 338.0
+
 const LOMOS := preload("res://encargos/puerto_junco_pescador_lomos.tres")
 
 var _primer_paso := "Hablá con el pescador para empezar."
@@ -16,6 +19,9 @@ var _primer_paso := "Hablá con el pescador para empezar."
 
 
 func _ready() -> void:
+	custom_minimum_size.x = ancho
+	size.x = ancho
+	minimum_size_changed.connect(_ajustar_alto.call_deferred)
 	Encargos.cambiado.connect(_actualizar)
 	_actualizar()
 
@@ -58,4 +64,10 @@ func _actualizar() -> void:
 		_indicacion.text = _primer_paso if Encargos.estado_de(LOMOS) == Encargos.Estado.DISPONIBLE else ""
 	_indicacion.visible = not _indicacion.text.is_empty()
 	_division.visible = _titulo.visible or _indicacion.visible
-	reset_size()
+	_ajustar_alto.call_deferred()
+
+
+## El texto envuelto recalcula su mínimo después de distribuir la columna.
+## No reiniciar el ancho: lo angosta y deja una altura antigua de muchas líneas.
+func _ajustar_alto() -> void:
+	size.y = get_combined_minimum_size().y

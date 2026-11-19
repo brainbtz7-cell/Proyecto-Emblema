@@ -68,6 +68,13 @@ theme_override_constants/separation = 20
 layout_mode = 2
 custom_minimum_size = Vector2(168, 0)
 
+[node name="Partida" type="Button" parent="Caja/Columna/Cuerpo/Menu"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 44)
+toggle_mode = true
+alignment = 0
+text = "Partida"
+
 [node name="Diario" type="Button" parent="Caja/Columna/Cuerpo/Menu"]
 layout_mode = 2
 custom_minimum_size = Vector2(0, 44)
@@ -151,3 +158,59 @@ theme_type_variation = &"Secundario"
 [node name="Cerrar" type="Label" parent="Caja/Columna/Pie"]
 layout_mode = 2
 theme_type_variation = &"Etiqueta"
+
+
+[node name="Partida" type="VBoxContainer" parent="Caja/Columna/Cuerpo/Interior/Paginas"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Titulo" type="Label" parent="Caja/Columna/Cuerpo/Interior/Paginas/Partida"]
+layout_mode = 2
+theme_type_variation = &"Nombre"
+text = "Tu partida"
+
+[node name="Descripcion" type="Label" parent="Caja/Columna/Cuerpo/Interior/Paginas/Partida"]
+layout_mode = 2
+autowrap_mode = 3
+text = "Tu progreso se carga al abrir el juego. Se guarda al avanzar en los encargos y al salir. Volvés al último lugar seguro donde apoyaste los pies."
+
+[node name="Estado" type="Label" parent="Caja/Columna/Cuerpo/Interior/Paginas/Partida"]
+layout_mode = 2
+theme_type_variation = &"Secundario"
+autowrap_mode = 3
+
+[node name="Acciones" type="HBoxContainer" parent="Caja/Columna/Cuerpo/Interior/Paginas/Partida"]
+layout_mode = 2
+
+[node name="Guardar" type="Button" parent="Caja/Columna/Cuerpo/Interior/Paginas/Partida/Acciones"]
+layout_mode = 2
+theme_type_variation = &"BotonPrincipal"
+text = "Guardar"
+
+[node name="Borrar" type="Button" parent="Caja/Columna/Cuerpo/Interior/Paginas/Partida/Acciones"]
+layout_mode = 2
+text = "Borrar partida"
+
+[node name="Confirmacion" type="VBoxContainer" parent="Caja/Columna/Cuerpo/Interior/Paginas/Partida"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Advertencia" type="Label" parent="Caja/Columna/Cuerpo/Interior/Paginas/Partida/Confirmacion"]
+layout_mode = 2
+theme_type_variation = &"Advertencia"
+autowrap_mode = 3
+text = "¿Borrar la partida y empezar de nuevo? Se perderán los encargos, las fichas y todo el progreso guardado. No se puede deshacer."
+
+[node name="Botones" type="HBoxContainer" parent="Caja/Columna/Cuerpo/Interior/Paginas/Partida/Confirmacion"]
+layout_mode = 2
+
+[node name="Cancelar" type="Button" parent="Caja/Columna/Cuerpo/Interior/Paginas/Partida/Confirmacion/Botones"]
+layout_mode = 2
+text = "Conservar partida"
+
+[node name="Confirmar" type="Button" parent="Caja/Columna/Cuerpo/Interior/Paginas/Partida/Confirmacion/Botones"]
+layout_mode = 2
+theme_type_variation = &"BotonPeligro"
+text = "Sí, borrar y reiniciar"

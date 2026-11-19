@@ -71,6 +71,7 @@ func _ready() -> void:
 		boton.mouse_entered.connect(_mostrar_detalle.bind(boton))
 		boton.mouse_exited.connect(_restaurar_detalle)
 	Interfaz.dispositivo_cambiado.connect(_actualizar_atajos)
+	minimum_size_changed.connect(Interfaz.ajustar_alto.bind(self).call_deferred)
 
 
 func _unhandled_input(evento: InputEvent) -> void:
@@ -114,6 +115,7 @@ func iniciar(
 	_raton_anterior = Input.mouse_mode
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	show()
+	Interfaz.animar_entrada(self)
 
 	var iniciativa_propia := randi_range(1, 20)
 	var iniciativa_rival := randi_range(1, 20)

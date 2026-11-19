@@ -36,6 +36,8 @@ func _ready() -> void:
 	visible = false
 	_seguir.pressed.connect(_seguir_dialogo)
 	Interfaz.dispositivo_cambiado.connect(_actualizar_pie)
+	var caja: Control = $Caja
+	caja.minimum_size_changed.connect(Interfaz.ajustar_alto.bind(caja).call_deferred)
 
 
 ## Muestra un texto y espera a que el jugador lo pase.
@@ -123,6 +125,7 @@ func _mostrar(quien: String, texto: String) -> void:
 	if not abierto:
 		abierto = true
 		visible = true
+		Interfaz.animar_entrada(self)
 		# El ratón queda libre para poder elegir opciones con un clic.
 		_raton_anterior = Input.mouse_mode
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE

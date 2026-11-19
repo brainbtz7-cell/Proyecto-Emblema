@@ -4,6 +4,11 @@ extends CanvasLayer
 signal solicitar_mapa
 signal dispositivo_cambiado
 
+## Duración de la entrada de menús, diálogos y mapa, en segundos.
+@export_range(0.0, 0.4, 0.01) var duracion_de_entrada := 0.16
+## Segundos que se mantiene cada aviso de encargo durante la exploración.
+@export_range(2.0, 6.0, 0.1) var duracion_del_aviso := 3.5
+
 const MARGEN_TRAS_CIERRE := 200
 const BOTONES_MANDO := {
 	JOY_BUTTON_A: "A", JOY_BUTTON_B: "B", JOY_BUTTON_X: "X", JOY_BUTTON_Y: "Y",
@@ -23,6 +28,8 @@ var _pausado_antes := false
 var _avisos_pendientes: Dictionary[Encargo, int] = {}
 var _tiempo_del_aviso := 0.0
 var _explorando := true
+var _tiempo_de_guardado := 0.0
+var _error_de_guardado := false
 
 @onready var dialogo: Dialogo = $Dialogo
 @onready var combate: CombateDePrueba = $Combate
@@ -38,6 +45,8 @@ var _explorando := true
 @onready var _notificacion: PanelContainer = $Notificacion
 @onready var _estado_del_aviso: Label = $Notificacion/Columna/Estado
 @onready var _titulo_del_aviso: Label = $Notificacion/Columna/Titulo
+@onready var _estado_guardado: PanelContainer = $EstadoGuardado
+@onready var _texto_guardado: Label = $EstadoGuardado/Texto
 
 
 func _ready() -> void:
@@ -45,9 +54,20 @@ func _ready() -> void:
 	combate.visibility_changed.connect(_actualizar_hud)
 	_mapa.pressed.connect(_pedir_mapa)
 	_diario.pressed.connect(_abrir_pausa.bind(MenuDePausa.DIARIO))
-	_boton_pausa.pressed.connect(_abrir_pausa.bind(MenuDePausa.CONTROLES))
+	_boton_pausa.pressed.connect(_abrir_pausa.bind(MenuDePausa.PARTIDA))
 	_pausa.volver.connect(_cerrar_pausa)
+	_pausa.reiniciar.connect(_reiniciar_partida)
 	Encargos.hito.connect(_anotar_hito)
+	Guardado.resultado.connect(_mostrar_resultado_guardado)
+	_estado_guardado.minimum_size_changed.connect(ajustar_alto.bind(_estado_guardado).call_deferred)
+	_notificacion.minimum_size_changed.connect(ajustar_alto.bind(_notificacion).call_deferred)
+	for boton: Button in [_mapa, _diario, _boton_pausa]:
+		boton.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	_mapa.icon = preload("res://interfaz/iconos/mapa.svg")
+	_diario.icon = preload("res://interfaz/iconos/diario.svg")
+	_boton_pausa.icon = preload("res://interfaz/iconos/pausa.svg")
+	if Guardado.hay_partida() and Guardado.automatico:
+		_mostrar_resultado_guardado(not Guardado.fecha.is_empty(), Guardado.ultimo_mensaje)
 	_actualizar_atajos()
 	_actualizar_hud()
 
@@ -60,7 +80,8 @@ func _input(evento: InputEvent) -> void:
 	var pausa := evento.is_action_pressed(&"pausar")
 	if _pausa.visible:
 		if pausa or evento.is_action_pressed(&"ui_cancel") or (diario and _pausa.pagina == MenuDePausa.DIARIO):
-			_cerrar_pausa()
+			if not _pausa.cancelar_borrado():
+				_cerrar_pausa()
 		elif diario:
 			_pausa.mostrar_pagina(MenuDePausa.DIARIO)
 		else:
@@ -70,13 +91,17 @@ func _input(evento: InputEvent) -> void:
 		if pausa and evento.is_action_pressed(&"soltar_raton") and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 		else:
-			_abrir_pausa(MenuDePausa.DIARIO if diario else MenuDePausa.CONTROLES)
+			_abrir_pausa(MenuDePausa.DIARIO if diario else MenuDePausa.PARTIDA)
 		get_viewport().set_input_as_handled()
 
 
 func _process(delta: float) -> void:
 	if not _explorando:
 		return
+	if not _error_de_guardado:
+		_tiempo_de_guardado = maxf(0.0, _tiempo_de_guardado - delta)
+	_estado_guardado.visible = _error_de_guardado or _tiempo_de_guardado > 0.0
+	_estado_guardado.modulate.a = 1.0 if _error_de_guardado else minf(_tiempo_de_guardado * 3.0, 1.0)
 	_tiempo_del_aviso = maxf(0.0, _tiempo_del_aviso - delta)
 	if _tiempo_del_aviso <= 0.0 and not _avisos_pendientes.is_empty():
 		var encargo: Encargo = _avisos_pendientes.keys()[0]
@@ -90,9 +115,10 @@ func _process(delta: float) -> void:
 				_estado_del_aviso.text = "Objetivo cumplido"
 			Encargos.Estado.COMPLETADO:
 				_estado_del_aviso.text = "Encargo entregado"
-		_tiempo_del_aviso = 3.5
+		_tiempo_del_aviso = duracion_del_aviso
+		ajustar_alto.call_deferred(_notificacion)
 	_notificacion.visible = _tiempo_del_aviso > 0.0
-	_notificacion.modulate.a = minf(_tiempo_del_aviso * 3.0, 1.0)
+	_notificacion.modulate.a = clampf(minf((duracion_del_aviso - _tiempo_del_aviso) * 6.0, _tiempo_del_aviso * 3.0), 0.0, 1.0)
 
 
 ## Evita reutilizar la misma pulsación al volver a explorar.
@@ -147,6 +173,7 @@ func _abrir_pausa(pagina: int) -> void:
 	_pausado_antes = get_tree().paused
 	get_tree().paused = true
 	_pausa.show()
+	animar_entrada(_pausa)
 	_pausa.mostrar_pagina(pagina)
 	_actualizar_hud()
 
@@ -169,6 +196,7 @@ func _actualizar_hud() -> void:
 	_seguimiento.visible = _explorando
 	_aviso.visible = _explorando and not _accion.text.is_empty()
 	_notificacion.visible = _explorando and _tiempo_del_aviso > 0.0
+	_estado_guardado.visible = _explorando and (_error_de_guardado or _tiempo_de_guardado > 0.0)
 
 
 func _actualizar_atajos() -> void:
@@ -191,3 +219,38 @@ func _detectar_dispositivo(evento: InputEvent) -> void:
 		_actualizar_atajos()
 		_pausa.actualizar_atajos()
 		dispositivo_cambiado.emit()
+
+
+func _reiniciar_partida() -> void:
+	_cerrar_pausa()
+	_avisos_pendientes.clear()
+	_tiempo_del_aviso = 0.0
+	# El autoload conserva la interfaz y la escena repone los valores iniciales.
+	get_tree().reload_current_scene()
+
+
+## Transición breve que no retrasa las entradas ni cambia el tamaño del panel.
+func animar_entrada(panel: CanvasItem) -> void:
+	var anterior: Tween
+	if panel.has_meta(&"entrada_de_interfaz"):
+		anterior = panel.get_meta(&"entrada_de_interfaz")
+	if anterior and anterior.is_valid():
+		anterior.kill()
+	panel.modulate.a = 0.0
+	var entrada := panel.create_tween()
+	panel.set_meta(&"entrada_de_interfaz", entrada)
+	entrada.tween_property(panel, "modulate:a", 1.0, duracion_de_entrada).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+
+
+## Mantiene el ancho y permite encoger cajas después de cambiar textos.
+func ajustar_alto(panel: Control) -> void:
+	panel.size.y = panel.get_combined_minimum_size().y
+
+
+func _mostrar_resultado_guardado(correcto: bool, mensaje: String) -> void:
+	_error_de_guardado = not correcto
+	_tiempo_de_guardado = 3.0
+	_texto_guardado.text = ("✓  " if correcto else "!  ") + mensaje
+	_texto_guardado.theme_type_variation = &"Confirmado" if correcto else &"Advertencia"
+	_estado_guardado.visible = _explorando
+	ajustar_alto.call_deferred(_estado_guardado)

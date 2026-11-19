@@ -11,7 +11,7 @@ const SERIF := preload("res://interfaz/fuentes/cormorant_garamond.ttf")
 const REGION := Rect2(-158, -137, 326, 214)
 const PANEL := Vector2(1150, 676)
 const LAMINA := Rect2(24, 84, 796, 522)
-const SIDEBAR := Rect2(840, 84, 286, 522)
+const CONTEXTO := Rect2(840, 84, 286, 522)
 const CERRAR := Rect2(941, 620, 185, 38)
 const TINTA := Color("172027")
 const MARFIL := Color("f2e5c5")
@@ -32,9 +32,11 @@ var _base: ImageTexture
 var _raton_anterior := Input.MOUSE_MODE_VISIBLE
 var _volver := Button.new()
 var _ubicacion := ""
+var _pausado_antes := false
 
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	theme = preload("res://interfaz/tema.tres")
 	Interfaz.establecer_mapa_disponible(true)
 	Interfaz.solicitar_mapa.connect(_abrir)
@@ -69,8 +71,11 @@ func _abrir() -> void:
 		_base = _dibujar_relieve()
 	_raton_anterior = Input.mouse_mode
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	_pausado_antes = get_tree().paused
+	get_tree().paused = true
 	Interfaz.mapa_abierto = true
 	show()
+	Interfaz.animar_entrada(self)
 	_colocar_boton()
 	_actualizar_boton()
 	_volver.grab_focus()
@@ -113,6 +118,7 @@ func _actualizar_ubicacion() -> void:
 
 func _cerrar() -> void:
 	hide()
+	get_tree().paused = _pausado_antes
 	Input.mouse_mode = _raton_anterior
 	Interfaz.registrar_cierre()
 	Interfaz.mapa_abierto = false
@@ -182,9 +188,9 @@ func _escala_en_metros() -> void:
 
 
 func _dibujar_contexto() -> void:
-	draw_style_box(get_theme_stylebox(&"panel", &"PanelBitacora"), SIDEBAR)
-	var x := SIDEBAR.position.x + 18.0
-	var ancho := SIDEBAR.size.x - 36.0
+	draw_style_box(get_theme_stylebox(&"panel", &"PanelBitacora"), CONTEXTO)
+	var x := CONTEXTO.position.x + 18.0
+	var ancho := CONTEXTO.size.x - 36.0
 	draw_string(NEGRITA, Vector2(x, 115), "Ubicación", HORIZONTAL_ALIGNMENT_LEFT, -1, 14, LATON)
 	draw_multiline_string(SERIF, Vector2(x, 145), _ubicacion, HORIZONTAL_ALIGNMENT_LEFT, ancho, 29, 2, MARFIL)
 	draw_line(Vector2(x, 190), Vector2(x + ancho, 190), Color("53615e"))
@@ -201,7 +207,7 @@ func _dibujar_contexto() -> void:
 		draw_multiline_string(NEGRITA, Vector2(x, y), encargo.titulo, HORIZONTAL_ALIGNMENT_LEFT, ancho, 15, 2, MARFIL)
 		draw_multiline_string(LETRA, Vector2(x, y + 36), avance, HORIZONTAL_ALIGNMENT_LEFT, ancho, 14, 2, CLARO)
 		y += 76.0
-	var fila := SIDEBAR.end.y - 57.0
+	var fila := CONTEXTO.end.y - 57.0
 	draw_line(Vector2(x, fila - 20), Vector2(x + ancho, fila - 20), Color("53615e"))
 	_marcador(Vector2(x + 10, fila), Vector2.UP)
 	draw_string(LETRA, Vector2(x + 28, fila + 5), "Tu posición", HORIZONTAL_ALIGNMENT_LEFT, -1, 15, MARFIL)

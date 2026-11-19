@@ -1,6 +1,6 @@
 # Traspaso — Proyecto Emblema (prototipo en Godot)
 
-Estado al 17 de noviembre de 2026. Este documento es para quien continúe el
+Estado actualizado al 19 de noviembre de 2026. Este documento es para quien continúe el
 trabajo, sea persona o IA. Para uso diario del proyecto (controles, carpetas,
 cómo agregar un encargo o un árbol) está `LEEME.md`.
 
@@ -20,7 +20,7 @@ porque puede haber una más nueva.
   ampliado sin suavizado, con luz por bandas y colores decididos por téxel.
 - Idioma: todo en español (nodos, scripts, variables, comentarios), sin
   acentos ni ñ en los identificadores.
-- No hay repositorio Git; solo un `.gitignore` preparado.
+- Hay repositorio Git: Codex trabaja en `main` y Claude en su carpeta y rama `claude`.
 
 ## 2. Reglas del canon (obligatorias)
 
@@ -74,7 +74,8 @@ Consultado, el usuario eligió "túnica larga, sin decidir". El protagonista
 - Viaje a Puerto Albor para la misión de La Voz que anuncia el cierre de
   La última marea. El tablón de Junco ya sirve para los dos últimos encargos.
   Quedan pendientes la tienda, la forja y la posada.
-- Fauna Anómala (regla del 0,25 % del documento), guardado de partida, sonido.
+- Fauna Anómala y guardado implementados. Sonido a cargo de Claude; no tocar
+  `sonido/` ni `nucleo/sonido.gd` durante ese trabajo.
 - Los jefes deben tener un tope de 15 turnos cuando se implementen.
 
 ## 5. Arquitectura
@@ -85,6 +86,11 @@ Autoloads, en este orden (`project.godot`):
 - `Encargos` (`nucleo/encargos.gd`): estados DISPONIBLE → ACTIVO → CUMPLIDO → COMPLETADO.
   Los IDs de `requisitos` deben estar COMPLETADO para ofrecer el encargo.
   El segundo argumento de `contar` admite el ID de un punto único.
+- `Guardado` (`nucleo/guardado.gd`): JSON versionado en `user://`, respaldo,
+  carga al iniciar y guardado al avanzar en encargos o cerrar. Cada sistema
+  expone `a_diccionario()` / `desde_diccionario()`. Los nodos del grupo
+  `persistentes` se identifican por su ruta dentro de cada escena. La carga
+  en una escena abierta la reconstruye; el rescate retoma junto al protagonista.
 - `Interfaz` (`interfaz/interfaz.tscn`): ayuda, seguimiento, aviso,
   `Interfaz.dialogo` e `Interfaz.combate`.
 
@@ -118,7 +124,7 @@ Piezas principales:
   las puntas. Las raíces quedan en su lugar.
 - `defensa_de_junco.tscn` es el acopio reutilizable. Cada instancia tiene
   una `clave` distinta. Al construir cambia de modelo, queda sólida y deja
-  de aparecer en el plano de M. El estado de cada punto dura la sesión.
+  de aparecer en el plano de M. El estado de cada punto se conserva en la partida.
 - `encuentro_de_junco.gd` activa los rivales de la emboscada y del ataque
   final solo con su encargo en curso. El capitán usa `limite_de_turnos`.
   `rescate_de_junco.gd` alterna la presencia del jefe y lo guía por las
@@ -165,11 +171,41 @@ y pulsar F6. Los modos de `herramientas/captura.gd` usan la isla.
 
 Las pruebas imprimen sus resultados por consola. Los modos `encargo` y
 `guardia` también devuelven un código de error si falla alguna comprobación.
-Las capturas se guardan reducidas a 1600 píxeles de ancho.
+Las capturas se guardan reducidas a 1600 píxeles de ancho. Con `--headless`,
+los modos de movimiento y encargos ejecutan sus comprobaciones sin capturas.
+Las herramientas `-s` tienen el guardado automático desactivado.
+
+Prueba aislada de guardado (no toca la partida real):
+
+    "$G" --headless --path "$P" -s herramientas/prueba_guardado.gd -- /tmp/emblema_guardado
+
+Verifica avance parcial, historial, puntos únicos, apoyo seguro, Fauna Anómala,
+rescate, respaldo, versión incompatible, fallo de escritura y borrado.
+Los argumentos finales `cerrar` y `reabrir`, ejecutados en ese orden con la
+misma carpeta temporal, comprueban el cierre y la recuperación entre procesos.
+
+Validación del 19/11/2026 desde el entorno de Codex: guardado, cierre/reapertura,
+movimiento, encargo completo e interfaz pasaron sin ventana. La importación no
+informó errores de scripts; sí tres errores del entorno de macOS: certificados
+del sistema y escritura de preferencias del editor. Las ejecuciones con ventana
+abortaron y el control de escritorio para Godot no fue aprobado, por lo que
+queda pendiente la revisión visual mediante capturas. El entorno también
+rechazó escribir `.git/index.lock`: los commits no se pudieron crear.
 
 `herramientas/generar_jugador.py` regenera `jugador/jugador.tscn` (ejecutar
 desde la raíz del proyecto). Es opcional: la escena también se puede editar
 a mano o en el editor, pero entonces el generador queda desactualizado.
+
+Prueba de tamaños de interfaz:
+
+    "$G" --headless --path "$P" -s herramientas/prueba_interfaz.gd
+
+La prueba recorre también pausa, guardado manual, cancelación y confirmación
+del borrado, diario, controles, mapa y tamaños del diálogo.
+
+El seguimiento mantiene su ancho y ajusta solo el alto al cambiar su mínimo.
+No usar `reset_size()` allí: achica el ancho antes de envolver el texto y deja
+un alto obsoleto que puede llegar al borde inferior de la pantalla.
 
 ## 7. Cosas que no son obvias
 

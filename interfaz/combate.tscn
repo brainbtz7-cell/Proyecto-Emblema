@@ -98,6 +98,7 @@ theme_override_constants/separation = 12
 
 [node name="Pronostico" type="Label" parent="Columna/Senal/Fila"]
 layout_mode = 2
+autowrap_mode = 3
 size_flags_horizontal = 3
 theme_type_variation = &"Enfasis"
 
@@ -141,6 +142,7 @@ size_flags_horizontal = 3
 text = "4 · Huir"
 
 [node name="Detalle" type="Label" parent="Columna"]
+autowrap_mode = 3
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 theme_type_variation = &"Secundario"

@@ -23,7 +23,8 @@ ampliado sin suavizado. Hecho en Godot 4.7.
 | Elegir una acción de combate | 1 a 4, flechas y Enter, o clic | Cruceta y botón A |
 | Girar la cámara | Clic y mover el ratón | Palanca derecha |
 | Acercar o alejar | Rueda del ratón | — |
-| Soltar el ratón | Esc | — |
+| Soltar el ratón / pausa | Esc (otra vez para pausar si estaba capturado) | Menú |
+| Abrir el diario | Tab | — |
 | Abrir el mapa de Salbruma | M | Vista / Select |
 | Píxel más grande / más chico | F2 / F3 | — |
 
@@ -38,12 +39,36 @@ Rotas queda río arriba, por el sendero que bordea el Gran Río. El sendero
 que sale al noroeste del pueblo lleva a las Marismas del Caparazón.
 
 Con **M** ves el plano del tramo y tu posición. Con **M** o **Esc** volvés
-a explorar. Hay pasto bajo junto al camino y matas altas en las riberas.
+a explorar. El mapa pausa el mundo mientras lo consultás. Hay pasto bajo junto al camino y matas altas en las riberas.
 Al acercarte, las hojas se apartan y vuelven a levantarse cuando pasás.
 Al vadear o caer en el agua se abren ondas y saltan gotas donde toca el
 protagonista. Las pasarelas mantienen los pies secos.
 En tierra firme, mantené **Shift** para correr. El agua va frenando el
 paso a medida que sube.
+
+## Guardar y continuar la partida
+
+La partida se carga sola al abrir el juego. Se guarda al aceptar, avanzar,
+cumplir o entregar encargos y al cerrar la ventana. En **Esc → Partida**
+podés **Guardar** manualmente o **Borrar partida** y volver a empezar.
+El borrado pide confirmación; **Esc** cancela esa confirmación.
+
+Se conservan el diario, los contadores, las defensas levantadas, los puntos
+únicos de la emboscada, el rescate en curso, las Fichas Anómalas y su colección,
+el nivel y el doble salto del protagonista. La posición guardada es el último
+apoyo seguro, incluso si guardás durante un salto. Cada escenario conserva
+su propia posición. Los combates se vuelven a iniciar: no se guardan los turnos.
+
+El archivo con versión es `user://partida.json`. En macOS se encuentra en
+`~/Library/Application Support/Godot/app_userdata/Proyecto Emblema/`.
+Se escribe primero un temporal y se conserva una copia `.bak`. Un archivo
+incompatible no altera la sesión; si se recupera el respaldo, guardá manualmente
+para confirmarlo. La pantalla Partida informa el resultado y la fecha. Al explorar también
+aparece un aviso breve de guardado; los errores permanecen visibles.
+
+Las herramientas ejecutadas con `-s` no cargan ni sobrescriben esa partida.
+`-- --sin-guardado` permite abrir el juego sin persistencia automática.
+La prueba `herramientas/prueba_guardado.gd` usa archivos aislados en `/tmp`.
 
 ## Combate y encargos de prueba
 
@@ -156,6 +181,8 @@ cazarlo da una Ficha Anómala y queda anotado en la colección.
 - **Los conceptos de personajes de Salbruma son propuestas visuales.**
   Las ilustraciones del protagonista, el jefe pesquero y el capitán Klaimyr
   se guardan como referencias en `arte_fuente/conceptos_personajes_v1/`.
+- **La presentación de la interfaz es provisional.** La paleta, la tipografía,
+  los paneles y las transiciones son propuestas para probar legibilidad y uso.
 - **El combate en el lugar es una prueba.** Los patrones, la preparación,
   el contraataque, la vida y los valores de daño sirven para probar el ritmo.
 - **El guardia y los asaltantes son modelos de marcador.** Su apariencia
