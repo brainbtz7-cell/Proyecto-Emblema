@@ -332,7 +332,7 @@ func _dibujar_encargos() -> void:
 func _dibujar_tercera_tanda() -> void:
 	if Encargos.estado_de(EMBOSCADA) == Encargos.Estado.ACTIVO:
 		_pintar_camino(TRAZADO.INVESTIGACION, SENDERO, 2.7)
-		_rotulo(TRAZADO.EMBOSCADA, Vector2(-85, -22), "Punto de investigación", 20, &"encargo")
+		_rotulo(TRAZADO.EMBOSCADA, Vector2(-185, -22), "Punto de investigación", 20, &"encargo")
 	if Encargos.estado_de(RESCATE) == Encargos.Estado.ACTIVO:
 		_pintar_camino(TRAZADO.HACIA_RESCATE, SENDERO, 2.7)
 		if not Encargos.contado(RESCATE, &"liberar"):

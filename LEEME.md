@@ -212,6 +212,7 @@ cazarlo da una Ficha Anómala y queda anotado en la colección.
   se guardan como referencias en `arte_fuente/conceptos_personajes_v1/`.
 - **La presentación de la interfaz es provisional.** La paleta, la tipografía,
   los paneles y las transiciones son propuestas para probar legibilidad y uso.
+  El seguimiento usa límites aproximados a partir del trazado jugable.
 - **El combate en el lugar es una prueba.** Los patrones, la preparación,
   el contraataque, la vida y los valores de daño sirven para probar el ritmo.
 - **El guardia y los asaltantes son modelos de marcador.** Su apariencia

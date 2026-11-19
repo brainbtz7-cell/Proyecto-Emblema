@@ -10,6 +10,7 @@ signal dispositivo_cambiado
 @export_range(2.0, 6.0, 0.1) var duracion_del_aviso := 3.5
 
 const MARGEN_TRAS_CIERRE := 200
+const MARGEN_DEL_GUARDADO := 24.0
 const BOTONES_MANDO := {
 	JOY_BUTTON_A: "A", JOY_BUTTON_B: "B", JOY_BUTTON_X: "X", JOY_BUTTON_Y: "Y",
 	JOY_BUTTON_BACK: "Vista", JOY_BUTTON_START: "Menú", JOY_BUTTON_LEFT_STICK: "L3",
@@ -60,7 +61,7 @@ func _ready() -> void:
 	_pausa.reiniciar.connect(_reiniciar_partida)
 	Encargos.hito.connect(_anotar_hito)
 	Guardado.resultado.connect(_mostrar_resultado_guardado)
-	_estado_guardado.minimum_size_changed.connect(ajustar_alto.bind(_estado_guardado).call_deferred)
+	_estado_guardado.minimum_size_changed.connect(ajustar_alto.bind(_estado_guardado, MARGEN_DEL_GUARDADO).call_deferred)
 	_notificacion.minimum_size_changed.connect(ajustar_alto.bind(_notificacion).call_deferred)
 	for boton: Button in [_mapa, _diario, _boton_pausa]:
 		boton.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -248,9 +249,14 @@ func animar_entrada(panel: CanvasItem) -> void:
 	entrada.tween_property(panel, "modulate:a", 1.0, duracion_de_entrada).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
 
-## Mantiene el ancho y permite encoger cajas después de cambiar textos.
-func ajustar_alto(panel: Control) -> void:
-	panel.size.y = panel.get_combined_minimum_size().y
+## Mantiene el ancho. En cajas ancladas abajo, vuelve a fijar el borde inferior.
+func ajustar_alto(panel: Control, margen_inferior := -1.0) -> void:
+	var alto := panel.get_combined_minimum_size().y
+	if margen_inferior >= 0.0:
+		panel.offset_bottom = -margen_inferior
+		panel.offset_top = -margen_inferior - alto
+	else:
+		panel.size.y = alto
 
 
 func _mostrar_resultado_guardado(correcto: bool, mensaje: String) -> void:
@@ -259,4 +265,4 @@ func _mostrar_resultado_guardado(correcto: bool, mensaje: String) -> void:
 	_texto_guardado.text = ("✓  " if correcto else "!  ") + mensaje
 	_texto_guardado.theme_type_variation = &"Confirmado" if correcto else &"Advertencia"
 	_estado_guardado.visible = _explorando
-	ajustar_alto.call_deferred(_estado_guardado)
+	ajustar_alto.call_deferred(_estado_guardado, MARGEN_DEL_GUARDADO)

@@ -15,6 +15,9 @@ const GUIAS := [
 	"Terminá el encuentro y volvé a explorar.",
 ]
 
+## Distancia entre el panel y el borde inferior, en píxeles de referencia.
+@export var margen_inferior := 24.0
+
 var cerrado_en := -100000
 var _vida_protagonista := 0
 var _vida_rival_actual := 0
@@ -38,11 +41,11 @@ var _animacion_de_vida: Tween
 
 @onready var _estado: Label = $Columna/Cabecera/Estado
 @onready var _relato: Label = $Columna/Relato
-@onready var _nombre: Label = $Columna/Vidas/Rival/Nombre
+@onready var _nombre: Label = $Columna/Vidas/Rival/Cabecera/Nombre
 @onready var _vida_propia: ProgressBar = $Columna/Vidas/Protagonista/Barra
 @onready var _vida_rival: ProgressBar = $Columna/Vidas/Rival/Barra
-@onready var _cantidad_propia: Label = $Columna/Vidas/Protagonista/Barra/Cantidad
-@onready var _cantidad_rival: Label = $Columna/Vidas/Rival/Barra/Cantidad
+@onready var _cantidad_propia: Label = $Columna/Vidas/Protagonista/Cabecera/Cantidad
+@onready var _cantidad_rival: Label = $Columna/Vidas/Rival/Cabecera/Cantidad
 @onready var _senal: PanelContainer = $Columna/Senal
 @onready var _pronostico: Label = $Columna/Senal/Fila/Pronostico
 @onready var _ventaja: Label = $Columna/Senal/Fila/Ventaja
@@ -71,7 +74,7 @@ func _ready() -> void:
 		boton.mouse_entered.connect(_mostrar_detalle.bind(boton))
 		boton.mouse_exited.connect(_restaurar_detalle)
 	Interfaz.dispositivo_cambiado.connect(_actualizar_atajos)
-	minimum_size_changed.connect(Interfaz.ajustar_alto.bind(self).call_deferred)
+	minimum_size_changed.connect(Interfaz.ajustar_alto.bind(self, margen_inferior).call_deferred)
 
 
 func _unhandled_input(evento: InputEvent) -> void:

@@ -186,13 +186,12 @@ rescate, respaldo, versión incompatible, fallo de escritura y borrado.
 Los argumentos finales `cerrar` y `reabrir`, ejecutados en ese orden con la
 misma carpeta temporal, comprueban el cierre y la recuperación entre procesos.
 
-Validación del 19/11/2026 desde el entorno de Codex: guardado, cierre/reapertura,
-movimiento, encargo completo e interfaz pasaron sin ventana. La importación no
-informó errores de scripts; sí tres errores del entorno de macOS: certificados
-del sistema y escritura de preferencias del editor. Las ejecuciones con ventana
-abortaron y el control de escritorio para Godot no fue aprobado, por lo que
-queda pendiente la revisión visual mediante capturas. El entorno también
-rechazó escribir `.git/index.lock`: los commits no se pudieron crear.
+Validación de la ronda de interfaz del 19/11/2026: movimiento, encargo,
+guardado, viaje a Albor y comprobaciones de interfaz se ejecutaron sin ventana.
+La importación cargó los scripts y el entorno de macOS informó errores al
+leer certificados del sistema y al escribir preferencias del editor. Godot
+abortó al abrir una ventana y el control de escritorio no fue aprobado.
+Quedó pendiente generar e inspeccionar las capturas.
 
 `herramientas/generar_jugador.py` regenera `jugador/jugador.tscn` (ejecutar
 desde la raíz del proyecto). Es opcional: la escena también se puede editar
@@ -203,7 +202,10 @@ Prueba de tamaños de interfaz:
     "$G" --headless --path "$P" -s herramientas/prueba_interfaz.gd
 
 La prueba recorre también pausa, guardado manual, cancelación y confirmación
-del borrado, diario, controles, mapa y tamaños del diálogo.
+del borrado, diario, controles, mapa, diálogo, combate y menú principal. Para
+guardar capturas de las pantallas, correrla con ventana y un directorio de salida:
+
+    "$G" --path "$P" --windowed -s herramientas/prueba_interfaz.gd -- /tmp/emblema_pantallas
 
 El seguimiento mantiene su ancho y ajusta solo el alto al cambiar su mínimo.
 No usar `reset_size()` allí: achica el ancho antes de envolver el texto y deja

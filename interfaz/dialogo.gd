@@ -17,6 +17,8 @@ const NOMBRE_DE_LA_VOZ := "La Voz"
 
 ## Letras que se escriben por segundo.
 @export var rapidez := 45.0
+## Distancia entre la caja y el borde inferior, en píxeles de referencia.
+@export var margen_inferior := 28.0
 
 ## Verdadero mientras la caja está en pantalla.
 var abierto := false
@@ -39,7 +41,7 @@ func _ready() -> void:
 	visible = false
 	_seguir.pressed.connect(_seguir_dialogo)
 	Interfaz.dispositivo_cambiado.connect(_actualizar_pie)
-	_caja.minimum_size_changed.connect(Interfaz.ajustar_alto.bind(_caja).call_deferred)
+	_caja.minimum_size_changed.connect(Interfaz.ajustar_alto.bind(_caja, margen_inferior).call_deferred)
 
 
 ## Muestra un texto y espera a que el jugador lo pase.
