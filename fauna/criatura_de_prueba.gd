@@ -165,6 +165,7 @@ func entrar_en_combate(jugador: Jugador) -> void:
 		var especie := nombre_de_combate.trim_suffix(" Anómalo")
 		FaunaAnomala.registrar_caza(especie)
 		AvisoAnomalo.mostrar(get_tree(), especie)
+		Sonido.efecto(&"ficha_anomala", 0.0)
 	if derrota_que_cuenta != &"":
 		Encargos.contar(derrota_que_cuenta, clave_de_derrota_unica)
 	if objeto_de_encargo != &"" and Encargos.hace_falta(objeto_de_encargo):

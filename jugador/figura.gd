@@ -35,6 +35,14 @@ extends Node3D
 ## Cuánto se levanta la capa al correr.
 @export var vuelo_de_la_capa := 0.9
 
+@export_group("Sonido")
+## Debajo de esta altura los pasos suenan a agua; hasta "altura_de_arena", a arena.
+@export var altura_de_agua := 0.0
+@export var altura_de_arena := 0.7
+
+var _ultimo_paso := 0
+var _ambiente_iniciado := false
+
 ## Aporte de la animación de combate a la postura de cada brazo.
 var golpe_de_combate := 0.0
 var guardia_de_combate := 0.0
@@ -75,6 +83,15 @@ func animar(delta: float, velocidad: Vector3, velocidad_maxima: float, en_el_sue
 	_en_el_aire = lerpf(_en_el_aire, 0.0 if en_el_suelo else 1.0, _hacia(12.0, delta))
 	if en_el_suelo:
 		_fase_de_paso += delta * rapidez * pasos_por_metro
+		# Cada medio ciclo apoya un pie.
+		var pisada := int(_fase_de_paso / PI)
+		if pisada != _ultimo_paso:
+			_ultimo_paso = pisada
+			if rapidez > 0.5:
+				Sonido.efecto_en(_superficie(), global_position)
+	if not _ambiente_iniciado and is_inside_tree():
+		_ambiente_iniciado = true
+		Sonido.iniciar_ambiente(get_tree())
 	var paso := sin(_fase_de_paso)
 	var respiracion := sin(_tiempo * 2.2)
 
@@ -128,15 +145,31 @@ func animar(delta: float, velocidad: Vector3, velocidad_maxima: float, en_el_sue
 
 func al_saltar() -> void:
 	scale = Vector3(0.8, 1.25, 0.8)
+	Sonido.efecto(&"salto")
 
 
 func al_doble_salto() -> void:
 	scale = Vector3(0.85, 1.2, 0.85)
 	_avance_de_la_vuelta = 0.0
+	Sonido.efecto(&"doble_salto")
 
 
 func al_aterrizar() -> void:
 	scale = Vector3(1.25, 0.75, 1.25)
+	Sonido.efecto(&"aterrizaje")
+
+
+# Qué suena al pisar: roca sobre rocas y construcciones; sobre el terreno,
+# agua, arena o pasto según la altura.
+func _superficie() -> StringName:
+	if global_position.y < altura_de_agua:
+		return &"paso_agua"
+	var espacio := get_world_3d().direct_space_state
+	var consulta := PhysicsRayQueryParameters3D.create(global_position + Vector3.UP * 0.3, global_position + Vector3.DOWN * 0.6, Suelo.CAPA_DEL_MUNDO)
+	var golpe := espacio.intersect_ray(consulta)
+	if not golpe.is_empty() and not (golpe.collider is Terreno or golpe.collider is TerrenoSalbruma):
+		return &"paso_roca"
+	return &"paso_arena" if global_position.y < altura_de_arena else &"paso_pasto"
 
 
 # Fracción del camino a recorrer en este paso para acercarse suavemente a un valor.

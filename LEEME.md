@@ -122,6 +122,15 @@ Cuando una copa tapa al protagonista, el follaje abre una ventana redonda
 para que no se pierda de vista. El radio se ajusta en `ventana_en_el_follaje`,
 en el nodo `Camara` del jugador.
 
+## Sonido
+
+Efectos provisionales sintetizados por código: pasos (pasto, arena, roca,
+agua), salto, doble salto, aterrizaje, Ficha Anómala y ambiente de olas y
+viento. Están en `sonido/` y se regeneran con
+`python3 herramientas/generar_sonidos.py`. Se reproducen con `nucleo/sonido.gd`
+(`Sonido.efecto(&"nombre")`, sin autoload). Volúmenes en
+`Sonido.volumen_efectos` y `Sonido.volumen_ambiente`.
+
 ## Fauna Anómala
 
 Regla del Documento Maestro (4.3): cada animal que aparece tiene un 0,25 % de
