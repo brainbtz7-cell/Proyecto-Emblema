@@ -147,6 +147,30 @@ Cuando una copa tapa al protagonista, el follaje abre una ventana redonda
 para que no se pierda de vista. El radio se ajusta en `ventana_en_el_follaje`,
 en el nodo `Camara` del jugador.
 
+## Viaje a Puerto Albor
+
+Al entregar *La última marea*, La Voz da la misión dorada *Desenmascara al
+impostor*. El camino sigue al norte de las marismas, cruza la loma por un paso
+(Sendero de los Faros, con Uscita y lagartos) y llega a Puerto Albor, río
+arriba, con su muelle. Al entrar al pueblo se cumple el tramo del viaje.
+
+- Trazado: `HACIA_ALBOR`, `FAROS` y `PUERTO_ALBOR` en `mundo/salbruma/trazado_salbruma.gd`.
+- Misión: `encargos/la_voz_desenmascara_al_impostor.tres` y `mundo/salbruma/mision_de_la_voz.gd`.
+- Prueba: `herramientas/prueba_albor.gd`.
+- **Provisional:** el texto de la visión (solo la descripción funcional del
+  documento), los faros y las casas genéricas, y que el encargo se cierre al
+  llegar. Falta la investigación en el pueblo (encargos de Albor, gruta, isla
+  y profeta) y marcar Albor en el plano.
+
+## Sonido
+
+Efectos provisionales sintetizados por código: pasos (pasto, arena, roca,
+agua), salto, doble salto, aterrizaje, Ficha Anómala y ambiente de olas y
+viento. Están en `sonido/` y se regeneran con
+`python3 herramientas/generar_sonidos.py`. Se reproducen con `nucleo/sonido.gd`
+(`Sonido.efecto(&"nombre")`, sin autoload). Volúmenes en
+`Sonido.volumen_efectos` y `Sonido.volumen_ambiente`.
+
 ## Fauna Anómala
 
 Regla del Documento Maestro (4.3): cada animal que aparece tiene un 0,25 % de

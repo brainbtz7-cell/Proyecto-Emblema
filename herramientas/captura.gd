@@ -48,6 +48,8 @@ func _correr() -> void:
 			await _retrato(jugador)
 		"anomala":
 			await _anomala(escena, jugador)
+		"sonido":
+			await _sonido(jugador)
 		"arboles":
 			await _arboles(escena, jugador)
 		"arranque":
@@ -575,6 +577,36 @@ func _anomala(escena: Node, jugador: CharacterBody3D) -> void:
 	FaunaAnomala.desde_diccionario({})
 	FaunaAnomala.desde_diccionario(datos)
 	print("GUARDADO ida y vuelta: ", FaunaAnomala.a_diccionario() == datos, "  ", datos)
+
+
+func _sonido(jugador: CharacterBody3D) -> void:
+	await _esperar_fisica(30)
+	var antes := _sonando()
+	Input.action_press("mover_adelante")
+	var oidos := {}
+	for i in 90:
+		await physics_frame
+		for n in _sonando():
+			oidos[n] = true
+	Input.action_release("mover_adelante")
+	Input.action_press("saltar")
+	for i in 30:
+		await physics_frame
+		for n in _sonando():
+			oidos[n] = true
+	Input.action_release("saltar")
+	await _esperar_fisica(40)
+	for n in _sonando():
+		oidos[n] = true
+	print("SONIDO: ambiente al inicio ", antes, "  oídos: ", oidos.keys())
+
+
+func _sonando() -> Array:
+	var lista := []
+	for nodo in root.get_children():
+		if (nodo is AudioStreamPlayer or nodo is AudioStreamPlayer3D) and nodo.playing and nodo.stream:
+			lista.append(nodo.stream.resource_path.get_file() if nodo.stream.resource_path else "ambiente(bucle)")
+	return lista
 
 
 func _retrato(jugador: CharacterBody3D) -> void:

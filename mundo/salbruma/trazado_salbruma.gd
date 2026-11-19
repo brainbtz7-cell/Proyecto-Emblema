@@ -13,6 +13,10 @@ const PUENTE_MARISMAS_NORTE := Vector2(-61.0, -99.0)
 const EMBOSCADA := Vector2(0.0, -48.0)
 const RESCATE := Vector2(76.0, -88.0)
 const ULTIMA_MAREA := Vector2(89.0, 12.5)
+## Segundo pueblo costero, río arriba, pegado a la orilla del lado de Salbruma.
+const PUERTO_ALBOR := Vector2(84.0, -161.0)
+## Sendero de los Faros: a tres cuartos del viaje de Junco a Albor.
+const FAROS := Vector2(36.0, -140.0)
 
 const CAMINO: Array[Vector2] = [
 	Vector2(-147, 27), LLEGADA, Vector2(-123, 24), Vector2(-108, 26),
@@ -33,6 +37,13 @@ const HACIA_MARISMAS: Array[Vector2] = [
 	Vector2(-14, -38), Vector2(-30, -50), Vector2(-40, -62), Vector2(-49, -71),
 	PUENTE_MARISMAS_SUR, MARISMAS, PUENTE_MARISMAS_NORTE,
 	Vector2(-55, -107), Vector2(-45, -114), Vector2(-33, -123),
+]
+
+## Sigue desde la salida norte de las marismas y gira al noreste hasta Albor.
+const HACIA_ALBOR: Array[Vector2] = [
+	Vector2(-33, -123), Vector2(-20, -127), Vector2(-4, -126), Vector2(11, -129),
+	Vector2(24, -135), FAROS, Vector2(49, -147), Vector2(62, -155),
+	Vector2(74, -160), PUERTO_ALBOR, Vector2(95, -161),
 ]
 
 const ARROYO: Array[Vector2] = [
@@ -68,6 +79,7 @@ static func distancia_a_camino(punto: Vector2) -> float:
 		distancia_a_tramo(punto, CAMINO),
 		minf(distancia_a_tramo(punto, RIBERA), distancia_a_tramo(punto, HACIA_MARISMAS))
 	)
+	caminos_principales = minf(caminos_principales, distancia_a_tramo(punto, HACIA_ALBOR))
 	return minf(caminos_principales, minf(distancia_a_tramo(punto, INVESTIGACION), distancia_a_tramo(punto, HACIA_RESCATE)))
 
 
@@ -77,3 +89,20 @@ static func distancia_a_tramo(punto: Vector2, tramo: Array[Vector2]) -> float:
 		var cerca := Geometry2D.get_closest_point_to_segment(punto, tramo[indice - 1], tramo[indice])
 		distancia = minf(distancia, cerca.distance_squared_to(punto))
 	return sqrt(distancia)
+
+
+## Distancia al tramo (x) y metros recorridos sobre él hasta el punto más cercano (y).
+static func distancia_y_avance(punto: Vector2, tramo: Array[Vector2]) -> Vector2:
+	var mejor := INF
+	var avance := 0.0
+	var recorrido := 0.0
+	for indice in range(1, tramo.size()):
+		var a := tramo[indice - 1]
+		var b := tramo[indice]
+		var cerca := Geometry2D.get_closest_point_to_segment(punto, a, b)
+		var distancia := cerca.distance_squared_to(punto)
+		if distancia < mejor:
+			mejor = distancia
+			avance = recorrido + a.distance_to(cerca)
+		recorrido += a.distance_to(b)
+	return Vector2(sqrt(mejor), avance)

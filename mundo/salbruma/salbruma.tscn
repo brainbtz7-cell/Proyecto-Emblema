@@ -36,6 +36,8 @@
 [ext_resource type="Script" path="res://mundo/salbruma/rescate_de_junco.gd" id="32_escorta"]
 [ext_resource type="Script" path="res://nucleo/interactuable.gd" id="33_interactuar"]
 [ext_resource type="PackedScene" path="res://personajes/capitan_klaimyr.tscn" id="34_capitan"]
+[ext_resource type="Script" path="res://mundo/salbruma/mision_de_la_voz.gd" id="35_voz"]
+[ext_resource type="Resource" path="res://encargos/la_voz_desenmascara_al_impostor.tres" id="36_impostor"]
 
 [sub_resource type="ShaderMaterial" id="mat_cielo"]
 shader = ExtResource("3_cielo")
@@ -89,6 +91,9 @@ shader_parameter/color = Color(1, 1, 1, 1)
 
 [sub_resource type="BoxShape3D" id="forma_poblado"]
 size = Vector3(40, 12, 34)
+
+[sub_resource type="BoxShape3D" id="forma_albor"]
+size = Vector3(34, 12, 28)
 
 [sub_resource type="SphereShape3D" id="forma_emboscada"]
 radius = 6.4
@@ -350,6 +355,42 @@ separacion = 3.8
 altura_minima = 0.31
 altura_maxima = 6.4
 
+[node name="PuertoAlbor" type="Area3D" parent="."]
+position = Vector3(80, 2, -161)
+script = ExtResource("35_voz")
+mision = ExtResource("36_impostor")
+desencadenante = ExtResource("29_marea")
+
+[node name="Forma" type="CollisionShape3D" parent="PuertoAlbor"]
+shape = SubResource("forma_albor")
+
+[node name="PobladoAlbor" type="Area3D" parent="."]
+position = Vector3(80, 2, -161)
+script = ExtResource("14_poblado")
+
+[node name="Forma" type="CollisionShape3D" parent="PobladoAlbor"]
+shape = SubResource("forma_albor")
+
+[node name="UscitasFaros" type="Node3D" parent="."]
+position = Vector3(46, 0, -146)
+script = ExtResource("15_manada")
+animal = ExtResource("16_uscita")
+cantidad = 4
+radio = 11.0
+separacion = 3.3
+altura_minima = 0.41
+altura_maxima = 12.0
+
+[node name="LagartosFaros" type="Node3D" parent="."]
+position = Vector3(14, 0, -136)
+script = ExtResource("15_manada")
+animal = ExtResource("25_lagarto")
+cantidad = 3
+radio = 10.0
+separacion = 3.8
+altura_minima = 0.31
+altura_maxima = 18.0
+
 [node name="Arboleda" type="Node3D" parent="." node_paths=PackedStringArray("terreno", "dejar_libre")]
 position = Vector3(-3, 0, -20)
 script = ExtResource("18_arboleda")
@@ -363,7 +404,7 @@ altura_maxima = 23.0
 pendiente_maxima = 0.48
 agrupamiento = 0.72
 tamano_de_los_manchones = 29.0
-dejar_libre = [NodePath("../Jugador"), NodePath("../Guardia"), NodePath("../Pescador"), NodePath("../Poblado"), NodePath("../Asaltantes"), NodePath("../Emboscada"), NodePath("../Rescate")]
+dejar_libre = [NodePath("../Jugador"), NodePath("../Guardia"), NodePath("../Pescador"), NodePath("../Poblado"), NodePath("../Asaltantes"), NodePath("../Emboscada"), NodePath("../Rescate"), NodePath("../PuertoAlbor")]
 radio_libre = 12.5
 
 [node name="Pasto" type="Node3D" parent="." node_paths=PackedStringArray("terreno")]

@@ -47,6 +47,8 @@ func _construir() -> void:
 	_caleta()
 	_marismas()
 	_campamento_de_prueba()
+	_sendero_de_los_faros()
+	_puerto_albor()
 
 
 func _puerto() -> void:
@@ -142,6 +144,63 @@ func _campamento_de_prueba() -> void:
 	_bloque(cerco, Vector3(0, 0.67, 0.13), Vector3(3.07, 0.14, 0.11), _madera)
 	_roca_en(Vector2(1.1, -48.4), Vector3(3.26, 1.42, 1.62), -0.37)
 	_roca_en(Vector2(6.7, -48.2), Vector3(2.7, 1.55, 2.32), 0.24)
+
+
+# PROVISIONAL: el documento nombra el Sendero de los Faros pero no describe
+# los faros; son torres de piedra genéricas.
+func _sendero_de_los_faros() -> void:
+	_cartel_en(Vector2(-30.0, -118.5), "Hacia Puerto Albor", deg_to_rad(-20))
+	_cartel_en(Vector2(27.5, -131.0), "Sendero de los Faros", deg_to_rad(-28))
+	_faro(Vector2(31.0, -147.5), 6.2)
+	_faro(Vector2(45.5, -133.5), 5.0)
+	_roca_en(Vector2(40.0, -150.0), Vector3(3.4, 1.6, 2.6), 0.7)
+	_roca_en(Vector2(20.5, -126.0), Vector3(2.6, 1.3, 2.0), -0.4)
+
+
+func _faro(punto: Vector2, alto: float) -> void:
+	var faro := _soporte(_suelo(punto, 0.1))
+	var cuerpo := CylinderMesh.new()
+	cuerpo.top_radius = 0.75
+	cuerpo.bottom_radius = 1.15
+	cuerpo.height = alto
+	cuerpo.radial_segments = 8
+	cuerpo.rings = 1
+	_mostrar(faro, cuerpo, Vector3(0, alto * 0.5, 0), _piedra)
+	_colision(faro, Vector3(0, alto * 0.5, 0), Vector3(1.8, alto, 1.8))
+	_bloque(faro, Vector3(0, alto + 0.1, 0), Vector3(1.9, 0.2, 1.9), _madera_oscura)
+	_bloque(faro, Vector3(0, alto + 0.55, 0), Vector3(0.9, 0.7, 0.9), _vidrio)
+	_bloque(faro, Vector3(0, alto + 1.05, 0), Vector3(1.3, 0.3, 1.3), _teja_oscura)
+	var luz := OmniLight3D.new()
+	luz.light_color = Color("ffc777")
+	luz.light_energy = 1.4
+	luz.omni_range = 9.0
+	faro.add_child(luz)
+	luz.position = Vector3(0, alto + 0.55, 0)
+
+
+# Segundo pueblo costero, río arriba. Las casas son genéricas: el documento
+# dice que sus tiendas en el mapa no fijan la arquitectura definitiva.
+func _puerto_albor() -> void:
+	_casa(Vector2(70, -151), Vector2(6.0, 4.8), 2.8, deg_to_rad(176), _marfil, _teja)
+	_casa(Vector2(80, -150), Vector2(6.8, 5.0), 3.3, deg_to_rad(184), _verde, _teja_oscura)
+	_casa(Vector2(90, -151.5), Vector2(5.4, 4.4), 2.6, deg_to_rad(172), _marfil, _teja_oscura)
+	_casa(Vector2(68, -170), Vector2(6.2, 4.9), 2.9, deg_to_rad(-4), _verde, _teja)
+	_casa(Vector2(78.5, -171), Vector2(7.4, 5.2), 3.4, deg_to_rad(3), _marfil, _teja)
+	_casa(Vector2(89, -170), Vector2(5.6, 4.5), 2.7, deg_to_rad(-9), _verde, _teja_oscura)
+
+	var rampa := Vector2(93.0, -161.0)
+	_pasarela(_suelo(rampa, 0.07), Vector3(101.0, 1.4, -161.0), 3.8, true)
+	_pasarela(Vector3(101.0, 1.4, -161.0), Vector3(111.0, 1.4, -161.0), 3.8, true)
+	_pasarela(Vector3(110.0, 1.4, -169.0), Vector3(110.0, 1.4, -153.0), 2.5, false)
+	_bote(Vector3(113.0, 0.25, -156.0), 0.2)
+	_bote(Vector3(106.5, 0.25, -166.5), -0.1)
+	_cajas(Vector3(104.5, 1.45, -159.6))
+	_red(_suelo(Vector2(91.0, -156.5)), 0.4, false)
+
+	_cartel_en(Vector2(62.5, -156.0), "Puerto Albor", deg_to_rad(-30))
+	_puesto(Vector2(84.0, -156.0), deg_to_rad(180))
+	_poste_con_luz(Vector2(66.0, -163.5))
+	_poste_con_luz(Vector2(92.0, -164.5))
 
 
 func _hojas_flotantes(centro: Vector2, radio: float, semilla: int) -> void:

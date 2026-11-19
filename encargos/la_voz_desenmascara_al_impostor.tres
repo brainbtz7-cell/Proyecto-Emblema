@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="Encargo" format=3]
+
+[ext_resource type="Script" path="res://nucleo/encargo.gd" id="1_encargo"]
+
+[resource]
+script = ExtResource("1_encargo")
+id = &"la_voz_desenmascara_al_impostor"
+titulo = "Desenmascara al impostor"
+oferta = "Viaja al siguiente pueblo e investiga por qué perdieron el contacto."
+objetivo = "Llegar a Puerto Albor"
+indicacion = "Seguí el camino al norte de las marismas y cruzá el Sendero de los Faros."
+clave_de_conteo = &"llegada_a_puerto_albor"
+cantidad = 1
+entregar_a = "Puerto Albor"
+cierre = "Llegaste a Puerto Albor.\nLa investigación en el pueblo continúa en la próxima etapa."
+requisitos = Array[StringName]([&"puerto_junco_ultima_marea"])
