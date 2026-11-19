@@ -38,11 +38,12 @@ func _actualizar() -> void:
 	var abiertos := Encargos.en_curso()
 	var elegido: Encargo
 	for encargo in abiertos:
-		if elegido == null:
-			elegido = encargo
 		if Encargos.estado_de(encargo) == Encargos.Estado.CUMPLIDO:
 			elegido = encargo
 			break
+		# Las misiones de La Voz son de largo plazo: el encargo local va primero.
+		if elegido == null or (elegido.de_la_voz and not encargo.de_la_voz):
+			elegido = encargo
 	_titulo.visible = elegido != null
 	_objetivo.visible = elegido != null
 	_otros.visible = abiertos.size() > 1
@@ -59,7 +60,7 @@ func _actualizar() -> void:
 		_progreso.value = Encargos.avance_de(elegido)
 		_progreso.theme_type_variation = &"ProgresoDeLaVoz" if elegido.de_la_voz else &"ProgressBar"
 		_progreso.visible = not cumplido
-		_indicacion.text = "" if cumplido else elegido.indicacion
+		_indicacion.text = "" if cumplido else elegido.indicacion_para(Encargos.avance_de(elegido))
 	else:
 		_objetivo.text = ""
 		_progreso.hide()

@@ -1,0 +1,17 @@
+; Propuesta de prueba. Los textos y los hitos internos quedan sujetos al Documento Maestro.
+[gd_resource type="Resource" script_class="Encargo" format=3]
+
+[ext_resource type="Script" path="res://nucleo/encargo.gd" id="1_encargo"]
+
+[resource]
+script = ExtResource("1_encargo")
+id = &"puerto_albor_testigo_silenciado"
+titulo = "El testigo silenciado"
+oferta = "El habitante que pidió investigar al profeta fue al Cayo de Salcristal. Buscalo allí."
+objetivo = "Pasos de la investigación"
+indicacion = "Buscá al habitante en el cayo."
+clave_de_conteo = &"testigo_de_albor"
+cantidad = 5
+entregar_a = "Puerto Junco"
+requisitos = Array[StringName]([&"puerto_albor_dudas_razonables"])
+indicaciones_por_paso = PackedStringArray("Buscá al habitante en el Cayo de Salcristal. El bote sale del muelle de Albor.", "Enfrentá al sicario que acecha junto al cuerpo.", "Leé la nota que quedó junto al cuerpo.", "Volvé a Puerto Albor con la nota.", "Huí a Puerto Junco.")

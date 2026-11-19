@@ -1,0 +1,17 @@
+; Propuesta de prueba. Los textos y los hitos internos quedan sujetos al Documento Maestro.
+[gd_resource type="Resource" script_class="Encargo" format=3]
+
+[ext_resource type="Script" path="res://nucleo/encargo.gd" id="1_encargo"]
+
+[resource]
+script = ExtResource("1_encargo")
+id = &"la_voz_misterios_de_la_montana"
+titulo = "Desentraña los misterios de la montaña"
+de_la_voz = true
+oferta = "Dirígete a la cumbre de la montaña más alta."
+objetivo = "Llegar a la ciudad minera"
+indicacion = "Desde Puerto Albor, seguí por las Praderas de Piedra y el Paso de los Vientos hasta Riscabruna."
+clave_de_conteo = &"misterios_de_la_montana"
+cantidad = 1
+entregar_a = "La Voz"
+requisitos = Array[StringName]([&"puerto_albor_rostro_del_engano"])

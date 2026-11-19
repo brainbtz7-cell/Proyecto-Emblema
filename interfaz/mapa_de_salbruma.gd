@@ -108,7 +108,11 @@ func _actualizar_ubicacion() -> void:
 	var posicion := Vector2(jugador.global_position.x, jugador.global_position.z)
 	var lugar := "Tierras de Salbruma"
 	var primer_paso := "Abrí el plano para orientarte."
-	if posicion.distance_squared_to(TRAZADO.PUERTO_ALBOR) < radio_de_puerto_albor * radio_de_puerto_albor:
+	# El islote es una elipse de unos 14 × 9 m; se toma un poco más, con el muelle.
+	if ((posicion - TRAZADO.CAYO) / Vector2(15.0, 11.0)).length() < 1.0:
+		lugar = "Cayo de Salcristal"
+		primer_paso = "El bote del muelle vuelve a Puerto Albor."
+	elif posicion.distance_squared_to(TRAZADO.PUERTO_ALBOR) < radio_de_puerto_albor * radio_de_puerto_albor:
 		lugar = "Puerto Albor"
 		primer_paso = "Recorré el pueblo y su muelle."
 	elif posicion.distance_squared_to(TRAZADO.PUERTO) < 32.0 * 32.0:

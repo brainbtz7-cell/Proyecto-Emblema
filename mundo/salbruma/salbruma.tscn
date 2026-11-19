@@ -47,6 +47,8 @@
 [ext_resource type="Script" path="res://mundo/bloqueo_de_encargo.gd" id="43_bloqueo"]
 [ext_resource type="Script" path="res://mundo/salbruma/fondo_de_la_gruta.gd" id="44_fondo"]
 
+[ext_resource type="Script" path="res://mundo/salbruma/intriga_de_albor.gd" id="45_intriga"]
+
 [sub_resource type="ShaderMaterial" id="mat_cielo"]
 shader = ExtResource("3_cielo")
 
@@ -575,3 +577,6 @@ texture_filter = 1
 script = ExtResource("20_mapa")
 terreno = NodePath("../../Terreno")
 jugador = NodePath("../../Jugador")
+
+[node name="IntrigaAlbor" type="Node3D" parent="."]
+script = ExtResource("45_intriga")

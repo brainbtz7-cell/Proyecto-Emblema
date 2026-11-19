@@ -1,0 +1,17 @@
+; Propuesta de prueba. Los textos y los hitos internos quedan sujetos al Documento Maestro.
+[gd_resource type="Resource" script_class="Encargo" format=3]
+
+[ext_resource type="Script" path="res://nucleo/encargo.gd" id="1_encargo"]
+
+[resource]
+script = ExtResource("1_encargo")
+id = &"puerto_albor_echa_luz"
+titulo = "Echa luz sobre tanta oscuridad"
+oferta = "Mostrá la nota al jefe pesquero de Puerto Junco. Con su ayuda, regresá a Albor y hablá con los tres habitantes que bloquean el acceso al líder."
+objetivo = "Jefe y habitantes convencidos"
+indicacion = "Mostrá la nota al jefe pesquero de Puerto Junco."
+clave_de_conteo = &"pruebas_de_albor"
+cantidad = 4
+entregar_a = "el líder de Puerto Albor"
+requisitos = Array[StringName]([&"puerto_albor_testigo_silenciado"])
+indicaciones_por_paso = PackedStringArray("Mostrá la nota al jefe pesquero de Puerto Junco.", "Volvé a Albor con el jefe y convencé a los habitantes que bloquean el portón del líder.", "Volvé a Albor con el jefe y convencé a los habitantes que bloquean el portón del líder.", "Volvé a Albor con el jefe y convencé a los habitantes que bloquean el portón del líder.")

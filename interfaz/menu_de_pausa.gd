@@ -120,7 +120,7 @@ func _agregar_encargo(encargo: Encargo) -> void:
 	match estado:
 		Encargos.Estado.ACTIVO:
 			resumen.text = "%s  ·  %d/%d" % [encargo.objetivo, Encargos.avance_de(encargo), encargo.cantidad]
-			nota = encargo.indicacion
+			nota = encargo.indicacion_para(Encargos.avance_de(encargo))
 		Encargos.Estado.CUMPLIDO:
 			resumen.text = "Listo para entregar  ·  Volvé con %s" % encargo.entregar_a
 			resumen.theme_type_variation = &"Confirmado"

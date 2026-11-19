@@ -1,0 +1,16 @@
+; Propuesta de prueba. Los textos y los hitos internos quedan sujetos al Documento Maestro.
+[gd_resource type="Resource" script_class="Encargo" format=3]
+
+[ext_resource type="Script" path="res://nucleo/encargo.gd" id="1_encargo"]
+
+[resource]
+script = ExtResource("1_encargo")
+id = &"puerto_albor_rostro_del_engano"
+titulo = "El rostro del engaño"
+oferta = "Las pruebas y los testigos esclarecen lo ocurrido. Confrontá al profeta."
+objetivo = "Profeta derrotado"
+indicacion = "Confrontá al profeta en el patio del líder."
+clave_de_conteo = &"profeta_de_albor"
+cantidad = 1
+entregar_a = "el líder de Puerto Albor"
+requisitos = Array[StringName]([&"puerto_albor_echa_luz"])

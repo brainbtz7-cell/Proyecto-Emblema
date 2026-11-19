@@ -12,4 +12,4 @@ indicacion = "La entrada está al norte del Sendero de los Faros, entre las roca
 clave_de_conteo = &"fondo_de_la_gruta"
 cantidad = 1
 entregar_a = "el habitante de Albor"
-requisitos = Array[StringName]([&"la_voz_desenmascara_al_impostor"])
+requisitos = Array[StringName]([&"puerto_junco_ultima_marea"])

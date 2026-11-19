@@ -58,6 +58,7 @@ Consultado, el usuario eligió "túnica larga, sin decidir". El protagonista
 | Segundo encargo | Guardia de Puerto Junco: derrotar 7 Asaltantes Klaimyr en la Caleta. Los dos encargos de la primera tanda se juegan en Salbruma y en la isla. |
 | Segunda tanda | Disponible al entregar los dos primeros encargos. El jefe pesquero pide levantar tres defensas, y el pescador siete cueros de lagarto armado. |
 | Tercera tanda | Emboscada con tres asaltantes, rescate y regreso a pie con el jefe pesquero, y defensa de Junco contra el capitán. El tablón ofrece los dos últimos encargos. |
+| Puerto Albor | Viaje por el Sendero de los Faros bajo la misión dorada, primera tanda (gruta, arena del cayo, caparazones de Krabchio) e investigación del profeta (encargos 4 a 7 del 9.7) hasta la visión de La Voz y la misión dorada siguiente. |
 | Fauna | Uscita en los Bajíos y lagarto acorazado en las Marismas. Las manadas se reponen al volver al poblado. |
 | Combate de prueba | En el lugar, 1 contra 1. El rival anuncia una intención según su patrón. Atacar, defender, preparar y huir. Defender una embestida habilita un golpe certero. |
 | Agua | Ondas de pisadas y salpicaduras al vadear o caer. La física de las pasarelas y del agua honda se conserva. |
@@ -71,11 +72,11 @@ Consultado, el usuario eligió "túnica larga, sin decidir". El protagonista
   enfrentamiento final siguen pendientes en el Documento Maestro.
 - Ampliar el recorte jugable a las 16 SubZonas de Tierras de Salbruma y
   dividirlo en etapas. El primer tramo es un escenario continuo.
-- Viaje a Puerto Albor para la misión de La Voz que anuncia el cierre de
-  La última marea. El tablón de Junco ya sirve para los dos últimos encargos.
-  Quedan pendientes la tienda, la forja y la posada.
-- Fauna Anómala y guardado implementados. Sonido a cargo de Claude; no tocar
-  `sonido/` ni `nucleo/sonido.gd` durante ese trabajo.
+- Albor está jugable de punta a punta. Lo siguiente del documento es el
+  trayecto a Riscabruna (Praderas de Piedra y Paso de los Vientos), el bardo y
+  la ciudad minera. Quedan pendientes la tienda, la forja, la posada y las
+  recompensas de Albor (comercio y mejora de equipo), que el documento no define.
+- Fauna Anómala, guardado y sonido provisional implementados.
 - Los jefes deben tener un tope de 15 turnos cuando se implementen.
 
 ## 5. Arquitectura
@@ -222,6 +223,18 @@ Las pruebas de movimiento y encargo terminaron correctamente, con el aviso
 previo de cuatro instancias ObjectDB al cerrar. La importación terminó con
 cero errores y advertencias.
 
+Prueba de la investigación de Albor (Dudas razonables → El rostro del engaño):
+
+    "$G" --headless --path "$P" -s herramientas/prueba_intriga_albor.gd
+
+Recorre con interacciones reales las tres consultas, el cuerpo, el sicario, la
+nota, guardar y continuar, la acusación y la huida, los dos tablones, el jefe
+acompañante, los tres habitantes del portón, huir del profeta y volver a
+enfrentarlo, la visión y la misión dorada siguiente. Con ventana y
+`-- <carpeta_de_salida>` guarda capturas. Pasó el 19/11/2026 sin y con ventana,
+junto con todas las pruebas anteriores (`prueba_albor.gd` necesita ventana y
+carpeta de salida).
+
 ## 7. Cosas que no son obvias
 
 - **El píxel no pasa de 10 píxeles de pantalla.** Godot limita
@@ -247,6 +260,14 @@ cero errores y advertencias.
 - **Nubes sin sombra a propósito:** sus sombras rectas parecían otro tipo de suelo.
 - En el shader de follaje, la ventana y los huecos se saltan con
   `IN_SHADOW_PASS`, para que las sombras salgan enteras.
+- **Capturas con ventana en macOS:** si otra ventana tapa la de Godot, macOS
+  deja de dibujarla y `await RenderingServer.frame_post_draw` espera para
+  siempre (la prueba queda colgada). Las pruebas con capturas ponen la ventana
+  `always_on_top`, `unfocusable` y `mouse_passthrough`: se dibuja siempre y no
+  le roba el foco ni el ratón a quien usa la computadora.
+- **Figuras de la investigación de Albor:** el acompañante, la víctima y la nota
+  no son sólidos (`HabitanteDeIntriga.solido = false`); si lo fueran, el brazo
+  de la cámara chocaría con el jefe que camina detrás del protagonista.
 
 ## 8. Lo que no se probó
 

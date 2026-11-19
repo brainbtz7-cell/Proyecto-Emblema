@@ -28,3 +28,13 @@ extends Resource
 @export var cierre := ""
 ## Identificadores de los encargos que se tienen que haber entregado.
 @export var requisitos: Array[StringName] = []
+## Indicaciones opcionales para cada paso, en orden de avance (la primera vale
+## con avance 0). Si hay una para el avance actual, reemplaza a "indicacion".
+@export var indicaciones_por_paso: PackedStringArray = []
+
+
+## La indicación que corresponde a un avance dado.
+func indicacion_para(avance: int) -> String:
+	if avance >= 0 and avance < indicaciones_por_paso.size() and not indicaciones_por_paso[avance].is_empty():
+		return indicaciones_por_paso[avance]
+	return indicacion

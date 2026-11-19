@@ -12,4 +12,4 @@ indicacion = "Los Krabchio viven en el Cayo de Salcristal."
 clave_de_conteo = &"caparazon_de_krabchio"
 cantidad = 5
 entregar_a = "la pescadora"
-requisitos = Array[StringName]([&"la_voz_desenmascara_al_impostor"])
+requisitos = Array[StringName]([&"puerto_junco_ultima_marea"])

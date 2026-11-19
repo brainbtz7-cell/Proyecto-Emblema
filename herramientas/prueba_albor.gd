@@ -7,6 +7,11 @@ var _salida := ""
 
 func _initialize() -> void:
 	_salida = OS.get_cmdline_user_args()[0]
+	# Arriba de todo para que macOS no deje de dibujarla (las capturas esperan
+	# un cuadro dibujado), pero sin tomar el foco ni el ratón.
+	root.always_on_top = true
+	root.unfocusable = true
+	root.mouse_passthrough = true
 	_correr()
 
 
@@ -60,7 +65,7 @@ func _correr() -> void:
 	jugador.teletransportar(Vector3(64, terreno.altura_en(64, -160) + 0.2, -160))
 	jugador.get_node("Camara").rotation.y = deg_to_rad(-90)
 	await _fisica(60)
-	print("LLEGADA: estado de la misión ", encargos.estado_de(mision), " (3 = completada)  diálogo abierto ", dialogo.abierto)
+	print("LLEGADA: estado de la misión ", encargos.estado_de(mision), " (1 = sigue activa hasta desenmascarar al profeta)  diálogo abierto ", dialogo.abierto)
 	await _guardar("albor_3_llegada")
 	await _pulsar("interactuar")
 	await _cuadros(4)

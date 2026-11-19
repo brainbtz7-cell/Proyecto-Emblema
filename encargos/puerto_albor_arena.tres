@@ -12,4 +12,4 @@ indicacion = "Tomá el bote en el muelle de Albor hasta el Cayo de Salcristal."
 clave_de_conteo = &"arena_de_salcristal"
 cantidad = 3
 entregar_a = "el barquero"
-requisitos = Array[StringName]([&"la_voz_desenmascara_al_impostor"])
+requisitos = Array[StringName]([&"puerto_junco_ultima_marea"])

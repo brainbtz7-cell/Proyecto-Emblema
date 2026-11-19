@@ -1,0 +1,16 @@
+; Propuesta de prueba. Los textos y los hitos internos quedan sujetos al Documento Maestro.
+[gd_resource type="Resource" script_class="Encargo" format=3]
+
+[ext_resource type="Script" path="res://nucleo/encargo.gd" id="1_encargo"]
+
+[resource]
+script = ExtResource("1_encargo")
+id = &"puerto_albor_dudas_razonables"
+titulo = "Dudas razonables"
+oferta = "Conservo amigos en Puerto Junco y no creo las acusaciones del profeta contra ellos. Hablá con tres habitantes de Albor e investigá qué ocurre."
+objetivo = "Habitantes consultados"
+indicacion = "Preguntales por el profeta al habitante de Albor, al barquero y a la pescadora."
+clave_de_conteo = &"dudas_de_albor"
+cantidad = 3
+entregar_a = "el habitante desconfiado"
+requisitos = Array[StringName]([&"puerto_albor_gruta_olvidada", &"puerto_albor_arena", &"puerto_albor_caparazones"])

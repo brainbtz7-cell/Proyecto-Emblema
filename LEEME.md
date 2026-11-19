@@ -155,16 +155,17 @@ en el nodo `Camara` del jugador.
 Al entregar *La última marea*, La Voz da la misión dorada *Desenmascara al
 impostor*. El camino sigue al norte de las marismas, cruza la loma por un paso
 (Sendero de los Faros, con Uscita y lagartos) y llega a Puerto Albor, río
-arriba, con su muelle. Al entrar al pueblo se cumple el tramo del viaje.
-El plano de **M** muestra el trayecto desde Junco hasta Albor y marca el destino
-mientras la misión esté en curso.
+arriba, con su muelle. La misión sigue activa durante todo lo de Albor y se
+cierra al derrotar al profeta (Documento Maestro, 9.7, encargo 7). El plano de
+**M** muestra el trayecto desde Junco hasta Albor y marca el destino mientras
+la misión esté en curso.
 
 - Trazado: `HACIA_ALBOR`, `FAROS` y `PUERTO_ALBOR` en `mundo/salbruma/trazado_salbruma.gd`.
 - Misión: `encargos/la_voz_desenmascara_al_impostor.tres` y `mundo/salbruma/mision_de_la_voz.gd`.
-- Prueba: `herramientas/prueba_albor.gd`.
+  Las partidas viejas, que cerraban la misión al llegar, la reabren al cargar.
+- Prueba: `herramientas/prueba_albor.gd -- <carpeta_de_salida>` (con ventana).
 - **Provisional:** el texto de la visión (solo la descripción funcional del
-  documento), los faros y las casas genéricas, y que el encargo se cierre al
-  llegar. Falta la investigación del profeta posterior a la primera tanda.
+  documento) y los faros y las casas genéricas.
 
 ## Primera tanda de Puerto Albor
 
@@ -182,6 +183,39 @@ Prueba completa, con preparación de Junco y el resto mediante interacciones:
 
 Para guardar imágenes del cayo, su muelle y la gruta, ejecutarla con ventana
 agregando `-- <carpeta_de_salida>`.
+
+## Investigación de Puerto Albor
+
+Los encargos 4 a 7 del apartado 9.7, en orden:
+
+1. **Dudas razonables.** Al entregar la primera tanda aparece el habitante
+   desconfiado. Pide preguntar por el profeta a tres habitantes: el de Albor,
+   el barquero y la pescadora.
+2. **El testigo silenciado.** Lo da el tablón de Albor. En el cayo está el
+   cuerpo del habitante; al examinarlo aparece el sicario del profeta (combate).
+   Después se lee la nota. Al volver a Albor acusan al protagonista y hay que
+   huir a Puerto Junco.
+3. **Echa luz sobre tanta oscuridad.** Aparece en los tablones de los dos
+   pueblos. Se le muestra la nota al jefe pesquero, que acompaña al
+   protagonista: sigue su rastro y no choca con la cámara. En Albor, tres
+   habitantes bloquean el portón del patio del líder; con el jefe presente se
+   los convence y el portón se abre.
+4. **El rostro del engaño.** Lo da el líder. El profeta aparece en el patio y,
+   al confrontarlo, ataca (combate de 15 turnos como máximo). Al vencerlo se
+   esfuma: se cierra *Desenmascara al impostor*, La Voz da la visión y empieza
+   la misión dorada *Desentraña los misterios de la montaña* (destino:
+   Riscabruna, que todavía no está construida).
+
+El seguimiento cambia la indicación en cada paso (`indicaciones_por_paso` en el
+encargo) y muestra el encargo local antes que la misión dorada.
+
+- Lógica: `mundo/salbruma/intriga_de_albor.gd` (nodo `IntrigaAlbor` de la
+  escena) y `personajes/personaje_de_intriga.gd`.
+- Encargos: `encargos/puerto_albor_{dudas_razonables,testigo_silenciado,echa_luz,rostro_del_engano}.tres`
+  y `encargos/la_voz_misterios_de_la_montana.tres`.
+- Prueba: `godot --headless --path . -s herramientas/prueba_intriga_albor.gd`.
+  Con ventana y `-- <carpeta_de_salida>` guarda capturas del patio, el cayo, el
+  acompañante y la visión.
 
 ## Sonido
 
@@ -234,6 +268,20 @@ cazarlo da una Ficha Anómala y queda anotado en la colección.
   la gruta al alcanzar el fondo, la forma del cayo y sus muelles, y el modelo
   del Krabchio son provisionales. Las cinco piezas de misión procedentes
   de cinco Krabchio siguen el Documento Maestro. Su nombre sigue pendiente.
+- **La investigación de Albor sigue el orden del documento, con detalles de
+  prueba.** Son provisionales todos los diálogos, la nota, los testimonios,
+  quiénes son los tres habitantes consultados y los tres de la entrada, el patio
+  amurallado del líder y su portón, la ubicación del cuerpo, el sicario y el
+  profeta (modelos de aldeano, vida, daño y estilo de combate), el texto del
+  cierre y los pasos internos de cada encargo. Mostrarle la nota al jefe es el
+  primer paso de *Echa luz* (el documento lo cuenta junto con el tablón, sin
+  fijar el orden). Siguen pendientes, según el documento: los nombres del líder
+  y del profeta, la identidad y afiliación del profeta, por qué se esfuma, las
+  recompensas, el comercio que se restaura y la mejora de equipo.
+- **La visión de *Desentraña los misterios de la montaña*** dice lo que el
+  documento cuenta de ella (9.3, punto 7: dirigirse a la cumbre de la montaña
+  más alta); el objetivo usa la descripción funcional (9.4) y la indicación,
+  la ruta del anexo cartográfico hasta Riscabruna.
 - **El combate en el lugar es una prueba.** Los patrones, la preparación,
   el contraataque, la vida y los valores de daño sirven para probar el ritmo.
 - **El guardia y los asaltantes son modelos de marcador.** Su apariencia
