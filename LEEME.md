@@ -165,3 +165,14 @@ en el nodo `Camara` del jugador.
 - **El doble salto se prueba en la isla.** El protagonista empieza Salbruma
   con salto simple. En la historia, los Estribos del Risco habilitan el
   doble salto.
+
+## Trabajo en paralelo (Git)
+
+- `JUEGO EMI` → rama `main`: Claude y la versión unida.
+- `JUEGO EMI-codex` → rama `codex`: Codex. Abrir Codex en esta carpeta.
+- Para unir lo de Codex a la principal, desde `JUEGO EMI`:
+  `git merge codex`. Para que Codex reciba lo nuevo, desde `JUEGO EMI-codex`:
+  `git merge main`.
+- Las reglas para las IA están en `AGENTS.md` (Claude las lee vía `CLAUDE.md`).
+- Los modelos originales de `arte_fuente/personajes/originales/` no están en
+  Git por su tamaño; el juego usa los de `exportaciones/`.
