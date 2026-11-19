@@ -2,6 +2,7 @@ extends Control
 ## Plano local dibujado a partir de las alturas y el trazado de la escena jugable.
 
 const TRAZADO := preload("res://mundo/salbruma/trazado_salbruma.gd")
+const LOMOS := preload("res://encargos/puerto_junco_pescador_lomos.tres")
 const EMBOSCADA := preload("res://encargos/puerto_junco_guardia_emboscada.tres")
 const RESCATE := preload("res://encargos/puerto_junco_tablon_rescate.tres")
 const MAREA := preload("res://encargos/puerto_junco_ultima_marea.tres")
@@ -28,11 +29,16 @@ const OTROS_DESTINOS := {
 
 @export var terreno: Terreno
 @export var jugador: Jugador
+## Distancia en metros al centro de Albor dentro de la que se muestra el nombre del pueblo.
+@export_range(1.0, 100.0, 1.0) var radio_de_puerto_albor := 28.0
+## Distancia en metros a cada lado del trazado donde se muestra Sendero de los Faros.
+@export_range(1.0, 100.0, 1.0) var margen_del_sendero_de_los_faros := 24.0
 
 var _base: ImageTexture
 var _raton_anterior := Input.MOUSE_MODE_VISIBLE
 var _volver := Button.new()
 var _ubicacion := ""
+var _primer_paso := ""
 var _pausado_antes := false
 
 
@@ -101,19 +107,36 @@ func _process(_delta: float) -> void:
 func _actualizar_ubicacion() -> void:
 	var posicion := Vector2(jugador.global_position.x, jugador.global_position.z)
 	var lugar := "Tierras de Salbruma"
-	if posicion.distance_squared_to(TRAZADO.PUERTO) < 32.0 * 32.0:
+	var primer_paso := "Abrí el plano para orientarte."
+	if posicion.distance_squared_to(TRAZADO.PUERTO_ALBOR) < radio_de_puerto_albor * radio_de_puerto_albor:
+		lugar = "Puerto Albor"
+		primer_paso = "Recorré el pueblo y su muelle."
+	elif posicion.distance_squared_to(TRAZADO.PUERTO) < 32.0 * 32.0:
 		lugar = "Puerto Junco"
+		if Encargos.estado_de(LOMOS) == Encargos.Estado.DISPONIBLE:
+			primer_paso = "Hablá con el pescador del muelle."
+		elif Encargos.estado_de(MAREA) == Encargos.Estado.COMPLETADO:
+			primer_paso = "El camino a Puerto Albor pasa por las marismas."
+		else:
+			primer_paso = "Buscá más encargos entre los habitantes o en el tablón."
 	elif posicion.distance_squared_to(TRAZADO.CALETA) < 23.0 * 23.0:
 		lugar = "Caleta de las Redes Rotas"
+		primer_paso = "El camino de la ribera lleva a Puerto Junco."
 	elif posicion.distance_squared_to(TRAZADO.MARISMAS) < 29.0 * 29.0:
 		lugar = "Marismas del Caparazón"
+		primer_paso = "El camino del norte continúa hacia el Sendero de los Faros."
+	elif TRAZADO.distancia_a_tramo(posicion, TRAZADO.HACIA_ALBOR) < margen_del_sendero_de_los_faros:
+		lugar = "Sendero de los Faros"
+		primer_paso = "Seguí el sendero hacia Puerto Albor."
 	elif posicion.distance_squared_to(TRAZADO.BAJIOS) < 34.0 * 34.0:
 		lugar = "Bajíos de Salbruma"
+		primer_paso = "Seguí el camino hacia el este para llegar a Puerto Junco."
 	elif posicion.x < -103.0:
 		lugar = "Llegada a Salbruma"
-	if _ubicacion != lugar:
+		primer_paso = "Seguí el sendero hasta Puerto Junco."
+	if _ubicacion != lugar or _primer_paso != primer_paso:
 		_ubicacion = lugar
-		var primer_paso := "Hablá con el pescador del muelle." if lugar == "Puerto Junco" else "Seguí el sendero hasta Puerto Junco."
+		_primer_paso = primer_paso
 		Interfaz.establecer_ubicacion(lugar, primer_paso)
 
 

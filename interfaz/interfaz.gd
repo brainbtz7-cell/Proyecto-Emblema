@@ -135,7 +135,7 @@ func establecer_en_menu_principal(activo: bool) -> void:
 func establecer_mapa_disponible(disponible: bool) -> void:
 	_mapa.visible = disponible
 	if not disponible:
-		establecer_ubicacion("Isla de pruebas", "Hablá con el pescador para empezar.")
+		establecer_ubicacion("Isla de pruebas", "")
 
 
 func establecer_ubicacion(nombre: String, primer_paso: String) -> void:

@@ -7,7 +7,7 @@ extends PanelContainer
 
 const LOMOS := preload("res://encargos/puerto_junco_pescador_lomos.tres")
 
-var _primer_paso := "Hablá con el pescador para empezar."
+var _primer_paso := ""
 
 @onready var _ubicacion: Label = $Columna/Ubicacion
 @onready var _division: HSeparator = $Columna/Division
@@ -61,7 +61,9 @@ func _actualizar() -> void:
 	else:
 		_objetivo.text = ""
 		_progreso.hide()
-		_indicacion.text = _primer_paso if Encargos.estado_de(LOMOS) == Encargos.Estado.DISPONIBLE else ""
+		_indicacion.text = _primer_paso
+		if _primer_paso.is_empty() and Encargos.estado_de(LOMOS) == Encargos.Estado.DISPONIBLE:
+			_indicacion.text = "Hablá con el pescador para empezar."
 	_indicacion.visible = not _indicacion.text.is_empty()
 	_division.visible = _titulo.visible or _indicacion.visible
 	_ajustar_alto.call_deferred()
