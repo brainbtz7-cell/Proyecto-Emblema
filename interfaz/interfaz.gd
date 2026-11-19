@@ -25,6 +25,7 @@ var mapa_abierto := false:
 var _ultimo_cierre := -100000
 var _raton_anterior := Input.MOUSE_MODE_VISIBLE
 var _pausado_antes := false
+var _en_menu_principal := false
 var _avisos_pendientes: Dictionary[Encargo, int] = {}
 var _tiempo_del_aviso := 0.0
 var _explorando := true
@@ -66,15 +67,13 @@ func _ready() -> void:
 	_mapa.icon = preload("res://interfaz/iconos/mapa.svg")
 	_diario.icon = preload("res://interfaz/iconos/diario.svg")
 	_boton_pausa.icon = preload("res://interfaz/iconos/pausa.svg")
-	if Guardado.hay_partida() and Guardado.automatico:
-		_mostrar_resultado_guardado(not Guardado.fecha.is_empty(), Guardado.ultimo_mensaje)
 	_actualizar_atajos()
 	_actualizar_hud()
 
 
 func _input(evento: InputEvent) -> void:
 	_detectar_dispositivo(evento)
-	if evento.is_echo():
+	if _en_menu_principal or evento.is_echo():
 		return
 	var diario := evento.is_action_pressed(&"ver_diario")
 	var pausa := evento.is_action_pressed(&"pausar")
@@ -124,7 +123,13 @@ func _process(delta: float) -> void:
 ## Evita reutilizar la misma pulsación al volver a explorar.
 func ocupada() -> bool:
 	var ultimo_cierre := maxi(_ultimo_cierre, maxi(dialogo.cerrado_en, combate.cerrado_en))
-	return mapa_abierto or _pausa.visible or dialogo.abierto or combate.visible or Time.get_ticks_msec() - ultimo_cierre < MARGEN_TRAS_CIERRE
+	return _en_menu_principal or mapa_abierto or _pausa.visible or dialogo.abierto or combate.visible or Time.get_ticks_msec() - ultimo_cierre < MARGEN_TRAS_CIERRE
+
+
+## Suspende los atajos y el HUD hasta que el menú abra el mundo.
+func establecer_en_menu_principal(activo: bool) -> void:
+	_en_menu_principal = activo
+	_actualizar_hud()
 
 
 func establecer_mapa_disponible(disponible: bool) -> void:
@@ -191,7 +196,7 @@ func _anotar_hito(encargo: Encargo, estado: int) -> void:
 
 
 func _actualizar_hud() -> void:
-	_explorando = not (mapa_abierto or _pausa.visible or dialogo.visible or combate.visible)
+	_explorando = not (_en_menu_principal or mapa_abierto or _pausa.visible or dialogo.visible or combate.visible)
 	_atajos.visible = _explorando
 	_seguimiento.visible = _explorando
 	_aviso.visible = _explorando and not _accion.text.is_empty()

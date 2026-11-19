@@ -12,12 +12,7 @@ var pagina := PARTIDA
 
 @onready var _diario: VBoxContainer = $Caja/Columna/Cuerpo/Interior/Paginas/Diario
 @onready var _lista: VBoxContainer = $Caja/Columna/Cuerpo/Interior/Paginas/Diario/Lista
-@onready var _controles: VBoxContainer = $Caja/Columna/Cuerpo/Interior/Paginas/Controles
-@onready var _tabla: GridContainer = $Caja/Columna/Cuerpo/Interior/Paginas/Controles/Tabla
-@onready var _imagen: HBoxContainer = $Caja/Columna/Cuerpo/Interior/Paginas/Controles/Imagen
-@onready var _resolucion: Label = _imagen.get_node("Resolucion")
-@onready var _grueso: Button = _imagen.get_node("Grueso")
-@onready var _fino: Button = _imagen.get_node("Fino")
+@onready var _controles: PanelDeControles = $Caja/Columna/Cuerpo/Interior/Paginas/Controles
 @onready var _interior: ScrollContainer = $Caja/Columna/Cuerpo/Interior
 @onready var _boton_diario: Button = $Caja/Columna/Cuerpo/Menu/Diario
 @onready var _boton_controles: Button = $Caja/Columna/Cuerpo/Menu/Controles
@@ -37,9 +32,6 @@ func _ready() -> void:
 	$Caja/Columna/Cabecera/Volver.pressed.connect(volver.emit)
 	_boton_diario.pressed.connect(mostrar_pagina.bind(DIARIO))
 	_boton_controles.pressed.connect(mostrar_pagina.bind(CONTROLES))
-	_grueso.pressed.connect(Pixelado.cambiar_alto.bind(-1))
-	_fino.pressed.connect(Pixelado.cambiar_alto.bind(1))
-	Pixelado.cambiado.connect(_actualizar_resolucion)
 	Encargos.cambiado.connect(_actualizar_diario)
 	_boton_partida.pressed.connect(mostrar_pagina.bind(PARTIDA))
 	_guardar.icon = preload("res://interfaz/iconos/guardar.svg")
@@ -48,7 +40,6 @@ func _ready() -> void:
 	_cancelar.pressed.connect(cancelar_borrado)
 	_confirmar.pressed.connect(_borrar_partida)
 	Guardado.cambiado.connect(_actualizar_partida)
-	_actualizar_resolucion()
 
 
 func mostrar_pagina(destino: int) -> void:
@@ -62,9 +53,7 @@ func mostrar_pagina(destino: int) -> void:
 	_boton_controles.set_pressed_no_signal(pagina == CONTROLES)
 	if pagina == DIARIO:
 		_actualizar_diario()
-	elif pagina == CONTROLES:
-		_actualizar_controles()
-	else:
+	elif pagina == PARTIDA:
 		_actualizar_partida()
 	_interior.scroll_vertical = 0
 	var botones: Array[Button] = [_boton_diario, _boton_controles, _boton_partida]
@@ -153,37 +142,6 @@ func _agregar_encargo(encargo: Encargo) -> void:
 		columna.add_child(_rotulo(nota, &"Secundario"))
 	ficha.add_child(columna)
 	_lista.add_child(ficha)
-
-
-func _actualizar_controles() -> void:
-	_vaciar(_tabla)
-	for titulo in ["Acción", "Teclado y ratón", "Mando"]:
-		var cabecera := _rotulo(titulo, &"Etiqueta")
-		cabecera.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		_tabla.add_child(cabecera)
-	_fila("Moverse", "WASD / flechas", "Palanca izq.")
-	_fila("Correr", Interfaz.tecla(&"correr", false), Interfaz.tecla(&"correr", true))
-	_fila("Saltar", Interfaz.tecla(&"saltar", false), Interfaz.tecla(&"saltar", true))
-	_fila("Interactuar / avanzar", Interfaz.tecla(&"interactuar", false), Interfaz.tecla(&"interactuar", true))
-	_fila("Girar / acercar cámara", "Clic y mover / Rueda", "Palanca der.")
-	_fila("Abrir mapa / diario", "%s / %s" % [Interfaz.tecla(&"ver_mapa", false), Interfaz.tecla(&"ver_diario", false)],
-		"%s / %s" % [Interfaz.tecla(&"ver_mapa", true), Interfaz.tecla(&"ver_diario", true)])
-	_fila("Elegir en combate", "1–4 / Flechas y Enter", "Cruceta y A")
-	_fila("Pausar / volver", Interfaz.tecla(&"pausar", false), Interfaz.tecla(&"pausar", true))
-	_fila("Píxel mayor / menor", "%s / %s" % [Interfaz.tecla(&"pixel_mas_grande", false), Interfaz.tecla(&"pixel_mas_chico", false)], "—")
-
-
-func _fila(accion: String, teclado: String, mando: String) -> void:
-	_tabla.add_child(_rotulo(accion, &"Enfasis"))
-	_tabla.add_child(_rotulo(teclado, &"Secundario"))
-	_tabla.add_child(_rotulo(mando, &"Secundario"))
-
-
-func _actualizar_resolucion() -> void:
-	var resolucion := Pixelado.resolucion_interna
-	_resolucion.text = "Imagen 3D  ·  %d × %d" % [resolucion.x, resolucion.y]
-	_grueso.disabled = Pixelado.alto_interno == Pixelado.ALTOS_INTERNOS.front()
-	_fino.disabled = Pixelado.alto_interno == Pixelado.ALTOS_INTERNOS.back()
 
 
 func _rotulo(texto: String, estilo: StringName) -> Label:

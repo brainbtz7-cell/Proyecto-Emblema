@@ -3,6 +3,8 @@
 [ext_resource type="Script" path="res://interfaz/menu_de_pausa.gd" id="1"]
 [ext_resource type="Theme" path="res://interfaz/tema.tres" id="2"]
 
+[ext_resource type="PackedScene" path="res://interfaz/panel_de_controles.tscn" id="3"]
+
 [node name="Pausa" type="Control"]
 visible = false
 layout_mode = 3
@@ -113,39 +115,9 @@ text = "Diario de encargos"
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Controles" type="VBoxContainer" parent="Caja/Columna/Cuerpo/Interior/Paginas"]
+[node name="Controles" parent="Caja/Columna/Cuerpo/Interior/Paginas" instance=ExtResource("3")]
 visible = false
 layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="Titulo" type="Label" parent="Caja/Columna/Cuerpo/Interior/Paginas/Controles"]
-layout_mode = 2
-theme_type_variation = &"Nombre"
-text = "Controles"
-
-[node name="Tabla" type="GridContainer" parent="Caja/Columna/Cuerpo/Interior/Paginas/Controles"]
-layout_mode = 2
-columns = 3
-
-[node name="Division" type="HSeparator" parent="Caja/Columna/Cuerpo/Interior/Paginas/Controles"]
-layout_mode = 2
-
-[node name="Imagen" type="HBoxContainer" parent="Caja/Columna/Cuerpo/Interior/Paginas/Controles"]
-layout_mode = 2
-
-[node name="Resolucion" type="Label" parent="Caja/Columna/Cuerpo/Interior/Paginas/Controles/Imagen"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_type_variation = &"Secundario"
-vertical_alignment = 1
-
-[node name="Grueso" type="Button" parent="Caja/Columna/Cuerpo/Interior/Paginas/Controles/Imagen"]
-layout_mode = 2
-text = "Píxel mayor"
-
-[node name="Fino" type="Button" parent="Caja/Columna/Cuerpo/Interior/Paginas/Controles/Imagen"]
-layout_mode = 2
-text = "Píxel menor"
 
 [node name="Pie" type="HBoxContainer" parent="Caja/Columna"]
 layout_mode = 2
@@ -173,7 +145,7 @@ text = "Tu partida"
 [node name="Descripcion" type="Label" parent="Caja/Columna/Cuerpo/Interior/Paginas/Partida"]
 layout_mode = 2
 autowrap_mode = 3
-text = "Tu progreso se carga al abrir el juego. Se guarda al avanzar en los encargos y al salir. Volvés al último lugar seguro donde apoyaste los pies."
+text = "Elegí Continuar en el menú principal para recuperar tu progreso. Se guarda al avanzar en los encargos y al salir. Volvés al último lugar seguro donde apoyaste los pies."
 
 [node name="Estado" type="Label" parent="Caja/Columna/Cuerpo/Interior/Paginas/Partida"]
 layout_mode = 2

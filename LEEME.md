@@ -8,7 +8,7 @@ ampliado sin suavizado. Hecho en Godot 4.7.
 1. Abrir Godot.
 2. En el gestor de proyectos, elegir **Importar** y seleccionar el archivo
    `project.godot` de esta carpeta.
-3. Dentro del editor, pulsar **F5** para jugar el primer tramo de Salbruma.
+3. Dentro del editor, pulsar **F5** para abrir el menú principal.
    Para volver a la isla de pruebas, abrir `mundo/terreno_de_prueba.tscn`
    y pulsar **F6**.
 
@@ -48,8 +48,11 @@ paso a medida que sube.
 
 ## Guardar y continuar la partida
 
-La partida se carga sola al abrir el juego. Se guarda al aceptar, avanzar,
-cumplir o entregar encargos y al cerrar la ventana. En **Esc → Partida**
+En el menú principal, **Continuar** recupera la partida guardada.
+**Nueva partida** pide confirmación si ya hay progreso guardado. También
+podés consultar **Controles** o **Salir** desde el menú. El juego guarda
+al aceptar, avanzar, cumplir o entregar encargos y al cerrar la ventana
+durante la partida. En **Esc → Partida**
 podés **Guardar** manualmente o **Borrar partida** y volver a empezar.
 El borrado pide confirmación; **Esc** cancela esa confirmación.
 

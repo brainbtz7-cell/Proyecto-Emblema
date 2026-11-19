@@ -6,6 +6,7 @@ signal resultado(correcto: bool, mensaje: String)
 
 const VERSION := 1
 const RUTA := "user://partida.json"
+const MENU_PRINCIPAL := "res://interfaz/menu_principal.tscn"
 
 ## Las herramientas usan un archivo temporal y desactivan el guardado automático.
 var ruta := RUTA
@@ -28,13 +29,24 @@ func _ready() -> void:
 	if not automatico:
 		return
 	get_tree().auto_accept_quit = false
-	if hay_partida():
+	_cargar_al_abrir.call_deferred()
+
+
+func _cargar_al_abrir() -> void:
+	# Una escena abierta directamente desde el editor conserva su carga automática.
+	var escena := _escena_jugable()
+	if escena == null or not hay_partida():
+		return
+	# Deja que el suelo y los habitantes terminen de entrar antes de reconstruirla.
+	for i in 3:
+		await get_tree().physics_frame
+	if is_instance_valid(escena) and escena == _escena_jugable():
 		cargar()
 
 
 ## Guarda también el avance parcial. Los sistemas deciden qué datos son persistentes.
 func guardar() -> bool:
-	var escena := get_tree().current_scene
+	var escena := _escena_jugable()
 	if escena == null or _restaurando:
 		return false
 	var escenarios: Dictionary = _datos.get("escenarios", {}).duplicate(true)
@@ -67,7 +79,7 @@ func guardar() -> bool:
 	return _informar(true, "Partida guardada.")
 
 
-## Comprueba la versión antes de modificar la sesión. No ejecuta datos del archivo.
+## Comprueba la versión; en el menú inicial, el mundo se abre después de cargar.
 func cargar() -> bool:
 	var datos := _leer(ruta)
 	var recuperada := false
@@ -84,7 +96,7 @@ func cargar() -> bool:
 	Encargos.desde_diccionario(sistemas["encargos"])
 	FaunaAnomala.desde_diccionario(sistemas["fauna_anomala"])
 	# Recargar reconstruye también defensas, rivales y presencias desde el progreso.
-	if get_tree().current_scene != null:
+	if _escena_jugable() != null:
 		get_tree().reload_current_scene()
 	fecha = str(datos.get("fecha", ""))
 	_bloqueado = recuperada
@@ -94,6 +106,13 @@ func cargar() -> bool:
 
 func hay_partida() -> bool:
 	return FileAccess.file_exists(ruta) or FileAccess.file_exists(ruta + ".bak")
+
+
+func _escena_jugable() -> Node:
+	var escena := get_tree().current_scene
+	if escena != null and escena.scene_file_path != MENU_PRINCIPAL:
+		return escena
+	return null
 
 
 ## Borra los archivos y reinicia el progreso; la interfaz vuelve a abrir la escena.
@@ -174,7 +193,7 @@ func _notification(aviso: int) -> void:
 	if not automatico:
 		return
 	if aviso == NOTIFICATION_WM_CLOSE_REQUEST:
-		if not _bloqueado and get_tree().current_scene != null:
+		if not _bloqueado and _escena_jugable() != null:
 			if not guardar():
 				return
 		get_tree().quit()

@@ -1,0 +1,32 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://interfaz/panel_de_controles.gd" id="1"]
+
+[node name="Controles" type="VBoxContainer"]
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+script = ExtResource("1")
+
+[node name="Tabla" type="GridContainer" parent="."]
+layout_mode = 2
+columns = 3
+
+[node name="Division" type="HSeparator" parent="."]
+layout_mode = 2
+
+[node name="Imagen" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Resolucion" type="Label" parent="Imagen"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"Secundario"
+vertical_alignment = 1
+
+[node name="Grueso" type="Button" parent="Imagen"]
+layout_mode = 2
+text = "Píxel mayor"
+
+[node name="Fino" type="Button" parent="Imagen"]
+layout_mode = 2
+text = "Píxel menor"

@@ -87,7 +87,8 @@ Autoloads, en este orden (`project.godot`):
   Los IDs de `requisitos` deben estar COMPLETADO para ofrecer el encargo.
   El segundo argumento de `contar` admite el ID de un punto único.
 - `Guardado` (`nucleo/guardado.gd`): JSON versionado en `user://`, respaldo,
-  carga al iniciar y guardado al avanzar en encargos o cerrar. Cada sistema
+  carga con Continuar y guardado al avanzar en encargos o cerrar el juego
+  durante una partida. Cada sistema
   expone `a_diccionario()` / `desde_diccionario()`. Los nodos del grupo
   `persistentes` se identifican por su ruta dentro de cada escena. La carga
   en una escena abierta la reconstruye; el rescate retoma junto al protagonista.
@@ -115,7 +116,8 @@ Piezas principales:
   del asaltante Klaimyr. La prueba de Meshy quedó en `arte_fuente/personajes/`.
 - `mundo/terreno.gd` (`@tool`): malla, colisión y mapa de altura. Emite
   `generado`. `altura_en(x, z)` da la altura sin usar física.
-- `mundo/salbruma/salbruma.tscn` es la escena principal. El trazado fija
+- `interfaz/menu_principal.tscn` abre `mundo/salbruma/salbruma.tscn` al
+  continuar o empezar una partida. El trazado fija
   los hitos y senderos. `terreno_salbruma.gd` crea el relieve y la máscara
   de suelo, y `elementos_de_salbruma.gd` añade puentes, casas y muelle.
   `interfaz/mapa_de_salbruma.gd` dibuja el plano a partir de ese relieve.
@@ -156,7 +158,7 @@ Piezas principales:
     # Pruebas con entradas simuladas y capturas (abre una ventana unos segundos)
     "$G" --path "$P" -s "$P/herramientas/captura.gd" -- <carpeta_de_salida> <modo>
 
-F5 abre Salbruma. Para jugar la isla, abrir `mundo/terreno_de_prueba.tscn`
+F5 abre el menú principal. Para jugar la isla, abrir `mundo/terreno_de_prueba.tscn`
 y pulsar F6. Los modos de `herramientas/captura.gd` usan la isla.
 
 - `vista`: una captura del inicio.
