@@ -168,11 +168,10 @@ en el nodo `Camara` del jugador.
 
 ## Trabajo en paralelo (Git)
 
-- `JUEGO EMI` → rama `main`: Claude y la versión unida.
-- `JUEGO EMI-codex` → rama `codex`: Codex. Abrir Codex en esta carpeta.
-- Para unir lo de Codex a la principal, desde `JUEGO EMI`:
-  `git merge codex`. Para que Codex reciba lo nuevo, desde `JUEGO EMI-codex`:
-  `git merge main`.
+- `JUEGO EMI` → rama `main`: Codex (su proyecto de siempre) y la versión unida.
+- `JUEGO EMI-claude` → rama `claude`: Claude.
+- Para unir lo de Claude a la principal, desde `JUEGO EMI`: `git merge claude`.
+  Para que Claude reciba lo nuevo, desde `JUEGO EMI-claude`: `git merge main`.
 - Las reglas para las IA están en `AGENTS.md` (Claude las lee vía `CLAUDE.md`).
 - Los modelos originales de `arte_fuente/personajes/originales/` no están en
   Git por su tamaño; el juego usa los de `exportaciones/`.

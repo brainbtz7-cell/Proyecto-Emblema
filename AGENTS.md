@@ -23,8 +23,8 @@ personas con ayuda de varias IA a la vez. Estas reglas valen para todas.
 ## Trabajo en paralelo con Git
 
 - Cada IA trabaja en **su propia carpeta y su propia rama**:
-  - `JUEGO EMI` (rama `main`): Claude y la integración.
-  - `JUEGO EMI-codex` (rama `codex`): Codex.
+  - `JUEGO EMI` (rama `main`): Codex y la versión unida.
+  - `JUEGO EMI-claude` (rama `claude`): Claude.
 - No editar archivos de la carpeta de otra IA.
 - Antes de empezar una tarea, traer lo último de `main`
   (`git merge main` desde la rama propia).
@@ -32,7 +32,8 @@ personas con ayuda de varias IA a la vez. Estas reglas valen para todas.
 - **Evitar tocar a la vez** los archivos que se mezclan mal:
   `project.godot`, `mundo/terreno_de_prueba.tscn` y cualquier `.tscn` grande.
   Si una tarea los necesita, avisarlo en el mensaje del commit.
-- No subir a GitHub ni unir ramas a `main` sin que la persona lo pida.
+- No subir a GitHub ni unir ramas sin que la persona lo pida.
+- Antes de unir, cada una hace commit de su trabajo.
 
 ## Estilo de código
 
