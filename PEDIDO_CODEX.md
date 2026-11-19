@@ -1,43 +1,44 @@
-# Pedido para Codex: guardado de partida, parte visual e interfaz
+# Pedido para Codex (ronda 2): interfaz y aspecto visual
 
 Trabajás en la carpeta `JUEGO EMI`, rama `main`. Claude trabaja en paralelo
 en `JUEGO EMI-claude` (rama `claude`). Leé primero `AGENTS.md`, `TRASPASO.md`
-y `LEEME.md`.
+y `LEEME.md`. Tu trabajo de la ronda 1 (guardado y pulido) ya está en `main`.
 
-## 1. Guardar y cargar partida
+## Tareas
 
-- Autoload nuevo `Guardado` en `nucleo/guardado.gd`, con `guardar()`,
-  `cargar()` y `hay_partida()`. Archivo en `user://`, con número de versión.
-- Guardar: estado y avance de cada encargo, posición segura del protagonista
-  y el resto del progreso que ya exista. Para la Fauna Anómala, Claude deja
-  `FaunaAnomala.a_diccionario()` y `FaunaAnomala.desde_diccionario(datos)`
-  (funciones estáticas de la clase `FaunaAnomala`): guardalas y cargalas así.
-- Guardado automático al aceptar, cumplir o entregar un encargo y al cerrar
-  el juego; en el menú de pausa, "Guardar" y "Borrar partida".
-- Cada sistema expone `a_diccionario()` / `desde_diccionario()`; el guardado
-  no conoce sus detalles internos.
+1. **Menú principal** al abrir el juego: Continuar (si hay partida), Nueva
+   partida (avisando que borra la actual), Controles y Salir. Mismo estilo que
+   el menú de pausa.
+2. **Plano (tecla M):** agregar Puerto Albor, el Sendero de los Faros y el
+   camino nuevo (`HACIA_ALBOR`, `FAROS`, `PUERTO_ALBOR` en
+   `mundo/salbruma/trazado_salbruma.gd`).
+3. **Ubicación en el seguimiento:** que el título y el primer paso cambien
+   según la zona donde está el protagonista (Puerto Junco, Bajíos, Marismas,
+   Sendero de los Faros, Puerto Albor). Hoy en Albor dice "Seguí el sendero
+   hasta Puerto Junco".
+4. **Misiones de La Voz en dorado:** la misión dorada
+   (`encargos/la_voz_desenmascara_al_impostor.tres`) y el diálogo de "La Voz"
+   tienen que verse distintos (dorado), como pide el Documento Maestro.
+   Si hace falta, agregá un campo `de_la_voz := false` a `nucleo/encargo.gd`.
+5. **Revisión gráfica:** abrí el juego con ventana, sacá capturas de cada
+   pantalla de la interfaz y corregí lo que se vea mal (textos cortados,
+   paneles superpuestos, contraste).
 
-## 2. Parte visual e interfaz
+## Fuera de tu área (lo hace Claude ahora)
 
-
-Todo lo visual y la interfaz:
-
-- `interfaz/` (HUD, seguimiento, diálogos, combate, menú de pausa, mapa,
-  `tema.tres`, fuentes).
-- Pulido visual: menús, transiciones, legibilidad, íconos, animaciones de la
-  interfaz, consistencia del estilo pixel 3D.
-- Shaders y aspecto de escenarios si hace falta (`shaders/`, materiales).
-
-## Fuera de tu área (lo hace Claude)
-
-- **Fauna Anómala**: `fauna/`, `nucleo/fauna_anomala.gd` y su propio aviso en
-  pantalla. No edites esos archivos.
-- Lógica de juego (`nucleo/encargos.gd`, `jugador/jugador.gd`): si un cambio
-  visual la necesita, que sea mínimo y avisalo en el commit.
+- `mundo/salbruma/` (terreno, elementos, trazado: solo leerlo), `fauna/`,
+  `encargos/` nuevos de Puerto Albor, `nucleo/sonido.gd`, `sonido/`.
 
 ## Cómo trabajar
 
-- Evitá tocar `project.godot` y las escenas grandes de `mundo/` salvo que sea
-  imprescindible.
-- Verificá con los comandos de `AGENTS.md` y hacé commit en `main` al terminar
-  cada mejora. No subas a GitHub sin que la persona lo pida.
+- No toques las escenas grandes de `mundo/` salvo lo mínimo.
+- Verificá con los comandos de `AGENTS.md` y con tus pruebas de `herramientas/`.
+- Si no podés hacer commit, dejá los cambios sin guardar: Claude los guarda.
+  No subas a GitHub.
+- Al final resumí en español qué hiciste y qué no pudiste.
+
+## Estado (actualizado por Claude)
+
+La ronda 2 está terminada y la rama `claude` ya está unida a `main`.
+Las próximas tareas están en `CONTINUAR_CON_CODEX.md`. Desde ahora Codex
+trabaja solo, siempre en esta carpeta (`JUEGO EMI`, rama `main`).
