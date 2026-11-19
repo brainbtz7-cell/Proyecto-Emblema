@@ -40,6 +40,7 @@ func _calcular_altura(ruido: FastNoiseLite, x: float, z: float) -> float:
 	var distancia_camino := TRAZADO.distancia_a_camino(punto)
 	var traza := 1.0 - smoothstep(1.25, 3.1, distancia_camino)
 	traza = maxf(traza, _zona(punto, TRAZADO.PUERTO, Vector2(9.8, 5.0)) * 0.74)
+	traza = maxf(traza, _zona(punto, TRAZADO.PUERTO_ALBOR, Vector2(8.5, 4.5)) * 0.74)
 	_guardar_traza(punto, traza)
 
 	var altura := 2.2 + detalle * lerpf(1.35, 0.46, traza)
@@ -60,6 +61,9 @@ func _calcular_altura(ruido: FastNoiseLite, x: float, z: float) -> float:
 	altura = lerpf(altura, 1.46 + detalle * 0.21, campamento)
 	altura = _humedal(punto, altura, detalle)
 	altura = _salida_del_humedal(punto, altura, detalle)
+	altura = _paso_hacia_albor(punto, altura, detalle)
+	var albor := _zona(punto, TRAZADO.PUERTO_ALBOR, Vector2(24, 18))
+	altura = lerpf(altura, 2.0 + detalle * 0.17, albor)
 
 	var eje_rio := TRAZADO.x_del_rio(z)
 	var ancho_rio := 17.0 + 2.0 * sin(z * 0.06)
@@ -101,6 +105,24 @@ func _salida_del_humedal(punto: Vector2, altura: float, detalle: float) -> float
 	var banda := 1.0 - smoothstep(3.5, 15.0, punto.distance_to(cerca))
 	var rampa := 1.42 + hacia_el_norte * 0.27 + detalle * 0.32
 	return lerpf(altura, rampa, banda * smoothstep(0.0, 7.0, hacia_el_norte))
+
+
+# El sendero cruza la loma con un perfil parejo: sube y baja como mucho un
+# 22 % entre la salida de las marismas y Albor. Donde la ladera es más alta
+# la corta como una garganta, y donde cae de golpe la rellena.
+func _paso_hacia_albor(punto: Vector2, altura: float, detalle: float) -> float:
+	var medida := TRAZADO.distancia_y_avance(punto, TRAZADO.HACIA_ALBOR)
+	var banda := 1.0 - smoothstep(3.0, 13.0, medida.x)
+	if banda <= 0.0:
+		return altura
+	var largo := 0.0
+	for indice in range(1, TRAZADO.HACIA_ALBOR.size()):
+		largo += TRAZADO.HACIA_ALBOR[indice - 1].distance_to(TRAZADO.HACIA_ALBOR[indice])
+	var subida := 7.2 + medida.y * 0.22
+	# Los últimos 32 m quedan al nivel del llano de Albor.
+	var bajada := 2.0 + maxf(0.0, largo - 32.0 - medida.y) * 0.22
+	var tope := minf(subida, bajada) + detalle * 0.2
+	return lerpf(altura, tope, banda)
 
 
 func _loma(punto: Vector2, centro: Vector2, extension: Vector2) -> float:
