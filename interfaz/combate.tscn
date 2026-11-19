@@ -1,0 +1,158 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://interfaz/combate_de_prueba.gd" id="1"]
+[ext_resource type="Script" path="res://efectos/gestos_de_combate.gd" id="2"]
+[ext_resource type="Theme" path="res://interfaz/tema.tres" id="3"]
+
+[node name="Combate" type="PanelContainer"]
+visible = false
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -447.0
+offset_top = -24.0
+offset_right = 447.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("3")
+script = ExtResource("1")
+
+[node name="Columna" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Cabecera" type="HBoxContainer" parent="Columna"]
+layout_mode = 2
+
+[node name="Estado" type="Label" parent="Columna/Cabecera"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"Nombre"
+
+[node name="Vidas" type="HBoxContainer" parent="Columna"]
+layout_mode = 2
+theme_override_constants/separation = 26
+
+[node name="Protagonista" type="VBoxContainer" parent="Columna/Vidas"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 5
+
+[node name="Nombre" type="Label" parent="Columna/Vidas/Protagonista"]
+layout_mode = 2
+theme_type_variation = &"Enfasis"
+text = "Tu vida"
+
+[node name="Barra" type="ProgressBar" parent="Columna/Vidas/Protagonista"]
+custom_minimum_size = Vector2(0, 9)
+layout_mode = 2
+mouse_filter = 2
+show_percentage = false
+
+[node name="Cantidad" type="Label" parent="Columna/Vidas/Protagonista/Barra"]
+layout_mode = 1
+anchor_right = 1.0
+offset_top = -28.0
+offset_bottom = -4.0
+mouse_filter = 2
+theme_type_variation = &"Confirmado"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Rival" type="VBoxContainer" parent="Columna/Vidas"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 5
+
+[node name="Nombre" type="Label" parent="Columna/Vidas/Rival"]
+layout_mode = 2
+theme_type_variation = &"Enfasis"
+
+[node name="Barra" type="ProgressBar" parent="Columna/Vidas/Rival"]
+custom_minimum_size = Vector2(0, 9)
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"VidaRival"
+show_percentage = false
+
+[node name="Cantidad" type="Label" parent="Columna/Vidas/Rival/Barra"]
+layout_mode = 1
+anchor_right = 1.0
+offset_top = -28.0
+offset_bottom = -4.0
+mouse_filter = 2
+theme_type_variation = &"Etiqueta"
+theme_override_colors/font_color = Color(0.953, 0.71, 0.606, 1)
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Senal" type="PanelContainer" parent="Columna"]
+layout_mode = 2
+theme_type_variation = &"PanelSenal"
+
+[node name="Fila" type="HBoxContainer" parent="Columna/Senal"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Pronostico" type="Label" parent="Columna/Senal/Fila"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"Enfasis"
+
+[node name="Ventaja" type="Label" parent="Columna/Senal/Fila"]
+visible = false
+layout_mode = 2
+theme_type_variation = &"Confirmado"
+text = "Golpe certero listo"
+
+[node name="Relato" type="Label" parent="Columna"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_type_variation = &"Secundario"
+autowrap_mode = 3
+
+[node name="Acciones" type="HBoxContainer" parent="Columna"]
+layout_mode = 2
+
+[node name="Atacar" type="Button" parent="Columna/Acciones"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "1 · Atacar"
+
+[node name="Defender" type="Button" parent="Columna/Acciones"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "2 · Defender"
+
+[node name="Preparar" type="Button" parent="Columna/Acciones"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "3 · Preparar"
+
+[node name="Huir" type="Button" parent="Columna/Acciones"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "4 · Huir"
+
+[node name="Detalle" type="Label" parent="Columna"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+theme_type_variation = &"Secundario"
+theme_override_font_sizes/font_size = 14
+
+[node name="Continuar" type="Button" parent="Columna"]
+visible = false
+custom_minimum_size = Vector2(218, 44)
+layout_mode = 2
+size_flags_horizontal = 8
+theme_type_variation = &"BotonPrincipal"
+text = "Volver a explorar"
+
+[node name="Gestos" type="Node" parent="."]
+script = ExtResource("2")

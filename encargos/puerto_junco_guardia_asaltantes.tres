@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Encargo" format=3]
+
+[ext_resource type="Script" path="res://nucleo/encargo.gd" id="1_encargo"]
+
+[resource]
+script = ExtResource("1_encargo")
+id = &"puerto_junco_guardia_asaltantes"
+titulo = "Encargo del guardia"
+oferta = "Estos Klaimyr no nos dan descanso. ¿Podrías echarnos una mano derrotando algunos? Quizás si mermamos sus filas podamos organizar nuestras defensas"
+objetivo = "Asaltantes Klaimyr derrotados"
+indicacion = "Buscalos fuera del poblado."
+clave_de_conteo = &"asaltante_klaimyr"
+cantidad = 7
+entregar_a = "el guardia"

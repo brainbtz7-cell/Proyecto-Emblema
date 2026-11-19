@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="Encargo" format=3]
+
+[ext_resource type="Script" path="res://nucleo/encargo.gd" id="1_encargo"]
+
+[resource]
+script = ExtResource("1_encargo")
+id = &"puerto_junco_ultima_marea"
+titulo = "La última marea"
+oferta = "Los renegados están en la ribera. Defendé Puerto Junco y derrotá al capitán Klaimyr."
+objetivo = "Capitán Klaimyr derrotado"
+indicacion = "Buscá al capitán en la ribera al norte de Junco."
+clave_de_conteo = &"capitan_de_junco"
+cantidad = 1
+entregar_a = "el tablón"
+cierre = "Puerto Junco quedó a salvo.\nLa Voz · Desenmascara al impostor · Próximo destino: Puerto Albor."
+requisitos = Array[StringName]([&"puerto_junco_tablon_rescate"])

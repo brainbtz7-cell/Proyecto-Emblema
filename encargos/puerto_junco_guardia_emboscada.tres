@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Encargo" format=3]
+
+[ext_resource type="Script" path="res://nucleo/encargo.gd" id="1_encargo"]
+
+[resource]
+script = ExtResource("1_encargo")
+id = &"puerto_junco_guardia_emboscada"
+titulo = "Investigar las afueras"
+oferta = "Todo ha estado demasiado tranquilo. Me temo lo peor. ¿Podrías investigar el punto marcado en el mapa? Allí suele haber un grupo de Klaimyr"
+objetivo = "Asaltantes de la emboscada"
+indicacion = "Buscá el punto de investigación marcado en el mapa."
+clave_de_conteo = &"emboscada_de_junco"
+cantidad = 3
+entregar_a = "el guardia"
+requisitos = Array[StringName]([&"puerto_junco_jefe_defensas", &"puerto_junco_pescador_cuero"])

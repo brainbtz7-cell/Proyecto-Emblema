@@ -1,0 +1,67 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://interfaz/dialogo.gd" id="1"]
+[ext_resource type="Theme" path="res://interfaz/tema.tres" id="2"]
+
+[node name="Dialogo" type="Control"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2")
+script = ExtResource("1")
+
+[node name="Fondo" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.039, 0.056, 0.066, 0.29)
+
+[node name="Caja" type="PanelContainer" parent="."]
+layout_mode = 1
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -438.0
+offset_top = -28.0
+offset_right = 438.0
+offset_bottom = -28.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Columna" type="VBoxContainer" parent="Caja"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Nombre" type="Label" parent="Caja/Columna"]
+layout_mode = 2
+theme_type_variation = &"Nombre"
+
+[node name="Texto" type="Label" parent="Caja/Columna"]
+custom_minimum_size = Vector2(0, 71)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+theme_override_constants/line_spacing = 5
+autowrap_mode = 3
+visible_characters_behavior = 1
+
+[node name="Division" type="HSeparator" parent="Caja/Columna"]
+layout_mode = 2
+
+[node name="Opciones" type="HBoxContainer" parent="Caja/Columna"]
+visible = false
+layout_mode = 2
+alignment = 2
+
+[node name="Seguir" type="Button" parent="Caja/Columna"]
+layout_mode = 2
+custom_minimum_size = Vector2(163, 41)
+size_flags_horizontal = 8
+focus_mode = 0
+theme_type_variation = &"BotonPrincipal"

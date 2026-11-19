@@ -1,0 +1,163 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://interfaz/interfaz.gd" id="1"]
+[ext_resource type="Script" path="res://interfaz/seguimiento.gd" id="2"]
+[ext_resource type="PackedScene" path="res://interfaz/dialogo.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://interfaz/combate.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://interfaz/pausa.tscn" id="5"]
+[ext_resource type="Theme" path="res://interfaz/tema.tres" id="6"]
+
+[node name="Interfaz" type="CanvasLayer"]
+process_mode = 3
+script = ExtResource("1")
+
+[node name="Seguimiento" type="PanelContainer" parent="."]
+offset_left = 24.0
+offset_top = 24.0
+offset_right = 362.0
+offset_bottom = 24.0
+mouse_filter = 2
+theme_type_variation = &"PanelHUD"
+theme = ExtResource("6")
+script = ExtResource("2")
+
+[node name="Columna" type="VBoxContainer" parent="Seguimiento"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 5
+
+[node name="Ubicacion" type="Label" parent="Seguimiento/Columna"]
+layout_mode = 2
+theme_type_variation = &"Nombre"
+text = "Isla de pruebas"
+
+[node name="Division" type="HSeparator" parent="Seguimiento/Columna"]
+layout_mode = 2
+
+[node name="Titulo" type="Label" parent="Seguimiento/Columna"]
+layout_mode = 2
+theme_type_variation = &"Enfasis"
+autowrap_mode = 3
+
+[node name="Objetivo" type="Label" parent="Seguimiento/Columna"]
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="Progreso" type="ProgressBar" parent="Seguimiento/Columna"]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+mouse_filter = 2
+show_percentage = false
+
+[node name="Indicacion" type="Label" parent="Seguimiento/Columna"]
+layout_mode = 2
+theme_type_variation = &"Secundario"
+autowrap_mode = 3
+
+[node name="Otros" type="Label" parent="Seguimiento/Columna"]
+layout_mode = 2
+theme_type_variation = &"Etiqueta"
+
+[node name="Notificacion" type="PanelContainer" parent="."]
+visible = false
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -342.0
+offset_top = 24.0
+offset_right = -24.0
+offset_bottom = 24.0
+grow_horizontal = 0
+mouse_filter = 2
+theme_type_variation = &"PanelHUD"
+theme = ExtResource("6")
+
+[node name="Columna" type="VBoxContainer" parent="Notificacion"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Estado" type="Label" parent="Notificacion/Columna"]
+layout_mode = 2
+theme_type_variation = &"Etiqueta"
+
+[node name="Titulo" type="Label" parent="Notificacion/Columna"]
+layout_mode = 2
+theme_type_variation = &"Enfasis"
+autowrap_mode = 3
+
+[node name="Aviso" type="CenterContainer" parent="."]
+visible = false
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -320.0
+offset_top = -147.0
+offset_right = 320.0
+offset_bottom = -96.0
+mouse_filter = 2
+theme = ExtResource("6")
+
+[node name="Caja" type="PanelContainer" parent="Aviso"]
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"PanelHUD"
+
+[node name="Fila" type="HBoxContainer" parent="Aviso/Caja"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="Tecla" type="PanelContainer" parent="Aviso/Caja/Fila"]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"PanelTecla"
+
+[node name="Texto" type="Label" parent="Aviso/Caja/Fila/Tecla"]
+layout_mode = 2
+theme_type_variation = &"Etiqueta"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Accion" type="Label" parent="Aviso/Caja/Fila"]
+layout_mode = 2
+theme_type_variation = &"Enfasis"
+vertical_alignment = 1
+
+[node name="Atajos" type="HBoxContainer" parent="."]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -565.0
+offset_top = -62.0
+offset_right = -24.0
+offset_bottom = -24.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+theme = ExtResource("6")
+alignment = 2
+
+[node name="Mapa" type="Button" parent="Atajos"]
+visible = false
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"Atajo"
+
+[node name="Diario" type="Button" parent="Atajos"]
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"Atajo"
+
+[node name="Pausa" type="Button" parent="Atajos"]
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"Atajo"
+
+[node name="Dialogo" parent="." instance=ExtResource("3")]
+
+[node name="Combate" parent="." instance=ExtResource("4")]
+
+[node name="Pausa" parent="." instance=ExtResource("5")]

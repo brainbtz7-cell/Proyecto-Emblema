@@ -1,0 +1,34 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://personajes/asaltante_klaimyr.tscn" id="asaltante"]
+[ext_resource type="Shader" path="res://shaders/toon.gdshader" id="toon"]
+
+[sub_resource type="ShaderMaterial" id="cobre"]
+shader = ExtResource("toon")
+shader_parameter/color = Color(0.65, 0.42, 0.24, 1)
+
+[sub_resource type="BoxMesh" id="peto"]
+material = SubResource("cobre")
+size = Vector3(0.41, 0.21, 0.12)
+
+[sub_resource type="PrismMesh" id="cresta"]
+material = SubResource("cobre")
+size = Vector3(0.31, 0.25, 0.22)
+
+[node name="CapitanKlaimyr" instance=ExtResource("asaltante")]
+nombre_de_combate = "Capitán Klaimyr"
+estilo_de_combate = 3
+vida_de_combate = 22
+dano_de_combate = 7
+limite_de_turnos = 15
+
+[node name="Modelo" parent="." index="1"]
+scale = Vector3(1.17, 1.19, 1.13)
+
+[node name="PlacaDeCobre" type="MeshInstance3D" parent="Modelo" index="0"]
+position = Vector3(0, 1.12, -0.285)
+mesh = SubResource("peto")
+
+[node name="Cresta" type="MeshInstance3D" parent="Modelo" index="1"]
+position = Vector3(0, 1.68, -0.025)
+mesh = SubResource("cresta")

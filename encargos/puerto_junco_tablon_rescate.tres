@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Encargo" format=3]
+
+[ext_resource type="Script" path="res://nucleo/encargo.gd" id="1_encargo"]
+
+[resource]
+script = ExtResource("1_encargo")
+id = &"puerto_junco_tablon_rescate"
+titulo = "Rescate del jefe pesquero"
+oferta = "El jefe pesquero ha sido secuestrado. Rescátalo y tráelo sano y salvo"
+objetivo = "Pasos del rescate"
+indicacion = "Buscalo río arriba y volvé con él a Puerto Junco."
+clave_de_conteo = &"rescate_de_junco"
+cantidad = 2
+entregar_a = "Puerto Junco"
+requisitos = Array[StringName]([&"puerto_junco_guardia_emboscada"])

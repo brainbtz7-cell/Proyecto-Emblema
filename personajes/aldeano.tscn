@@ -1,0 +1,99 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://personajes/dador_de_encargos.gd" id="dador"]
+[ext_resource type="Script" path="res://nucleo/interactuable.gd" id="interactuable"]
+[ext_resource type="Shader" path="res://shaders/toon.gdshader" id="toon"]
+[ext_resource type="Texture2D" path="res://personajes/globo_de_encargo.svg" id="globo"]
+
+[sub_resource type="ShaderMaterial" id="mat_tunica"]
+shader = ExtResource("toon")
+shader_parameter/color = Color(0.87, 0.88, 0.85, 1)
+
+[sub_resource type="ShaderMaterial" id="mat_chaleco"]
+shader = ExtResource("toon")
+shader_parameter/color = Color(0.48, 0.57, 0.66, 1)
+
+[sub_resource type="ShaderMaterial" id="mat_plumas"]
+shader = ExtResource("toon")
+shader_parameter/color = Color(0.97, 0.97, 0.95, 1)
+
+[sub_resource type="ShaderMaterial" id="mat_pico"]
+shader = ExtResource("toon")
+shader_parameter/color = Color(0.91, 0.69, 0.3, 1)
+
+[sub_resource type="CylinderMesh" id="malla_tunica"]
+material = SubResource("mat_tunica")
+top_radius = 0.16
+bottom_radius = 0.33
+height = 0.9
+radial_segments = 8
+rings = 1
+
+[sub_resource type="CylinderMesh" id="malla_chaleco"]
+material = SubResource("mat_chaleco")
+top_radius = 0.13
+bottom_radius = 0.28
+height = 0.3
+radial_segments = 8
+rings = 1
+
+[sub_resource type="SphereMesh" id="malla_cabeza"]
+material = SubResource("mat_plumas")
+radius = 0.2
+height = 0.4
+radial_segments = 8
+rings = 4
+
+[sub_resource type="BoxMesh" id="malla_pico"]
+material = SubResource("mat_pico")
+size = Vector3(0.08, 0.07, 0.2)
+
+[sub_resource type="CapsuleShape3D" id="forma_cuerpo"]
+radius = 0.3
+height = 1.5
+
+[sub_resource type="SphereShape3D" id="forma_alcance"]
+radius = 1.3
+
+[node name="Aldeano" type="StaticBody3D"]
+script = ExtResource("dador")
+
+[node name="Colision" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+shape = SubResource("forma_cuerpo")
+
+[node name="Modelo" type="Node3D" parent="."]
+
+[node name="Tunica" type="MeshInstance3D" parent="Modelo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+mesh = SubResource("malla_tunica")
+
+[node name="Chaleco" type="MeshInstance3D" parent="Modelo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("malla_chaleco")
+
+[node name="Cabeza" type="MeshInstance3D" parent="Modelo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
+mesh = SubResource("malla_cabeza")
+
+[node name="Pico" type="MeshInstance3D" parent="Modelo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.27, -0.25)
+mesh = SubResource("malla_pico")
+
+[node name="Globo" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.05, 0)
+physics_interpolation_mode = 2
+pixel_size = 0.04
+billboard = 1
+shaded = false
+alpha_cut = 1
+texture_filter = 0
+texture = ExtResource("globo")
+
+[node name="Interactuable" type="Area3D" parent="."]
+script = ExtResource("interactuable")
+accion = "Hablar"
+
+[node name="Forma" type="CollisionShape3D" parent="Interactuable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+shape = SubResource("forma_alcance")

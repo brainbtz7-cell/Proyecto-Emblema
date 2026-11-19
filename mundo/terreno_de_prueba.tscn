@@ -1,0 +1,202 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://mundo/nivel_de_prueba.gd" id="1_nivel"]
+[ext_resource type="Shader" path="res://shaders/cielo.gdshader" id="2_cielo"]
+[ext_resource type="Script" path="res://mundo/terreno.gd" id="3_terreno"]
+[ext_resource type="Shader" path="res://shaders/terreno.gdshader" id="4_suelo"]
+[ext_resource type="Shader" path="res://shaders/agua.gdshader" id="5_agua"]
+[ext_resource type="Script" path="res://mundo/nubes.gd" id="6_nubes"]
+[ext_resource type="Shader" path="res://shaders/toon.gdshader" id="7_toon"]
+[ext_resource type="PackedScene" path="res://jugador/jugador.tscn" id="8_jugador"]
+[ext_resource type="Shader" path="res://shaders/roca.gdshader" id="10_roca"]
+[ext_resource type="PackedScene" path="res://personajes/aldeano.tscn" id="11_aldeano"]
+[ext_resource type="Script" path="res://nucleo/encargo.gd" id="12_encargo"]
+[ext_resource type="Resource" path="res://encargos/puerto_junco_pescador_lomos.tres" id="13_lomos"]
+[ext_resource type="Script" path="res://mundo/poblado.gd" id="14_poblado"]
+[ext_resource type="Script" path="res://fauna/manada.gd" id="15_manada"]
+[ext_resource type="PackedScene" path="res://fauna/uscita.tscn" id="16_uscita"]
+[ext_resource type="Script" path="res://mundo/arboleda.gd" id="17_arboleda"]
+[ext_resource type="PackedScene" path="res://mundo/arbol.tscn" id="18_arbol"]
+[ext_resource type="Resource" path="res://encargos/puerto_junco_guardia_asaltantes.tres" id="19_derrotas"]
+[ext_resource type="PackedScene" path="res://personajes/asaltante_klaimyr.tscn" id="20_asaltante"]
+
+[ext_resource type="Script" path="res://mundo/agua_con_pisadas.gd" id="agua_con_pisadas"]
+
+[sub_resource type="ShaderMaterial" id="mat_cielo"]
+shader = ExtResource("2_cielo")
+
+[sub_resource type="Sky" id="cielo"]
+sky_material = SubResource("mat_cielo")
+
+[sub_resource type="Environment" id="entorno"]
+background_mode = 2
+sky = SubResource("cielo")
+ambient_light_source = 2
+ambient_light_color = Color(0.56, 0.62, 0.84, 1)
+ambient_light_energy = 0.65
+reflected_light_source = 1
+tonemap_mode = 0
+fog_enabled = true
+fog_mode = 1
+fog_light_color = Color(0.82, 0.91, 0.94, 1)
+fog_density = 1.0
+fog_sky_affect = 0.0
+fog_depth_begin = 45.0
+fog_depth_end = 260.0
+
+[sub_resource type="ShaderMaterial" id="mat_suelo"]
+shader = ExtResource("4_suelo")
+
+[sub_resource type="ShaderMaterial" id="mat_agua"]
+shader = ExtResource("5_agua")
+
+[sub_resource type="PlaneMesh" id="malla_agua"]
+material = SubResource("mat_agua")
+size = Vector2(1200, 1200)
+
+[sub_resource type="ShaderMaterial" id="mat_nube"]
+shader = ExtResource("7_toon")
+shader_parameter/color = Color(1, 1, 1, 1)
+
+[sub_resource type="ShaderMaterial" id="mat_roca"]
+shader = ExtResource("10_roca")
+
+[sub_resource type="SphereShape3D" id="forma_poblado"]
+radius = 8.0
+
+[node name="TerrenoDePrueba" type="Node3D"]
+script = ExtResource("1_nivel")
+
+[node name="Entorno" type="WorldEnvironment" parent="."]
+environment = SubResource("entorno")
+
+[node name="Sol" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.819, -0.439, 0.369, 0, 0.643, 0.766, -0.574, -0.627, 0.527, 0, 20, 0)
+light_color = Color(1, 0.96, 0.86, 1)
+light_energy = 0.7
+shadow_enabled = true
+directional_shadow_mode = 1
+directional_shadow_max_distance = 90.0
+
+[node name="Terreno" type="StaticBody3D" parent="."]
+script = ExtResource("3_terreno")
+material = SubResource("mat_suelo")
+
+[node name="Agua" type="MeshInstance3D" parent="." node_paths=PackedStringArray("jugador", "terreno")]
+cast_shadow = 0
+mesh = SubResource("malla_agua")
+script = ExtResource("agua_con_pisadas")
+jugador = NodePath("../Jugador")
+terreno = NodePath("../Terreno")
+
+[node name="Rocas" type="Node3D" parent="."]
+
+[node name="Escalon1" type="CSGBox3D" parent="Rocas"]
+transform = Transform3D(0.978, 0, 0.208, 0, 1, 0, -0.208, 0, 0.978, 1, -1.4, 44)
+use_collision = true
+size = Vector3(3.2, 5.2, 3.2)
+material = SubResource("mat_roca")
+
+[node name="Escalon2" type="CSGBox3D" parent="Rocas"]
+transform = Transform3D(0.94, 0, -0.342, 0, 1, 0, 0.342, 0, 0.94, 4, -1.3, 48)
+use_collision = true
+size = Vector3(3, 7.4, 3)
+material = SubResource("mat_roca")
+
+[node name="Escalon3" type="CSGBox3D" parent="Rocas"]
+transform = Transform3D(0.866, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866, 1.5, -1.6, 52.5)
+use_collision = true
+size = Vector3(3, 12.8, 3)
+material = SubResource("mat_roca")
+
+[node name="Escalon4" type="CSGBox3D" parent="Rocas"]
+transform = Transform3D(0.985, 0, -0.174, 0, 1, 0, 0.174, 0, 0.985, -4, -2.6, 55)
+use_collision = true
+size = Vector3(2.6, 14.8, 2.6)
+material = SubResource("mat_roca")
+
+[node name="Mirador" type="CSGBox3D" parent="Rocas"]
+transform = Transform3D(0.99, 0, 0.139, 0, 1, 0, -0.139, 0, 0.99, -11, -2.5, 57)
+use_collision = true
+size = Vector3(6, 17, 5)
+material = SubResource("mat_roca")
+
+[node name="RocaDePlaya1" type="CSGBox3D" parent="Rocas"]
+transform = Transform3D(0.906, 0, 0.423, 0, 1, 0, -0.423, 0, 0.906, -9, 0.45, 26)
+use_collision = true
+size = Vector3(2.2, 2.9, 1.8)
+material = SubResource("mat_roca")
+
+[node name="RocaDePlaya2" type="CSGBox3D" parent="Rocas"]
+transform = Transform3D(0.966, 0, -0.259, 0, 1, 0, 0.259, 0, 0.966, 9, 0.15, 27)
+use_collision = true
+size = Vector3(1.6, 2.3, 1.6)
+material = SubResource("mat_roca")
+
+[node name="RocaDePlaya3" type="CSGBox3D" parent="Rocas"]
+transform = Transform3D(0.643, 0, 0.766, 0, 1, 0, -0.766, 0, 0.643, -7.2, 0, 27.4)
+use_collision = true
+size = Vector3(1.2, 2, 1.1)
+material = SubResource("mat_roca")
+
+[node name="Nubes" type="Node3D" parent="."]
+script = ExtResource("6_nubes")
+material = SubResource("mat_nube")
+
+[node name="Jugador" parent="." instance=ExtResource("8_jugador")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 2, 1.35, 34)
+
+[node name="Pescador" parent="." instance=ExtResource("11_aldeano")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5, 0.4, 38.5)
+nombre = "Pescador"
+encargos = Array[ExtResource("12_encargo")]([ExtResource("13_lomos")])
+
+[node name="Guardia" parent="." instance=ExtResource("11_aldeano")]
+position = Vector3(0.65, 1.0, 36.3)
+nombre = "Guardia"
+encargos = Array[ExtResource("12_encargo")]([ExtResource("19_derrotas")])
+
+[node name="Nombre" type="Label3D" parent="Guardia"]
+position = Vector3(0, 2.67, 0)
+billboard = 1
+pixel_size = 0.005
+font_size = 28
+outline_size = 9
+text = "Guardia"
+visibility_range_end = 14.0
+
+[node name="Poblado" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5, 1, 38.5)
+script = ExtResource("14_poblado")
+
+[node name="Forma" type="CollisionShape3D" parent="Poblado"]
+shape = SubResource("forma_poblado")
+
+[node name="ManadaEste" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 0, 22)
+script = ExtResource("15_manada")
+animal = ExtResource("16_uscita")
+cantidad = 4
+
+[node name="ManadaOeste" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28, 0, 14)
+script = ExtResource("15_manada")
+animal = ExtResource("16_uscita")
+cantidad = 5
+radio = 10.0
+
+[node name="Asaltantes" type="Node3D" parent="."]
+position = Vector3(2, 0, 15)
+script = ExtResource("15_manada")
+animal = ExtResource("20_asaltante")
+cantidad = 8
+radio = 9.5
+separacion = 4.7
+altura_minima = 1.15
+altura_maxima = 6.0
+
+[node name="Arboleda" type="Node3D" parent="." node_paths=PackedStringArray("terreno", "dejar_libre")]
+script = ExtResource("17_arboleda")
+terreno = NodePath("../Terreno")
+arboles = Array[PackedScene]([ExtResource("18_arbol")])
+dejar_libre = [NodePath("../Jugador"), NodePath("../Pescador"), NodePath("../Guardia"), NodePath("../Asaltantes")]

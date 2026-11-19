@@ -1,0 +1,173 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://fauna/criatura_de_prueba.gd" id="criatura"]
+[ext_resource type="Shader" path="res://shaders/toon.gdshader" id="toon"]
+[ext_resource type="PackedScene" path="res://efectos/polvo.tscn" id="polvo"]
+
+[sub_resource type="ShaderMaterial" id="mat_roca"]
+shader = ExtResource("toon")
+shader_parameter/color = Color(0.31, 0.34, 0.37, 1)
+
+[sub_resource type="ShaderMaterial" id="mat_arcilla"]
+shader = ExtResource("toon")
+shader_parameter/color = Color(0.49, 0.30, 0.22, 1)
+
+[sub_resource type="ShaderMaterial" id="mat_arena"]
+shader = ExtResource("toon")
+shader_parameter/color = Color(0.72, 0.53, 0.34, 1)
+
+[sub_resource type="ShaderMaterial" id="mat_pizarra"]
+shader = ExtResource("toon")
+shader_parameter/color = Color(0.22, 0.24, 0.28, 1)
+
+[sub_resource type="ShaderMaterial" id="mat_pupila"]
+shader = ExtResource("toon")
+shader_parameter/color = Color(0.61, 0.87, 0.87, 1)
+
+[sub_resource type="BoxMesh" id="malla_torso"]
+material = SubResource("mat_arcilla")
+size = Vector3(0.62, 0.54, 0.39)
+
+[sub_resource type="BoxMesh" id="malla_placa"]
+material = SubResource("mat_roca")
+size = Vector3(0.55, 0.36, 0.13)
+
+[sub_resource type="BoxMesh" id="malla_cabeza"]
+material = SubResource("mat_arena")
+size = Vector3(0.33, 0.31, 0.30)
+
+[sub_resource type="BoxMesh" id="malla_ceja"]
+material = SubResource("mat_pizarra")
+size = Vector3(0.37, 0.11, 0.15)
+
+[sub_resource type="BoxMesh" id="malla_ojo"]
+material = SubResource("mat_pupila")
+size = Vector3(0.06, 0.025, 0.025)
+
+[sub_resource type="BoxMesh" id="malla_hombrera"]
+material = SubResource("mat_roca")
+size = Vector3(0.31, 0.27, 0.40)
+
+[sub_resource type="BoxMesh" id="malla_brazo"]
+material = SubResource("mat_arena")
+size = Vector3(0.22, 0.37, 0.22)
+
+[sub_resource type="BoxMesh" id="malla_puno"]
+material = SubResource("mat_pizarra")
+size = Vector3(0.23, 0.23, 0.24)
+
+[sub_resource type="BoxMesh" id="malla_base_cola"]
+material = SubResource("mat_arcilla")
+size = Vector3(0.46, 0.44, 0.47)
+
+[sub_resource type="BoxMesh" id="malla_cola"]
+material = SubResource("mat_arcilla")
+size = Vector3(0.34, 0.25, 0.72)
+
+[sub_resource type="BoxMesh" id="malla_aleta"]
+material = SubResource("mat_pizarra")
+size = Vector3(0.51, 0.095, 0.34)
+
+[sub_resource type="CapsuleShape3D" id="cuerpo"]
+radius = 0.4
+height = 1.8
+
+[sub_resource type="SphereShape3D" id="alcance"]
+radius = 2.6
+
+[node name="AsaltanteKlaimyr" type="CharacterBody3D"]
+collision_layer = 8
+collision_mask = 19
+script = ExtResource("criatura")
+nombre_de_combate = "Asaltante Klaimyr"
+estilo_de_combate = 2
+vida_de_combate = 16
+nivel_hostil = 1
+derrota_que_cuenta = &"asaltante_klaimyr"
+velocidad = 1.0
+radio_de_paseo = 1.35
+altura_minima = 0.15
+efecto_al_ser_cazado = ExtResource("polvo")
+
+[node name="Colision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.9, 0)
+shape = SubResource("cuerpo")
+
+[node name="Modelo" type="Node3D" parent="."]
+
+[node name="Torso" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(0, 1, 0)
+mesh = SubResource("malla_torso")
+
+[node name="Peto" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(0, 1.10, -0.18)
+rotation = Vector3(0.09, 0, 0)
+mesh = SubResource("malla_placa")
+
+[node name="Cabeza" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(0, 1.47, -0.01)
+mesh = SubResource("malla_cabeza")
+
+[node name="Ceja" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(0, 1.54, -0.135)
+mesh = SubResource("malla_ceja")
+
+[node name="OjoIzquierdo" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(-0.093, 1.467, -0.17)
+mesh = SubResource("malla_ojo")
+
+[node name="OjoDerecho" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(0.093, 1.467, -0.17)
+mesh = SubResource("malla_ojo")
+
+[node name="HombroIzquierdo" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(-0.39, 1.16, 0.025)
+rotation = Vector3(0, 0.15, -0.27)
+mesh = SubResource("malla_hombrera")
+
+[node name="HombroDerecho" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(0.39, 1.16, 0.025)
+rotation = Vector3(0, -0.15, 0.27)
+mesh = SubResource("malla_hombrera")
+
+[node name="BrazoIzquierdo" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(-0.47, 0.93, -0.04)
+rotation = Vector3(-0.25, 0, -0.20)
+mesh = SubResource("malla_brazo")
+
+[node name="BrazoDerecho" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(0.47, 0.93, -0.04)
+rotation = Vector3(-0.25, 0, 0.20)
+mesh = SubResource("malla_brazo")
+
+[node name="PunoIzquierdo" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(-0.50, 0.74, -0.12)
+mesh = SubResource("malla_puno")
+
+[node name="PunoDerecho" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(0.50, 0.74, -0.12)
+mesh = SubResource("malla_puno")
+
+[node name="BaseCola" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(0, 0.68, 0.08)
+rotation = Vector3(-0.33, 0, 0)
+mesh = SubResource("malla_base_cola")
+
+[node name="Cola" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(0, 0.38, 0.42)
+rotation = Vector3(0.49, 0.24, 0)
+mesh = SubResource("malla_cola")
+
+[node name="Aleta" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(0.13, 0.24, 0.82)
+rotation = Vector3(0.10, 0.35, 0)
+mesh = SubResource("malla_aleta")
+
+[node name="Deteccion" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="Forma" type="CollisionShape3D" parent="Deteccion"]
+position = Vector3(0, 0.9, 0)
+shape = SubResource("alcance")

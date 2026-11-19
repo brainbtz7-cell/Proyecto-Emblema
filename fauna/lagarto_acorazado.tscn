@@ -1,0 +1,418 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://fauna/lagarto_acorazado.gd" id="lagarto"]
+[ext_resource type="Script" path="res://nucleo/interactuable.gd" id="interactuable"]
+[ext_resource type="Shader" path="res://shaders/toon.gdshader" id="toon"]
+[ext_resource type="PackedScene" path="res://efectos/polvo.tscn" id="polvo"]
+
+[ext_resource type="ArrayMesh" path="res://fauna/modelos/placa_dorsal_lagarto.obj" id="placa_dorsal"]
+
+[sub_resource type="ShaderMaterial" id="mat_piel"]
+shader = ExtResource("toon")
+shader_parameter/color = Color(0.33, 0.42, 0.34, 1)
+
+[sub_resource type="ShaderMaterial" id="mat_vientre"]
+shader = ExtResource("toon")
+shader_parameter/color = Color(0.56, 0.53, 0.37, 1)
+
+[sub_resource type="ShaderMaterial" id="mat_pizarra"]
+shader = ExtResource("toon")
+shader_parameter/color = Color(0.37, 0.47, 0.46, 1)
+
+[sub_resource type="ShaderMaterial" id="mat_musgo"]
+shader = ExtResource("toon")
+shader_parameter/color = Color(0.49, 0.56, 0.36, 1)
+
+[sub_resource type="ShaderMaterial" id="mat_junta"]
+shader = ExtResource("toon")
+shader_parameter/color = Color(0.22, 0.29, 0.27, 1)
+
+[sub_resource type="ShaderMaterial" id="mat_garra"]
+shader = ExtResource("toon")
+shader_parameter/color = Color(0.72, 0.67, 0.49, 1)
+
+[sub_resource type="ShaderMaterial" id="mat_ojo"]
+shader = ExtResource("toon")
+shader_parameter/color = Color(0.96, 0.67, 0.23, 1)
+
+[sub_resource type="SphereMesh" id="malla_cuerpo"]
+material = SubResource("mat_piel")
+radius = 0.5
+height = 1.0
+radial_segments = 8
+rings = 3
+
+[sub_resource type="BoxMesh" id="malla_cuello"]
+material = SubResource("mat_piel")
+size = Vector3(0.45, 0.27, 0.43)
+
+[sub_resource type="BoxMesh" id="malla_cabeza"]
+material = SubResource("mat_pizarra")
+size = Vector3(0.42, 0.25, 0.43)
+
+[sub_resource type="BoxMesh" id="malla_hocico"]
+material = SubResource("mat_piel")
+size = Vector3(0.32, 0.16, 0.30)
+
+[sub_resource type="BoxMesh" id="malla_quijada"]
+material = SubResource("mat_vientre")
+size = Vector3(0.34, 0.10, 0.42)
+
+[sub_resource type="BoxMesh" id="malla_cuenca"]
+material = SubResource("mat_junta")
+size = Vector3(0.094, 0.10, 0.18)
+
+[sub_resource type="BoxMesh" id="malla_ojo"]
+material = SubResource("mat_ojo")
+size = Vector3(0.032, 0.064, 0.09)
+
+[sub_resource type="BoxMesh" id="malla_pupila"]
+material = SubResource("mat_junta")
+size = Vector3(0.010, 0.058, 0.024)
+
+[sub_resource type="BoxMesh" id="malla_placa_costado"]
+material = SubResource("mat_pizarra")
+size = Vector3(0.13, 0.14, 0.29)
+
+[sub_resource type="BoxMesh" id="malla_pata"]
+material = SubResource("mat_piel")
+size = Vector3(0.24, 0.23, 0.19)
+
+[sub_resource type="BoxMesh" id="malla_pie"]
+material = SubResource("mat_vientre")
+size = Vector3(0.23, 0.095, 0.24)
+
+[sub_resource type="BoxMesh" id="malla_garra"]
+material = SubResource("mat_garra")
+size = Vector3(0.044, 0.052, 0.14)
+
+[sub_resource type="BoxMesh" id="malla_cola"]
+material = SubResource("mat_piel")
+size = Vector3(0.28, 0.24, 0.44)
+
+[sub_resource type="PrismMesh" id="malla_cola_armada"]
+material = SubResource("mat_musgo")
+size = Vector3(0.29, 0.18, 0.29)
+
+[sub_resource type="CapsuleShape3D" id="forma_cuerpo"]
+radius = 0.30
+height = 1.44
+
+[sub_resource type="SphereShape3D" id="forma_alcance"]
+radius = 1.10
+
+[node name="LagartoAcorazado" type="CharacterBody3D"]
+collision_layer = 8
+collision_mask = 19
+script = ExtResource("lagarto")
+nombre_de_combate = "Lagarto acorazado"
+estilo_de_combate = 1
+vida_de_combate = 18
+dano_de_combate = 4
+velocidad = 1.24
+radio_de_paseo = 3.2
+pausa_minima = 1.0
+pausa_maxima = 3.7
+altura_minima = -0.13
+objeto_de_encargo = &"cuero_de_lagarto_armado"
+efecto_al_ser_cazado = ExtResource("polvo")
+
+[node name="Colision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.31, 0)
+rotation_degrees = Vector3(90, 0, 0)
+shape = SubResource("forma_cuerpo")
+
+[node name="Modelo" type="Node3D" parent="."]
+
+[node name="Tronco" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(0.000, 0.400, 0.000)
+scale = Vector3(0.68, 0.48, 1.3)
+mesh = SubResource("malla_cuerpo")
+
+[node name="PlacaDeLaFrente" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(0, 0.533, -0.719)
+rotation_degrees = Vector3(-12, 0, 0)
+scale = Vector3(0.61, 0.44, 0.65)
+mesh = ExtResource("placa_dorsal")
+material_override = SubResource("mat_pizarra")
+
+[node name="Cuello" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(0.000, 0.390, -0.520)
+rotation_degrees = Vector3(7, 0, 0)
+mesh = SubResource("malla_cuello")
+
+[node name="Frente" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(0.000, 0.425, -0.750)
+rotation_degrees = Vector3(-8, 0, 0)
+mesh = SubResource("malla_cabeza")
+
+[node name="Hocico" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(0.000, 0.376, -0.990)
+rotation_degrees = Vector3(5, 0, 0)
+mesh = SubResource("malla_hocico")
+
+[node name="Quijada" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(0.000, 0.291, -0.940)
+mesh = SubResource("malla_quijada")
+
+[node name="CuencaIzquierda" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(-0.201, 0.460, -0.790)
+rotation_degrees = Vector3(0, 0, -14)
+mesh = SubResource("malla_cuenca")
+
+[node name="OjoIzquierda" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(-0.255, 0.460, -0.810)
+mesh = SubResource("malla_ojo")
+
+[node name="PupilaIzquierda" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(-0.276, 0.460, -0.825)
+mesh = SubResource("malla_pupila")
+
+[node name="PlacaLateralIzquierda1" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(-0.300, 0.480, -0.310)
+rotation_degrees = Vector3(9, 0, -20)
+mesh = SubResource("malla_placa_costado")
+
+[node name="PlacaLateralIzquierda2" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(-0.300, 0.480, -0.040)
+rotation_degrees = Vector3(9, 0, -20)
+mesh = SubResource("malla_placa_costado")
+
+[node name="PlacaLateralIzquierda3" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(-0.300, 0.480, 0.250)
+rotation_degrees = Vector3(9, 0, -20)
+mesh = SubResource("malla_placa_costado")
+
+[node name="PlacaLateralIzquierda4" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(-0.230, 0.480, 0.500)
+rotation_degrees = Vector3(9, 0, -20)
+mesh = SubResource("malla_placa_costado")
+
+[node name="CuencaDerecha" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(0.201, 0.460, -0.790)
+rotation_degrees = Vector3(0, 0, 14)
+mesh = SubResource("malla_cuenca")
+
+[node name="OjoDerecha" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(0.255, 0.460, -0.810)
+mesh = SubResource("malla_ojo")
+
+[node name="PupilaDerecha" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(0.276, 0.460, -0.825)
+mesh = SubResource("malla_pupila")
+
+[node name="PlacaLateralDerecha1" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(0.300, 0.480, -0.310)
+rotation_degrees = Vector3(9, 0, 20)
+mesh = SubResource("malla_placa_costado")
+
+[node name="PlacaLateralDerecha2" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(0.300, 0.480, -0.040)
+rotation_degrees = Vector3(9, 0, 20)
+mesh = SubResource("malla_placa_costado")
+
+[node name="PlacaLateralDerecha3" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(0.300, 0.480, 0.250)
+rotation_degrees = Vector3(9, 0, 20)
+mesh = SubResource("malla_placa_costado")
+
+[node name="PlacaLateralDerecha4" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(0.230, 0.480, 0.500)
+rotation_degrees = Vector3(9, 0, 20)
+mesh = SubResource("malla_placa_costado")
+
+[node name="PlacaDelLomo1" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(0.000, 0.635, -0.410)
+rotation_degrees = Vector3(12, 0, 0)
+scale = Vector3(0.86, 1, 0.86)
+mesh = ExtResource("placa_dorsal")
+material_override = SubResource("mat_pizarra")
+
+[node name="PlacaDelLomo2" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(0.000, 0.689, -0.160)
+rotation_degrees = Vector3(12, 0, 0)
+scale = Vector3(1.0, 1, 1.0)
+mesh = ExtResource("placa_dorsal")
+material_override = SubResource("mat_musgo")
+
+[node name="PlacaDelLomo3" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(0.000, 0.684, 0.102)
+rotation_degrees = Vector3(12, 0, 0)
+scale = Vector3(1.12, 1, 1.12)
+mesh = ExtResource("placa_dorsal")
+material_override = SubResource("mat_pizarra")
+
+[node name="PlacaDelLomo4" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(0.000, 0.641, 0.365)
+rotation_degrees = Vector3(12, 0, 0)
+scale = Vector3(0.99, 1, 0.99)
+mesh = ExtResource("placa_dorsal")
+material_override = SubResource("mat_musgo")
+
+[node name="PlacaDelLomo5" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(0.000, 0.543, 0.584)
+rotation_degrees = Vector3(12, 0, 0)
+scale = Vector3(0.75, 1, 0.75)
+mesh = ExtResource("placa_dorsal")
+material_override = SubResource("mat_pizarra")
+
+[node name="PataDelanteraIzquierda" type="Node3D" parent="Modelo"]
+position = Vector3(-0.278, 0.313, -0.360)
+
+[node name="Brazo" type="MeshInstance3D" parent="Modelo/PataDelanteraIzquierda"]
+position = Vector3(-0.100, -0.088, 0.028)
+rotation_degrees = Vector3(5, 0, -23)
+mesh = SubResource("malla_pata")
+
+[node name="Pie" type="MeshInstance3D" parent="Modelo/PataDelanteraIzquierda"]
+position = Vector3(-0.163, -0.235, -0.062)
+rotation_degrees = Vector3(0, 12, 0)
+mesh = SubResource("malla_pie")
+
+[node name="Garra1" type="MeshInstance3D" parent="Modelo/PataDelanteraIzquierda"]
+position = Vector3(-0.220, -0.251, -0.211)
+rotation_degrees = Vector3(-10, 1, 0)
+mesh = SubResource("malla_garra")
+
+[node name="Garra2" type="MeshInstance3D" parent="Modelo/PataDelanteraIzquierda"]
+position = Vector3(-0.161, -0.251, -0.211)
+rotation_degrees = Vector3(-10, 11, 0)
+mesh = SubResource("malla_garra")
+
+[node name="Garra3" type="MeshInstance3D" parent="Modelo/PataDelanteraIzquierda"]
+position = Vector3(-0.102, -0.251, -0.211)
+rotation_degrees = Vector3(-10, 21, 0)
+mesh = SubResource("malla_garra")
+
+[node name="PataDelanteraDerecha" type="Node3D" parent="Modelo"]
+position = Vector3(0.278, 0.313, -0.360)
+
+[node name="Brazo" type="MeshInstance3D" parent="Modelo/PataDelanteraDerecha"]
+position = Vector3(0.100, -0.088, 0.028)
+rotation_degrees = Vector3(5, 0, 23)
+mesh = SubResource("malla_pata")
+
+[node name="Pie" type="MeshInstance3D" parent="Modelo/PataDelanteraDerecha"]
+position = Vector3(0.163, -0.235, -0.062)
+rotation_degrees = Vector3(0, -12, 0)
+mesh = SubResource("malla_pie")
+
+[node name="Garra1" type="MeshInstance3D" parent="Modelo/PataDelanteraDerecha"]
+position = Vector3(0.102, -0.251, -0.211)
+rotation_degrees = Vector3(-10, -21, 0)
+mesh = SubResource("malla_garra")
+
+[node name="Garra2" type="MeshInstance3D" parent="Modelo/PataDelanteraDerecha"]
+position = Vector3(0.161, -0.251, -0.211)
+rotation_degrees = Vector3(-10, -11, 0)
+mesh = SubResource("malla_garra")
+
+[node name="Garra3" type="MeshInstance3D" parent="Modelo/PataDelanteraDerecha"]
+position = Vector3(0.220, -0.251, -0.211)
+rotation_degrees = Vector3(-10, -1, 0)
+mesh = SubResource("malla_garra")
+
+[node name="PataTraseraIzquierda" type="Node3D" parent="Modelo"]
+position = Vector3(-0.278, 0.313, 0.405)
+
+[node name="Brazo" type="MeshInstance3D" parent="Modelo/PataTraseraIzquierda"]
+position = Vector3(-0.100, -0.088, 0.028)
+rotation_degrees = Vector3(5, 0, -23)
+mesh = SubResource("malla_pata")
+
+[node name="Pie" type="MeshInstance3D" parent="Modelo/PataTraseraIzquierda"]
+position = Vector3(-0.163, -0.235, -0.062)
+rotation_degrees = Vector3(0, 12, 0)
+mesh = SubResource("malla_pie")
+
+[node name="Garra1" type="MeshInstance3D" parent="Modelo/PataTraseraIzquierda"]
+position = Vector3(-0.220, -0.251, -0.211)
+rotation_degrees = Vector3(-10, 1, 0)
+mesh = SubResource("malla_garra")
+
+[node name="Garra2" type="MeshInstance3D" parent="Modelo/PataTraseraIzquierda"]
+position = Vector3(-0.161, -0.251, -0.211)
+rotation_degrees = Vector3(-10, 11, 0)
+mesh = SubResource("malla_garra")
+
+[node name="Garra3" type="MeshInstance3D" parent="Modelo/PataTraseraIzquierda"]
+position = Vector3(-0.102, -0.251, -0.211)
+rotation_degrees = Vector3(-10, 21, 0)
+mesh = SubResource("malla_garra")
+
+[node name="PataTraseraDerecha" type="Node3D" parent="Modelo"]
+position = Vector3(0.278, 0.313, 0.405)
+
+[node name="Brazo" type="MeshInstance3D" parent="Modelo/PataTraseraDerecha"]
+position = Vector3(0.100, -0.088, 0.028)
+rotation_degrees = Vector3(5, 0, 23)
+mesh = SubResource("malla_pata")
+
+[node name="Pie" type="MeshInstance3D" parent="Modelo/PataTraseraDerecha"]
+position = Vector3(0.163, -0.235, -0.062)
+rotation_degrees = Vector3(0, -12, 0)
+mesh = SubResource("malla_pie")
+
+[node name="Garra1" type="MeshInstance3D" parent="Modelo/PataTraseraDerecha"]
+position = Vector3(0.102, -0.251, -0.211)
+rotation_degrees = Vector3(-10, -21, 0)
+mesh = SubResource("malla_garra")
+
+[node name="Garra2" type="MeshInstance3D" parent="Modelo/PataTraseraDerecha"]
+position = Vector3(0.161, -0.251, -0.211)
+rotation_degrees = Vector3(-10, -11, 0)
+mesh = SubResource("malla_garra")
+
+[node name="Garra3" type="MeshInstance3D" parent="Modelo/PataTraseraDerecha"]
+position = Vector3(0.220, -0.251, -0.211)
+rotation_degrees = Vector3(-10, -1, 0)
+mesh = SubResource("malla_garra")
+
+[node name="Cola" type="Node3D" parent="Modelo"]
+position = Vector3(0.000, 0.300, 0.560)
+
+[node name="Base" type="MeshInstance3D" parent="Modelo/Cola"]
+position = Vector3(0.000, -0.004, 0.180)
+rotation_degrees = Vector3(12, 0, 0)
+mesh = SubResource("malla_cola")
+
+[node name="Placa" type="MeshInstance3D" parent="Modelo/Cola"]
+position = Vector3(0.000, 0.106, 0.200)
+mesh = SubResource("malla_cola_armada")
+
+[node name="Tramo" type="Node3D" parent="Modelo/Cola"]
+position = Vector3(0.000, -0.031, 0.390)
+
+[node name="Centro" type="MeshInstance3D" parent="Modelo/Cola/Tramo"]
+position = Vector3(0.000, -0.014, 0.155)
+rotation_degrees = Vector3(7, 0, 0)
+scale = Vector3(0.74, 0.7, 0.98)
+mesh = SubResource("malla_cola")
+
+[node name="Placa" type="MeshInstance3D" parent="Modelo/Cola/Tramo"]
+position = Vector3(0.000, 0.060, 0.150)
+scale = Vector3(0.68, 0.71, 0.77)
+mesh = SubResource("malla_cola_armada")
+
+[node name="Punta" type="Node3D" parent="Modelo/Cola/Tramo"]
+position = Vector3(0.000, -0.036, 0.329)
+
+[node name="Extremo" type="MeshInstance3D" parent="Modelo/Cola/Tramo/Punta"]
+position = Vector3(0.000, -0.022, 0.127)
+rotation_degrees = Vector3(8, 0, 0)
+scale = Vector3(0.43, 0.47, 0.69)
+mesh = SubResource("malla_cola")
+
+[node name="Terminal" type="MeshInstance3D" parent="Modelo/Cola/Tramo/Punta"]
+position = Vector3(0.000, -0.041, 0.286)
+rotation_degrees = Vector3(8, 0, 0)
+scale = Vector3(0.24, 0.33, 0.34)
+mesh = SubResource("malla_cola")
+
+[node name="Interactuable" type="Area3D" parent="."]
+position = Vector3(0, 0.45, 0)
+script = ExtResource("interactuable")
+accion = "Cazar lagarto"
+
+[node name="Forma" type="CollisionShape3D" parent="Interactuable"]
+shape = SubResource("forma_alcance")

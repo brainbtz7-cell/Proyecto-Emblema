@@ -1,0 +1,346 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://jugador/jugador.gd" id="1_jugador"]
+[ext_resource type="Script" path="res://jugador/camara_orbital.gd" id="2_camara"]
+[ext_resource type="Shader" path="res://shaders/toon.gdshader" id="3_toon"]
+[ext_resource type="Script" path="res://jugador/alcance.gd" id="4_alcance"]
+[ext_resource type="Script" path="res://jugador/figura.gd" id="5_figura"]
+[ext_resource type="Shader" path="res://shaders/contorno.gdshader" id="6_contorno"]
+
+[sub_resource type="CapsuleShape3D" id="forma_cuerpo"]
+radius = 0.3
+height = 1.5
+
+[sub_resource type="ShaderMaterial" id="mat_contorno"]
+shader = ExtResource("6_contorno")
+
+[sub_resource type="ShaderMaterial" id="mat_tunica"]
+next_pass = SubResource("mat_contorno")
+shader = ExtResource("3_toon")
+shader_parameter/color = Color(0.78, 0.41, 0.28, 1)
+shader_parameter/luz_propia = 0.15
+
+[sub_resource type="ShaderMaterial" id="mat_tunica_clara"]
+shader = ExtResource("3_toon")
+shader_parameter/color = Color(0.9, 0.55, 0.37, 1)
+shader_parameter/luz_propia = 0.15
+
+[sub_resource type="ShaderMaterial" id="mat_capucha"]
+next_pass = SubResource("mat_contorno")
+shader = ExtResource("3_toon")
+shader_parameter/color = Color(0.23, 0.29, 0.54, 1)
+shader_parameter/luz_propia = 0.15
+
+[sub_resource type="ShaderMaterial" id="mat_capa"]
+next_pass = SubResource("mat_contorno")
+shader = ExtResource("3_toon")
+shader_parameter/color = Color(0.16, 0.2, 0.41, 1)
+shader_parameter/luz_propia = 0.15
+
+[sub_resource type="ShaderMaterial" id="mat_ocre"]
+next_pass = SubResource("mat_contorno")
+shader = ExtResource("3_toon")
+shader_parameter/color = Color(0.89, 0.71, 0.36, 1)
+shader_parameter/luz_propia = 0.15
+
+[sub_resource type="ShaderMaterial" id="mat_guante"]
+next_pass = SubResource("mat_contorno")
+shader = ExtResource("3_toon")
+shader_parameter/color = Color(0.34, 0.25, 0.21, 1)
+shader_parameter/luz_propia = 0.15
+
+[sub_resource type="ShaderMaterial" id="mat_rostro"]
+shader = ExtResource("3_toon")
+shader_parameter/color = Color(0.05, 0.05, 0.09, 1)
+
+[sub_resource type="StandardMaterial3D" id="mat_ojos"]
+shading_mode = 0
+albedo_color = Color(0.86, 0.98, 0.94, 1)
+
+[sub_resource type="ShaderMaterial" id="mat_polvo"]
+shader = ExtResource("3_toon")
+shader_parameter/color = Color(0.95, 0.93, 0.86, 1)
+
+[sub_resource type="CylinderMesh" id="malla_falda"]
+material = SubResource("mat_tunica")
+top_radius = 0.19
+bottom_radius = 0.4
+height = 0.79
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="malla_ruedo"]
+material = SubResource("mat_ocre")
+top_radius = 0.4
+bottom_radius = 0.42
+height = 0.07
+radial_segments = 10
+rings = 1
+
+[sub_resource type="BoxMesh" id="malla_panel"]
+material = SubResource("mat_tunica_clara")
+size = Vector3(0.14, 0.76, 0.02)
+
+[sub_resource type="CylinderMesh" id="malla_pecho"]
+material = SubResource("mat_tunica")
+top_radius = 0.2
+bottom_radius = 0.19
+height = 0.36
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="malla_faja"]
+material = SubResource("mat_ocre")
+top_radius = 0.205
+bottom_radius = 0.205
+height = 0.07
+radial_segments = 10
+rings = 1
+
+[sub_resource type="BoxMesh" id="malla_lazo"]
+material = SubResource("mat_ocre")
+size = Vector3(0.06, 0.2, 0.03)
+
+[sub_resource type="CylinderMesh" id="malla_manga"]
+material = SubResource("mat_tunica")
+top_radius = 0.065
+bottom_radius = 0.095
+height = 0.4
+radial_segments = 8
+rings = 1
+
+[sub_resource type="CylinderMesh" id="malla_puno"]
+material = SubResource("mat_ocre")
+top_radius = 0.098
+bottom_radius = 0.106
+height = 0.05
+radial_segments = 8
+rings = 1
+
+[sub_resource type="BoxMesh" id="malla_mano"]
+material = SubResource("mat_guante")
+size = Vector3(0.09, 0.09, 0.09)
+
+[sub_resource type="CylinderMesh" id="malla_manto"]
+material = SubResource("mat_capucha")
+top_radius = 0.12
+bottom_radius = 0.3
+height = 0.22
+radial_segments = 10
+rings = 1
+
+[sub_resource type="SphereMesh" id="malla_capucha"]
+material = SubResource("mat_capucha")
+radius = 0.23
+height = 0.46
+radial_segments = 10
+rings = 5
+
+[sub_resource type="PrismMesh" id="malla_pico"]
+material = SubResource("mat_capucha")
+size = Vector3(0.2, 0.3, 0.12)
+
+[sub_resource type="SphereMesh" id="malla_rostro"]
+material = SubResource("mat_rostro")
+radius = 0.165
+height = 0.33
+radial_segments = 8
+rings = 4
+
+[sub_resource type="BoxMesh" id="malla_ojo"]
+material = SubResource("mat_ojos")
+size = Vector3(0.06, 0.07, 0.03)
+
+[sub_resource type="BoxMesh" id="malla_capa_alta"]
+material = SubResource("mat_capa")
+size = Vector3(0.38, 0.27, 0.035)
+
+[sub_resource type="BoxMesh" id="malla_capa_media"]
+material = SubResource("mat_capa")
+size = Vector3(0.44, 0.27, 0.035)
+
+[sub_resource type="BoxMesh" id="malla_capa_baja"]
+material = SubResource("mat_capa")
+size = Vector3(0.5, 0.27, 0.035)
+
+[sub_resource type="BoxMesh" id="malla_polvo"]
+material = SubResource("mat_polvo")
+size = Vector3(0.14, 0.14, 0.14)
+
+[sub_resource type="Curve" id="curva_polvo"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="SphereShape3D" id="forma_camara"]
+radius = 0.25
+
+[sub_resource type="SphereShape3D" id="forma_alcance"]
+radius = 1.5
+
+[node name="Jugador" type="CharacterBody3D"]
+collision_layer = 2
+collision_mask = 25
+script = ExtResource("1_jugador")
+
+[node name="Colision" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+shape = SubResource("forma_cuerpo")
+
+[node name="Modelo" type="Node3D" parent="."]
+script = ExtResource("5_figura")
+
+[node name="Inclinacion" type="Node3D" parent="Modelo"]
+
+[node name="Giro" type="Node3D" parent="Modelo/Inclinacion"]
+
+[node name="Falda" type="Node3D" parent="Modelo/Inclinacion/Giro"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.86, 0)
+
+[node name="Tela" type="MeshInstance3D" parent="Modelo/Inclinacion/Giro/Falda"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.395, 0)
+mesh = SubResource("malla_falda")
+
+[node name="Ruedo" type="MeshInstance3D" parent="Modelo/Inclinacion/Giro/Falda"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.825, 0)
+mesh = SubResource("malla_ruedo")
+
+[node name="PanelFrontal" type="MeshInstance3D" parent="Modelo/Inclinacion/Giro/Falda"]
+transform = Transform3D(1, 0, 0, 0, 0.966, -0.257, 0, 0.257, 0.966, 0, -0.4, -0.312)
+mesh = SubResource("malla_panel")
+
+[node name="Torso" type="Node3D" parent="Modelo/Inclinacion/Giro"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.84, 0)
+
+[node name="Pecho" type="MeshInstance3D" parent="Modelo/Inclinacion/Giro/Torso"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.18, 0)
+mesh = SubResource("malla_pecho")
+
+[node name="Faja" type="MeshInstance3D" parent="Modelo/Inclinacion/Giro/Torso"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 0)
+mesh = SubResource("malla_faja")
+
+[node name="Lazo" type="MeshInstance3D" parent="Modelo/Inclinacion/Giro/Torso"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, -0.1, -0.215)
+mesh = SubResource("malla_lazo")
+
+[node name="Manto" type="MeshInstance3D" parent="Modelo/Inclinacion/Giro/Torso"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+mesh = SubResource("malla_manto")
+
+[node name="BrazoIzquierdo" type="Node3D" parent="Modelo/Inclinacion/Giro/Torso"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.22, 0.3, 0)
+
+[node name="Manga" type="MeshInstance3D" parent="Modelo/Inclinacion/Giro/Torso/BrazoIzquierdo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.19, 0)
+mesh = SubResource("malla_manga")
+
+[node name="Puno" type="MeshInstance3D" parent="Modelo/Inclinacion/Giro/Torso/BrazoIzquierdo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.385, 0)
+mesh = SubResource("malla_puno")
+
+[node name="Mano" type="MeshInstance3D" parent="Modelo/Inclinacion/Giro/Torso/BrazoIzquierdo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.44, 0)
+mesh = SubResource("malla_mano")
+
+[node name="BrazoDerecho" type="Node3D" parent="Modelo/Inclinacion/Giro/Torso"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.22, 0.3, 0)
+
+[node name="Manga" type="MeshInstance3D" parent="Modelo/Inclinacion/Giro/Torso/BrazoDerecho"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.19, 0)
+mesh = SubResource("malla_manga")
+
+[node name="Puno" type="MeshInstance3D" parent="Modelo/Inclinacion/Giro/Torso/BrazoDerecho"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.385, 0)
+mesh = SubResource("malla_puno")
+
+[node name="Mano" type="MeshInstance3D" parent="Modelo/Inclinacion/Giro/Torso/BrazoDerecho"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.44, 0)
+mesh = SubResource("malla_mano")
+
+[node name="Cabeza" type="Node3D" parent="Modelo/Inclinacion/Giro/Torso"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+
+[node name="Capucha" type="MeshInstance3D" parent="Modelo/Inclinacion/Giro/Torso/Cabeza"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 0)
+mesh = SubResource("malla_capucha")
+
+[node name="PicoDeCapucha" type="MeshInstance3D" parent="Modelo/Inclinacion/Giro/Torso/Cabeza"]
+transform = Transform3D(1, 0, 0, 0, -0.866, -0.5, 0, 0.5, -0.866, 0, -0.03, 0.23)
+mesh = SubResource("malla_pico")
+
+[node name="Rostro" type="MeshInstance3D" parent="Modelo/Inclinacion/Giro/Torso/Cabeza"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.01, -0.1)
+mesh = SubResource("malla_rostro")
+
+[node name="Ojos" type="Node3D" parent="Modelo/Inclinacion/Giro/Torso/Cabeza"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="OjoIzquierdo" type="MeshInstance3D" parent="Modelo/Inclinacion/Giro/Torso/Cabeza/Ojos"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.075, 0.01, -0.262)
+mesh = SubResource("malla_ojo")
+
+[node name="OjoDerecho" type="MeshInstance3D" parent="Modelo/Inclinacion/Giro/Torso/Cabeza/Ojos"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.075, 0.01, -0.262)
+mesh = SubResource("malla_ojo")
+
+[node name="Capa" type="Node3D" parent="Modelo/Inclinacion/Giro/Torso"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0.27)
+
+[node name="PanoAlto" type="MeshInstance3D" parent="Modelo/Inclinacion/Giro/Torso/Capa"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.13, 0)
+mesh = SubResource("malla_capa_alta")
+
+[node name="CapaMedia" type="Node3D" parent="Modelo/Inclinacion/Giro/Torso/Capa"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.26, 0)
+
+[node name="PanoMedio" type="MeshInstance3D" parent="Modelo/Inclinacion/Giro/Torso/Capa/CapaMedia"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.13, 0)
+mesh = SubResource("malla_capa_media")
+
+[node name="CapaBaja" type="Node3D" parent="Modelo/Inclinacion/Giro/Torso/Capa/CapaMedia"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.26, 0)
+
+[node name="PanoBajo" type="MeshInstance3D" parent="Modelo/Inclinacion/Giro/Torso/Capa/CapaMedia/CapaBaja"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.13, 0)
+mesh = SubResource("malla_capa_baja")
+
+[node name="Alcance" type="Area3D" parent="."]
+script = ExtResource("4_alcance")
+
+[node name="Forma" type="CollisionShape3D" parent="Alcance"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+shape = SubResource("forma_alcance")
+
+[node name="Polvo" type="CPUParticles3D" parent="."]
+top_level = true
+emitting = false
+amount = 8
+lifetime = 0.4
+one_shot = true
+explosiveness = 1.0
+mesh = SubResource("malla_polvo")
+direction = Vector3(1, 0, 0)
+spread = 180.0
+flatness = 1.0
+gravity = Vector3(0, 0.6, 0)
+initial_velocity_min = 1.6
+initial_velocity_max = 2.6
+damping_min = 3.0
+damping_max = 3.0
+scale_amount_curve = SubResource("curva_polvo")
+
+[node name="Camara" type="Node3D" parent="."]
+top_level = true
+physics_interpolation_mode = 2
+script = ExtResource("2_camara")
+
+[node name="Brazo" type="SpringArm3D" parent="Camara"]
+transform = Transform3D(1, 0, 0, 0, 0.951, 0.309, 0, -0.309, 0.951, 0, 0, 0)
+shape = SubResource("forma_camara")
+spring_length = 8.0
+margin = 0.1
+
+[node name="Lente" type="Camera3D" parent="Camara/Brazo"]
+current = true
+fov = 42.0
+far = 600.0

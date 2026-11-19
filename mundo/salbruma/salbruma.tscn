@@ -1,0 +1,388 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://mundo/nivel_de_prueba.gd" id="1_nivel"]
+[ext_resource type="Script" path="res://mundo/salbruma/terreno_salbruma.gd" id="2_terreno"]
+[ext_resource type="Shader" path="res://shaders/cielo.gdshader" id="3_cielo"]
+[ext_resource type="Shader" path="res://shaders/terreno.gdshader" id="4_suelo"]
+[ext_resource type="Shader" path="res://shaders/agua.gdshader" id="5_agua"]
+[ext_resource type="Shader" path="res://shaders/toon.gdshader" id="6_toon"]
+[ext_resource type="Script" path="res://mundo/nubes.gd" id="7_nubes"]
+[ext_resource type="Script" path="res://mundo/salbruma/elementos_de_salbruma.gd" id="8_elementos"]
+[ext_resource type="PackedScene" path="res://jugador/jugador.tscn" id="9_jugador"]
+[ext_resource type="PackedScene" path="res://personajes/aldeano.tscn" id="10_aldeano"]
+[ext_resource type="Script" path="res://nucleo/encargo.gd" id="11_encargo"]
+[ext_resource type="Resource" path="res://encargos/puerto_junco_pescador_lomos.tres" id="12_lomos"]
+[ext_resource type="Resource" path="res://encargos/puerto_junco_guardia_asaltantes.tres" id="13_derrotas"]
+[ext_resource type="Script" path="res://mundo/poblado.gd" id="14_poblado"]
+[ext_resource type="Script" path="res://fauna/manada.gd" id="15_manada"]
+[ext_resource type="PackedScene" path="res://fauna/uscita.tscn" id="16_uscita"]
+[ext_resource type="PackedScene" path="res://personajes/asaltante_klaimyr.tscn" id="17_asaltante"]
+[ext_resource type="Script" path="res://mundo/arboleda.gd" id="18_arboleda"]
+[ext_resource type="PackedScene" path="res://mundo/arbol.tscn" id="19_arbol"]
+[ext_resource type="Script" path="res://interfaz/mapa_de_salbruma.gd" id="20_mapa"]
+[ext_resource type="Script" path="res://mundo/salbruma/pasto_de_salbruma.gd" id="21_pasto"]
+[ext_resource type="Resource" path="res://encargos/puerto_junco_jefe_defensas.tres" id="22_defensas"]
+[ext_resource type="Resource" path="res://encargos/puerto_junco_pescador_cuero.tres" id="23_cuero"]
+[ext_resource type="PackedScene" path="res://mundo/salbruma/defensa_de_junco.tscn" id="24_acopio"]
+[ext_resource type="PackedScene" path="res://fauna/lagarto_acorazado.tscn" id="25_lagarto"]
+
+[ext_resource type="Script" path="res://mundo/agua_con_pisadas.gd" id="agua_con_pisadas"]
+
+[ext_resource type="Resource" path="res://encargos/puerto_junco_guardia_emboscada.tres" id="27_emboscada"]
+[ext_resource type="Resource" path="res://encargos/puerto_junco_tablon_rescate.tres" id="28_rescate"]
+[ext_resource type="Resource" path="res://encargos/puerto_junco_ultima_marea.tres" id="29_marea"]
+[ext_resource type="PackedScene" path="res://personajes/tablon_de_junco.tscn" id="30_tablon"]
+[ext_resource type="Script" path="res://mundo/salbruma/encuentro_de_junco.gd" id="31_encuentro"]
+[ext_resource type="Script" path="res://mundo/salbruma/rescate_de_junco.gd" id="32_escorta"]
+[ext_resource type="Script" path="res://nucleo/interactuable.gd" id="33_interactuar"]
+[ext_resource type="PackedScene" path="res://personajes/capitan_klaimyr.tscn" id="34_capitan"]
+
+[sub_resource type="ShaderMaterial" id="mat_cielo"]
+shader = ExtResource("3_cielo")
+
+[sub_resource type="Sky" id="cielo"]
+sky_material = SubResource("mat_cielo")
+
+[sub_resource type="Environment" id="entorno"]
+background_mode = 2
+sky = SubResource("cielo")
+ambient_light_source = 2
+ambient_light_color = Color(0.7, 0.77, 0.86, 1)
+ambient_light_energy = 0.66
+reflected_light_source = 1
+tonemap_mode = 0
+fog_enabled = true
+fog_mode = 1
+fog_light_color = Color(0.73, 0.82, 0.85, 1)
+fog_density = 1.0
+fog_sky_affect = 0.0
+fog_depth_begin = 95.0
+fog_depth_end = 280.0
+
+[sub_resource type="ShaderMaterial" id="mat_suelo"]
+resource_local_to_scene = true
+shader = ExtResource("4_suelo")
+shader_parameter/dibujar_caminos = true
+shader_parameter/color_arena_mojada = Color(0.61, 0.51, 0.37, 1)
+shader_parameter/color_arena = Color(0.81, 0.71, 0.50, 1)
+shader_parameter/color_pasto_claro = Color(0.55, 0.67, 0.36, 1)
+shader_parameter/color_pasto = Color(0.38, 0.55, 0.31, 1)
+shader_parameter/color_pasto_oscuro = Color(0.25, 0.43, 0.29, 1)
+shader_parameter/alto_de_franja = 2.2
+shader_parameter/pendiente_de_roca = 0.59
+
+[sub_resource type="ShaderMaterial" id="mat_agua"]
+shader = ExtResource("5_agua")
+shader_parameter/color_orilla = Color(0.61, 0.81, 0.74, 1)
+shader_parameter/color_bajo = Color(0.31, 0.62, 0.64, 1)
+shader_parameter/color_medio = Color(0.19, 0.45, 0.56, 1)
+shader_parameter/color_hondo = Color(0.14, 0.32, 0.46, 1)
+shader_parameter/zona_de_humedal = Vector4(-58, -88, 46, 34)
+
+[sub_resource type="PlaneMesh" id="malla_agua"]
+material = SubResource("mat_agua")
+size = Vector2(1200, 1200)
+
+[sub_resource type="ShaderMaterial" id="mat_nube"]
+shader = ExtResource("6_toon")
+shader_parameter/color = Color(1, 1, 1, 1)
+
+[sub_resource type="BoxShape3D" id="forma_poblado"]
+size = Vector3(40, 12, 34)
+
+[sub_resource type="SphereShape3D" id="forma_emboscada"]
+radius = 6.4
+
+[sub_resource type="SphereShape3D" id="forma_ataque"]
+radius = 5.0
+
+[sub_resource type="SphereShape3D" id="forma_rescate"]
+radius = 1.22
+
+[node name="Salbruma" type="Node3D"]
+script = ExtResource("1_nivel")
+
+[node name="Entorno" type="WorldEnvironment" parent="."]
+environment = SubResource("entorno")
+
+[node name="Sol" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-50, -38, 0)
+light_color = Color(1, 0.94, 0.82, 1)
+light_energy = 0.81
+shadow_enabled = true
+directional_shadow_mode = 2
+directional_shadow_max_distance = 100.0
+
+[node name="Terreno" type="StaticBody3D" parent="."]
+script = ExtResource("2_terreno")
+semilla = 14
+tamano = 392.0
+celdas = 256
+material = SubResource("mat_suelo")
+
+[node name="Agua" type="MeshInstance3D" parent="." node_paths=PackedStringArray("jugador", "terreno")]
+cast_shadow = 0
+mesh = SubResource("malla_agua")
+script = ExtResource("agua_con_pisadas")
+jugador = NodePath("../Jugador")
+terreno = NodePath("../Terreno")
+
+[node name="Nubes" type="Node3D" parent="."]
+script = ExtResource("7_nubes")
+cantidad = 16
+radio = 220.0
+altura = 48.0
+material = SubResource("mat_nube")
+
+[node name="Elementos" type="Node3D" parent="." node_paths=PackedStringArray("terreno")]
+script = ExtResource("8_elementos")
+terreno = NodePath("../Terreno")
+
+[node name="Jugador" parent="." instance=ExtResource("9_jugador")]
+position = Vector3(-137, 0, 25)
+rotation_degrees = Vector3(0, -90, 0)
+doble_salto = false
+
+[node name="Pescador" parent="." instance=ExtResource("10_aldeano")]
+position = Vector3(88.5, 1.6, 24.7)
+rotation_degrees = Vector3(0, 215, 0)
+nombre = "Pescador"
+encargos = Array[ExtResource("11_encargo")]([ExtResource("12_lomos"), ExtResource("23_cuero")])
+
+[node name="Nombre" type="Label3D" parent="Pescador"]
+position = Vector3(0, 2.47, 0)
+billboard = 1
+pixel_size = 0.005
+font_size = 28
+outline_size = 8
+text = "Pescador"
+visibility_range_end = 15.0
+
+[node name="Guardia" parent="." instance=ExtResource("10_aldeano")]
+position = Vector3(61, 1.66, 31)
+rotation_degrees = Vector3(0, 93, 0)
+nombre = "Guardia"
+encargos = Array[ExtResource("11_encargo")]([ExtResource("13_derrotas"), ExtResource("27_emboscada")])
+
+[node name="Nombre" type="Label3D" parent="Guardia"]
+position = Vector3(0, 2.47, 0)
+billboard = 1
+pixel_size = 0.005
+font_size = 28
+outline_size = 8
+text = "Guardia"
+visibility_range_end = 15.0
+
+[node name="JefePesquero" parent="." instance=ExtResource("10_aldeano")]
+position = Vector3(72.1, 1.66, 25.1)
+rotation_degrees = Vector3(0, 186, 0)
+nombre = "Jefe pesquero"
+encargos = Array[ExtResource("11_encargo")]([ExtResource("22_defensas")])
+
+[node name="Nombre" type="Label3D" parent="JefePesquero"]
+position = Vector3(0, 2.47, 0)
+billboard = 1
+pixel_size = 0.005
+font_size = 28
+outline_size = 8
+text = "Jefe pesquero"
+visibility_range_end = 15.0
+
+[node name="Tablon" parent="." instance=ExtResource("30_tablon")]
+position = Vector3(74.7, 1.66, 32.1)
+rotation_degrees = Vector3(0, -10, 0)
+encargos = Array[ExtResource("11_encargo")]([ExtResource("28_rescate"), ExtResource("29_marea")])
+
+[node name="Poblado" type="Area3D" parent="."]
+position = Vector3(74, 2, 33)
+script = ExtResource("14_poblado")
+
+[node name="Forma" type="CollisionShape3D" parent="Poblado"]
+shape = SubResource("forma_poblado")
+
+[node name="Defensas" type="Node3D" parent="."]
+
+[node name="Entrada" parent="Defensas" instance=ExtResource("24_acopio")]
+position = Vector3(49.7, 2, 37.5)
+rotation_degrees = Vector3(0, 20, 0)
+clave = &"entrada"
+sitio = "Entrada"
+
+[node name="Ribera" parent="Defensas" instance=ExtResource("24_acopio")]
+position = Vector3(83.4, 2, 10.6)
+rotation_degrees = Vector3(0, 75, 0)
+clave = &"ribera"
+sitio = "Ribera"
+
+[node name="Muelle" parent="Defensas" instance=ExtResource("24_acopio")]
+position = Vector3(95.4, 1, 30.8)
+rotation_degrees = Vector3(0, 158, 0)
+clave = &"muelle"
+sitio = "Muelle"
+
+[node name="Emboscada" type="Area3D" parent="." node_paths=PackedStringArray("terreno")]
+position = Vector3(0, 2.8, -48)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("31_encuentro")
+encargo = ExtResource("27_emboscada")
+escena_del_rival = ExtResource("17_asaltante")
+terreno = NodePath("../Terreno")
+revelacion = "Llegaste tarde. Los nuestros atacaron el pueblo mientras venías a buscarnos."
+
+[node name="Forma" type="CollisionShape3D" parent="Emboscada"]
+shape = SubResource("forma_emboscada")
+
+[node name="Rivales" type="Node3D" parent="Emboscada"]
+
+[node name="Avanzada" type="Marker3D" parent="Emboscada/Rivales"]
+position = Vector3(-2.4, 0, 2.15)
+
+[node name="Flanco" type="Marker3D" parent="Emboscada/Rivales"]
+position = Vector3(3.5, 0, -0.65)
+rotation_degrees = Vector3(0, 35, 0)
+
+[node name="Retaguardia" type="Marker3D" parent="Emboscada/Rivales"]
+position = Vector3(-2.25, 0, -4.2)
+rotation_degrees = Vector3(0, 138, 0)
+
+[node name="Rescate" type="Node3D" parent="." node_paths=PackedStringArray("jugador", "jefe_de_junco", "poblado")]
+position = Vector3(76, 0.6, -88)
+script = ExtResource("32_escorta")
+jugador = NodePath("../Jugador")
+jefe_de_junco = NodePath("../JefePesquero")
+poblado = NodePath("../Poblado")
+
+[node name="Jefe" parent="Rescate" instance=ExtResource("10_aldeano")]
+visible = false
+position = Vector3(0, 0, -0.88)
+collision_layer = 0
+collision_mask = 0
+nombre = "Jefe pesquero"
+
+[node name="Aviso" type="Label3D" parent="Rescate"]
+visible = false
+position = Vector3(0, 2.0, 0.9)
+billboard = 1
+font_size = 28
+outline_size = 8
+pixel_size = 0.006
+modulate = Color(1, 0.83, 0.49, 1)
+text = "◇  Jefe pesquero"
+visibility_range_end = 20.0
+
+[node name="Interactuable" type="Area3D" parent="Rescate"]
+position = Vector3(0, 0.7, 1.05)
+script = ExtResource("33_interactuar")
+accion = "Rescatar al jefe"
+disponible = false
+
+[node name="Forma" type="CollisionShape3D" parent="Rescate/Interactuable"]
+shape = SubResource("forma_rescate")
+
+[node name="UltimaMarea" type="Area3D" parent="." node_paths=PackedStringArray("terreno")]
+position = Vector3(89, 1.6, 12.5)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("31_encuentro")
+encargo = ExtResource("29_marea")
+escena_del_rival = ExtResource("34_capitan")
+terreno = NodePath("../Terreno")
+
+[node name="Forma" type="CollisionShape3D" parent="UltimaMarea"]
+shape = SubResource("forma_ataque")
+
+[node name="Rivales" type="Node3D" parent="UltimaMarea"]
+
+[node name="Capitan" type="Marker3D" parent="UltimaMarea/Rivales"]
+position = Vector3(0, 0, -1.35)
+rotation_degrees = Vector3(0, 155, 0)
+
+[node name="ManadaOeste" type="Node3D" parent="."]
+position = Vector3(-59, 0, 19)
+script = ExtResource("15_manada")
+animal = ExtResource("16_uscita")
+cantidad = 5
+radio = 10.5
+separacion = 3.3
+altura_minima = 0.41
+altura_maxima = 9.0
+
+[node name="ManadaEste" type="Node3D" parent="."]
+position = Vector3(-11, 0, 30)
+script = ExtResource("15_manada")
+animal = ExtResource("16_uscita")
+cantidad = 5
+radio = 12.0
+separacion = 3.3
+altura_minima = 0.41
+altura_maxima = 9.0
+
+[node name="Asaltantes" type="Node3D" parent="."]
+position = Vector3(94, 0, -55)
+script = ExtResource("15_manada")
+animal = ExtResource("17_asaltante")
+cantidad = 8
+radio = 12.0
+separacion = 4.6
+altura_minima = 0.35
+altura_maxima = 3.0
+
+[node name="LagartosPoniente" type="Node3D" parent="."]
+position = Vector3(-76, 0, -75)
+script = ExtResource("15_manada")
+animal = ExtResource("25_lagarto")
+cantidad = 5
+radio = 11.5
+separacion = 3.8
+altura_minima = 0.31
+altura_maxima = 6.4
+
+[node name="LagartosOriente" type="Node3D" parent="."]
+position = Vector3(-36, 0, -79)
+script = ExtResource("15_manada")
+animal = ExtResource("25_lagarto")
+cantidad = 5
+radio = 12.0
+separacion = 3.8
+altura_minima = 0.31
+altura_maxima = 6.4
+
+[node name="Arboleda" type="Node3D" parent="." node_paths=PackedStringArray("terreno", "dejar_libre")]
+position = Vector3(-3, 0, -20)
+script = ExtResource("18_arboleda")
+terreno = NodePath("../Terreno")
+arboles = Array[PackedScene]([ExtResource("19_arbol")])
+semilla = 22
+cantidad = 205
+separacion = 4.2
+extension_de_reparto = Vector2(166, 119)
+altura_maxima = 23.0
+pendiente_maxima = 0.48
+agrupamiento = 0.72
+tamano_de_los_manchones = 29.0
+dejar_libre = [NodePath("../Jugador"), NodePath("../Guardia"), NodePath("../Pescador"), NodePath("../Poblado"), NodePath("../Asaltantes"), NodePath("../Emboscada"), NodePath("../Rescate")]
+radio_libre = 12.5
+
+[node name="Pasto" type="Node3D" parent="." node_paths=PackedStringArray("terreno")]
+script = ExtResource("21_pasto")
+terreno = NodePath("../Terreno")
+
+[node name="InterfazDelMapa" type="CanvasLayer" parent="."]
+layer = 7
+
+[node name="Mapa" type="Control" parent="InterfazDelMapa" node_paths=PackedStringArray("terreno", "jugador")]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+texture_filter = 1
+script = ExtResource("20_mapa")
+terreno = NodePath("../../Terreno")
+jugador = NodePath("../../Jugador")

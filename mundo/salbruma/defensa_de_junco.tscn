@@ -1,0 +1,228 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://mundo/salbruma/defensa_de_junco.gd" id="defensa"]
+[ext_resource type="Script" path="res://nucleo/interactuable.gd" id="interactuable"]
+[ext_resource type="Shader" path="res://shaders/toon.gdshader" id="toon"]
+
+[sub_resource type="ShaderMaterial" id="mat_madera"]
+shader = ExtResource("toon")
+shader_parameter/color = Color(0.46, 0.31, 0.19, 1)
+
+[sub_resource type="ShaderMaterial" id="mat_clara"]
+shader = ExtResource("toon")
+shader_parameter/color = Color(0.68, 0.47, 0.27, 1)
+
+[sub_resource type="ShaderMaterial" id="mat_oscura"]
+shader = ExtResource("toon")
+shader_parameter/color = Color(0.31, 0.23, 0.17, 1)
+
+[sub_resource type="ShaderMaterial" id="mat_lona"]
+shader = ExtResource("toon")
+shader_parameter/color = Color(0.70, 0.62, 0.44, 1)
+
+[sub_resource type="CylinderMesh" id="malla_poste"]
+material = SubResource("mat_madera")
+top_radius = 0.145
+bottom_radius = 0.17
+height = 1.45
+radial_segments = 6
+
+[sub_resource type="CylinderMesh" id="malla_punta"]
+material = SubResource("mat_clara")
+top_radius = 0.0
+bottom_radius = 0.145
+height = 0.29
+radial_segments = 6
+
+[sub_resource type="BoxMesh" id="malla_viga"]
+material = SubResource("mat_oscura")
+size = Vector3(3.45, 0.14, 0.16)
+
+[sub_resource type="BoxMesh" id="malla_tabla"]
+material = SubResource("mat_clara")
+size = Vector3(2.37, 0.14, 0.31)
+
+[sub_resource type="BoxMesh" id="malla_saco"]
+material = SubResource("mat_lona")
+size = Vector3(0.63, 0.29, 0.47)
+
+[sub_resource type="BoxMesh" id="malla_soporte"]
+material = SubResource("mat_madera")
+size = Vector3(0.22, 1.27, 0.18)
+
+[sub_resource type="BoxShape3D" id="defensa_solida"]
+size = Vector3(3.6, 1.52, 0.39)
+
+[sub_resource type="BoxShape3D" id="defensa_espacio"]
+size = Vector3(4.25, 1.7, 1.04)
+
+[sub_resource type="SphereShape3D" id="alcance"]
+radius = 0.82
+
+[node name="Defensa" type="Node3D"]
+script = ExtResource("defensa")
+
+[node name="Materiales" type="Node3D" parent="."]
+
+[node name="Tabla1" type="MeshInstance3D" parent="Materiales"]
+position = Vector3(0.170, 0.090, 0.190)
+rotation_degrees = Vector3(0, -7, 0)
+mesh = SubResource("malla_tabla")
+
+[node name="Tabla2" type="MeshInstance3D" parent="Materiales"]
+position = Vector3(0.170, 0.240, 0.190)
+rotation_degrees = Vector3(0, 0, 0)
+mesh = SubResource("malla_tabla")
+
+[node name="Tabla3" type="MeshInstance3D" parent="Materiales"]
+position = Vector3(0.170, 0.390, 0.190)
+rotation_degrees = Vector3(0, 7, 0)
+mesh = SubResource("malla_tabla")
+
+[node name="Saco" type="MeshInstance3D" parent="Materiales"]
+position = Vector3(-1.290, 0.120, 0.220)
+rotation_degrees = Vector3(0, 13, 0)
+mesh = SubResource("malla_saco")
+
+[node name="SacoAlto" type="MeshInstance3D" parent="Materiales"]
+position = Vector3(-1.280, 0.370, 0.190)
+rotation_degrees = Vector3(0, -23, 0)
+mesh = SubResource("malla_saco")
+
+[node name="Barrera" type="Node3D" parent="."]
+visible = false
+
+[node name="Palo1" type="MeshInstance3D" parent="Barrera"]
+position = Vector3(-1.620, 0.585, -0.025)
+scale = Vector3(1, 0.9448, 1)
+mesh = SubResource("malla_poste")
+
+[node name="Punta1" type="MeshInstance3D" parent="Barrera"]
+position = Vector3(-1.620, 1.415, -0.025)
+mesh = SubResource("malla_punta")
+
+[node name="Palo2" type="MeshInstance3D" parent="Barrera"]
+position = Vector3(-1.215, 0.660, 0.000)
+scale = Vector3(1, 1.0483, 1)
+mesh = SubResource("malla_poste")
+
+[node name="Punta2" type="MeshInstance3D" parent="Barrera"]
+position = Vector3(-1.215, 1.565, 0.000)
+mesh = SubResource("malla_punta")
+
+[node name="Palo3" type="MeshInstance3D" parent="Barrera"]
+position = Vector3(-0.810, 0.605, 0.025)
+scale = Vector3(1, 0.9724, 1)
+mesh = SubResource("malla_poste")
+
+[node name="Punta3" type="MeshInstance3D" parent="Barrera"]
+position = Vector3(-0.810, 1.455, 0.025)
+mesh = SubResource("malla_punta")
+
+[node name="Palo4" type="MeshInstance3D" parent="Barrera"]
+position = Vector3(-0.405, 0.645, -0.025)
+scale = Vector3(1, 1.0276, 1)
+mesh = SubResource("malla_poste")
+
+[node name="Punta4" type="MeshInstance3D" parent="Barrera"]
+position = Vector3(-0.405, 1.535, -0.025)
+mesh = SubResource("malla_punta")
+
+[node name="Palo5" type="MeshInstance3D" parent="Barrera"]
+position = Vector3(0.000, 0.570, 0.000)
+scale = Vector3(1, 0.9241, 1)
+mesh = SubResource("malla_poste")
+
+[node name="Punta5" type="MeshInstance3D" parent="Barrera"]
+position = Vector3(0.000, 1.385, 0.000)
+mesh = SubResource("malla_punta")
+
+[node name="Palo6" type="MeshInstance3D" parent="Barrera"]
+position = Vector3(0.405, 0.660, 0.025)
+scale = Vector3(1, 1.0483, 1)
+mesh = SubResource("malla_poste")
+
+[node name="Punta6" type="MeshInstance3D" parent="Barrera"]
+position = Vector3(0.405, 1.565, 0.025)
+mesh = SubResource("malla_punta")
+
+[node name="Palo7" type="MeshInstance3D" parent="Barrera"]
+position = Vector3(0.810, 0.620, -0.025)
+scale = Vector3(1, 0.9931, 1)
+mesh = SubResource("malla_poste")
+
+[node name="Punta7" type="MeshInstance3D" parent="Barrera"]
+position = Vector3(0.810, 1.485, -0.025)
+mesh = SubResource("malla_punta")
+
+[node name="Palo8" type="MeshInstance3D" parent="Barrera"]
+position = Vector3(1.215, 0.655, 0.000)
+scale = Vector3(1, 1.0414, 1)
+mesh = SubResource("malla_poste")
+
+[node name="Punta8" type="MeshInstance3D" parent="Barrera"]
+position = Vector3(1.215, 1.555, 0.000)
+mesh = SubResource("malla_punta")
+
+[node name="Palo9" type="MeshInstance3D" parent="Barrera"]
+position = Vector3(1.620, 0.590, 0.025)
+scale = Vector3(1, 0.9517, 1)
+mesh = SubResource("malla_poste")
+
+[node name="Punta9" type="MeshInstance3D" parent="Barrera"]
+position = Vector3(1.620, 1.425, 0.025)
+mesh = SubResource("malla_punta")
+
+[node name="Viga1" type="MeshInstance3D" parent="Barrera"]
+position = Vector3(0.000, 0.520, 0.140)
+mesh = SubResource("malla_viga")
+
+[node name="Viga2" type="MeshInstance3D" parent="Barrera"]
+position = Vector3(0.000, 1.020, 0.140)
+mesh = SubResource("malla_viga")
+
+[node name="Soporte1" type="MeshInstance3D" parent="Barrera"]
+position = Vector3(-1.170, 0.540, 0.290)
+rotation_degrees = Vector3(19, 0, 0)
+mesh = SubResource("malla_soporte")
+
+[node name="Soporte2" type="MeshInstance3D" parent="Barrera"]
+position = Vector3(1.170, 0.540, 0.290)
+rotation_degrees = Vector3(19, 0, 0)
+mesh = SubResource("malla_soporte")
+
+[node name="Cuerpo" type="StaticBody3D" parent="."]
+
+[node name="Forma" type="CollisionShape3D" parent="Cuerpo"]
+position = Vector3(0, 0.69, 0)
+shape = SubResource("defensa_solida")
+disabled = true
+
+[node name="Espacio" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="Forma" type="CollisionShape3D" parent="Espacio"]
+position = Vector3(0, 0.69, 0)
+shape = SubResource("defensa_espacio")
+
+[node name="Interactuable" type="Area3D" parent="."]
+position = Vector3(0, 0.65, 1.31)
+script = ExtResource("interactuable")
+accion = "Levantar defensa"
+disponible = false
+
+[node name="Forma" type="CollisionShape3D" parent="Interactuable"]
+shape = SubResource("alcance")
+
+[node name="Senal" type="Label3D" parent="."]
+visible = false
+position = Vector3(0, 1.95, 0)
+billboard = 1
+font_size = 28
+outline_size = 8
+pixel_size = 0.006
+modulate = Color(1, 0.83, 0.49, 1)
+no_depth_test = true
+visibility_range_end = 25.0

@@ -1,0 +1,101 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://personajes/dador_de_encargos.gd" id="dador"]
+[ext_resource type="Script" path="res://nucleo/interactuable.gd" id="zona"]
+[ext_resource type="Shader" path="res://shaders/toon.gdshader" id="toon"]
+[ext_resource type="Texture2D" path="res://personajes/globo_de_encargo.svg" id="globo"]
+
+[sub_resource type="ShaderMaterial" id="madera"]
+shader = ExtResource("toon")
+shader_parameter/color = Color(0.46, 0.30, 0.19, 1)
+
+[sub_resource type="ShaderMaterial" id="clara"]
+shader = ExtResource("toon")
+shader_parameter/color = Color(0.59, 0.41, 0.24, 1)
+
+[sub_resource type="ShaderMaterial" id="papel"]
+shader = ExtResource("toon")
+shader_parameter/color = Color(0.88, 0.77, 0.57, 1)
+
+[sub_resource type="BoxMesh" id="poste"]
+material = SubResource("madera")
+size = Vector3(0.16, 1.93, 0.16)
+
+[sub_resource type="BoxMesh" id="tabla"]
+material = SubResource("clara")
+size = Vector3(1.95, 1.15, 0.14)
+
+[sub_resource type="BoxMesh" id="alero"]
+material = SubResource("madera")
+size = Vector3(2.12, 0.13, 0.37)
+
+[sub_resource type="BoxMesh" id="hoja"]
+material = SubResource("papel")
+size = Vector3(0.41, 0.55, 0.028)
+
+[sub_resource type="BoxShape3D" id="obstaculo"]
+size = Vector3(1.97, 1.93, 0.28)
+
+[sub_resource type="SphereShape3D" id="alcance"]
+radius = 0.98
+
+[node name="Tablon" type="StaticBody3D"]
+script = ExtResource("dador")
+nombre = "Tablón de encargos"
+girar_al_hablar = false
+
+[node name="Colision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.96, 0)
+shape = SubResource("obstaculo")
+
+[node name="Modelo" type="Node3D" parent="."]
+
+[node name="PosteIzquierdo" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(-0.83, 0.94, 0)
+mesh = SubResource("poste")
+
+[node name="PosteDerecho" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(0.83, 0.94, 0)
+mesh = SubResource("poste")
+
+[node name="Tabla" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(0, 1.36, -0.025)
+mesh = SubResource("tabla")
+
+[node name="Alero" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(0, 1.93, -0.065)
+rotation_degrees = Vector3(12, 0, 0)
+mesh = SubResource("alero")
+
+[node name="AvisoUno" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(-0.52, 1.31, -0.107)
+rotation_degrees = Vector3(0, 0, 8)
+mesh = SubResource("hoja")
+
+[node name="AvisoDos" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(0.08, 1.37, -0.11)
+rotation_degrees = Vector3(0, 0, -6)
+mesh = SubResource("hoja")
+
+[node name="AvisoTres" type="MeshInstance3D" parent="Modelo"]
+position = Vector3(0.54, 1.19, -0.12)
+scale = Vector3(0.72, 0.68, 1)
+rotation_degrees = Vector3(0, 0, -12)
+mesh = SubResource("hoja")
+
+[node name="Globo" type="Sprite3D" parent="."]
+position = Vector3(0, 2.42, 0)
+physics_interpolation_mode = 2
+pixel_size = 0.04
+billboard = 1
+alpha_cut = 1
+texture_filter = 0
+texture = ExtResource("globo")
+
+[node name="Interactuable" type="Area3D" parent="."]
+position = Vector3(0, 0.85, -0.42)
+script = ExtResource("zona")
+accion = "Leer tablón"
+
+[node name="Forma" type="CollisionShape3D" parent="Interactuable"]
+shape = SubResource("alcance")

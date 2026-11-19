@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Encargo" format=3]
+
+[ext_resource type="Script" path="res://nucleo/encargo.gd" id="1_encargo"]
+
+[resource]
+script = ExtResource("1_encargo")
+id = &"puerto_junco_pescador_cuero"
+titulo = "Cuero para Puerto Junco"
+oferta = "Gracias por tu colaboración. ¿Podrás traerme cuero de lagarto armado? Ya es hora de equipar a nuestros guerreros"
+objetivo = "Cuero de lagarto armado"
+indicacion = "Seguí el sendero al noroeste, a las Marismas."
+clave_de_conteo = &"cuero_de_lagarto_armado"
+cantidad = 7
+entregar_a = "el pescador"
+requisitos = Array[StringName]([&"puerto_junco_pescador_lomos", &"puerto_junco_guardia_asaltantes"])

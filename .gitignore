@@ -1,0 +1,11 @@
+# Archivos que Godot genera solo y no hace falta compartir.
+.godot/
+*.translation
+export_presets.cfg
+
+# macOS
+.DS_Store
+
+# Modelos originales sin optimizar (más de 100 MB; el juego usa los de
+# arte_fuente/personajes/exportaciones). Se comparten aparte si hace falta.
+arte_fuente/personajes/originales/

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Encargo" format=3]
+
+[ext_resource type="Script" path="res://nucleo/encargo.gd" id="1_encargo"]
+
+[resource]
+script = ExtResource("1_encargo")
+id = &"puerto_junco_pescador_lomos"
+titulo = "Encargo del pescador"
+oferta = "Con los constantes ataques de los Klaimyr se me está haciendo difícil conseguir la pesca diaria. ¿Podrías conseguirme carne de Uscita mientras se resuelve esta situación?"
+objetivo = "Lomos de Uscita"
+clave_de_conteo = &"lomo_de_uscita"
+cantidad = 7
+entregar_a = "el pescador"

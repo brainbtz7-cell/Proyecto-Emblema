@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Encargo" format=3]
+
+[ext_resource type="Script" path="res://nucleo/encargo.gd" id="1_encargo"]
+
+[resource]
+script = ExtResource("1_encargo")
+id = &"puerto_junco_jefe_defensas"
+titulo = "Defensas del pueblo"
+oferta = "Gracias por ayudarnos. ¿Puedo pedirte un favor más? Ayúdanos a fortalecer nuestras defensas así tendremos una oportunidad de sobrevivir"
+objetivo = "Defensas levantadas"
+indicacion = "Buscá los acopios marcados en Junco."
+clave_de_conteo = &"defensa_de_junco"
+cantidad = 3
+entregar_a = "el jefe pesquero"
+requisitos = Array[StringName]([&"puerto_junco_pescador_lomos", &"puerto_junco_guardia_asaltantes"])

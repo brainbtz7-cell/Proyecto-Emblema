@@ -1,0 +1,32 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://efectos/efecto_fugaz.gd" id="fugaz"]
+[ext_resource type="Shader" path="res://shaders/toon.gdshader" id="toon"]
+
+[sub_resource type="ShaderMaterial" id="mat_polvo"]
+shader = ExtResource("toon")
+shader_parameter/color = Color(0.95, 0.93, 0.86, 1)
+
+[sub_resource type="BoxMesh" id="malla_polvo"]
+material = SubResource("mat_polvo")
+size = Vector3(0.16, 0.16, 0.16)
+
+[sub_resource type="Curve" id="curva_polvo"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.0, 0.0, 0, 0]
+point_count = 2
+
+[node name="Polvo" type="CPUParticles3D"]
+emitting = false
+amount = 12
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+mesh = SubResource("malla_polvo")
+spread = 180.0
+gravity = Vector3(0, 1, 0)
+initial_velocity_min = 1.5
+initial_velocity_max = 3.0
+damping_min = 3.0
+damping_max = 3.0
+scale_amount_curve = SubResource("curva_polvo")
+script = ExtResource("fugaz")
