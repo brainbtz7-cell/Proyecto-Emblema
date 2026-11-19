@@ -94,7 +94,10 @@ Autoloads, en este orden (`project.godot`):
   `persistentes` se identifican por su ruta dentro de cada escena. La carga
   en una escena abierta la reconstruye; el rescate retoma junto al protagonista.
 - `Interfaz` (`interfaz/interfaz.tscn`): ayuda, seguimiento, aviso,
-  `Interfaz.dialogo` e `Interfaz.combate`.
+  cartel del lugar (`Lugar`), nombres sobre los habitantes (`Rotulos`,
+  `interfaz/rotulos_de_personajes.gd`), `Interfaz.dialogo` e `Interfaz.combate`.
+  Todo usa `interfaz/tema.tres`: fuente Pixelify Sans y marcos de
+  `interfaz/marcos/` (se regeneran con `herramientas/generar_marcos.py`).
 
 Capas de física 3D: 1 mundo · 2 jugador · 3 interactuables · 4 criaturas ·
 5 vegetación. La cámara solo choca con la 1, por eso ignora troncos y animales.
@@ -265,6 +268,18 @@ carpeta de salida).
   siempre (la prueba queda colgada). Las pruebas con capturas ponen la ventana
   `always_on_top`, `unfocusable` y `mouse_passthrough`: se dibuja siempre y no
   le roba el foco ni el ratón a quien usa la computadora.
+- **Fuente pixel:** Pixelify Sans solo sale nítida en múltiplos de 20 px (20
+  para todo, 40 para títulos; la negrita no queda pareja a 20). Está importada
+  sin suavizado ni posicionamiento subpíxel, y `Pixelado` amplía la interfaz en
+  pasos enteros (`content_scale_stretch`); si la ventana es más chica que
+  1280 × 720, vuelve a la escala fraccionaria para que todo entre. Los controles
+  del HUD usan filtro de textura "nearest".
+- **Nombres de los personajes:** cada `DadorDeEncargos` oculta sus `Label3D` y
+  entra al grupo `personajes_con_nombre`; `RotulosDePersonajes` dibuja el nombre
+  en 2D (`mostrar_nombre = false` para no mostrarlo).
+- **Primera importación en una copia nueva:** el tema carga los marcos antes de
+  que se importen y Godot avisa "Failed loading resource" una sola vez; la
+  segunda importación da 0.
 - **Figuras de la investigación de Albor:** el acompañante, la víctima y la nota
   no son sólidos (`HabitanteDeIntriga.solido = false`); si lo fueran, el brazo
   de la cámara chocaría con el jefe que camina detrás del protagonista.

@@ -3,7 +3,7 @@ extends Node
 ##
 ## El 3D se dibuja en una imagen pequeña (unos 270 píxeles de alto) y se amplía
 ## sin suavizado: de ahí sale el aspecto "pixel 3D". La interfaz 2D no se ve
-## afectada y queda nítida.
+## afectada y queda nítida; se amplía en pasos enteros (ver _escalar_interfaz).
 ##
 ## Es un autoload: funciona en cualquier escena sin agregar nada a mano.
 ## En el juego, F2 y F3 cambian el tamaño del píxel para comparar estilos.
@@ -63,4 +63,19 @@ func _actualizar() -> void:
 	tamano_de_pixel = clampi(roundi(ventana.size.y / float(alto_interno)), 1, PIXEL_MAXIMO)
 	ventana.scaling_3d_scale = 1.0 / tamano_de_pixel
 	resolucion_interna = ventana.size / tamano_de_pixel
+	_escalar_interfaz(ventana)
 	cambiado.emit()
+
+
+# La interfaz usa una fuente pixel (nítida en múltiplos de 20 px): con una escala
+# entera, cada píxel de letra y de marco ocupa los mismos píxeles de pantalla.
+# Si la ventana es más chica que el lienzo de referencia, se reduce sin redondear
+# para que todo entre.
+func _escalar_interfaz(ventana: Window) -> void:
+	var lienzo := Vector2(ventana.content_scale_size)
+	if lienzo.x <= 0.0 or lienzo.y <= 0.0:
+		return
+	var escala := minf(ventana.size.x / lienzo.x, ventana.size.y / lienzo.y)
+	var modo := Window.CONTENT_SCALE_STRETCH_INTEGER if escala >= 1.0 else Window.CONTENT_SCALE_STRETCH_FRACTIONAL
+	if ventana.content_scale_stretch != modo:
+		ventana.content_scale_stretch = modo

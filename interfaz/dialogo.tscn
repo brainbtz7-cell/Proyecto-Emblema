@@ -42,6 +42,7 @@ theme_override_constants/separation = 10
 [node name="Nombre" type="Label" parent="Caja/Columna"]
 layout_mode = 2
 theme_type_variation = &"Nombre"
+uppercase = true
 
 [node name="Texto" type="Label" parent="Caja/Columna"]
 custom_minimum_size = Vector2(0, 71)

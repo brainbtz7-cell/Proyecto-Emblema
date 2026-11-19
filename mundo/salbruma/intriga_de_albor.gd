@@ -319,18 +319,8 @@ func _persona(id: String, nombre: String, sitio: Vector2, accion := "", con_rotu
 	actor.position = _suelo(sitio)
 	if not accion.is_empty():
 		(actor.get_node("Interactuable") as Interactuable).accion = accion
-	if con_rotulo:
-		# Igual que los rótulos de los demás habitantes de la escena.
-		var rotulo := Label3D.new()
-		rotulo.name = "Rotulo"
-		rotulo.text = nombre
-		rotulo.position.y = 2.47
-		rotulo.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-		rotulo.font_size = 28
-		rotulo.outline_size = 8
-		rotulo.pixel_size = 0.005
-		rotulo.visibility_range_end = 15.0
-		actor.add_child(rotulo)
+	# El nombre sobre la cabeza lo dibuja la interfaz (interfaz/rotulos_de_personajes.gd).
+	actor.mostrar_nombre = con_rotulo
 	return actor
 
 

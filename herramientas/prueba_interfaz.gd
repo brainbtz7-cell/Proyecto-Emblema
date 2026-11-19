@@ -30,6 +30,10 @@ func _correr() -> void:
 			var error := DirAccess.make_dir_recursive_absolute(_carpeta_de_capturas)
 			_verificar(error == OK, "Crear carpeta para las capturas")
 			root.mode = Window.MODE_WINDOWED
+			# Arriba de todo para que macOS no deje de dibujarla, sin tomar foco ni ratón.
+			root.always_on_top = true
+			root.unfocusable = true
+			root.mouse_passthrough = true
 	root.size = Vector2i(1280, 720)
 	_encargos = root.get_node("Encargos")
 	_interfaz = root.get_node("Interfaz")

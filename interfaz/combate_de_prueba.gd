@@ -36,7 +36,7 @@ var _modelo_rival: Node3D
 var _modelo_caido: Node3D
 var _reposo_del_caido: Transform3D
 var _raton_anterior := Input.MOUSE_MODE_VISIBLE
-var _estilo_de_senal: StyleBoxFlat
+var _estilo_de_senal: StyleBox
 var _animacion_de_vida: Tween
 
 @onready var _estado: Label = $Columna/Cabecera/Estado
@@ -62,7 +62,7 @@ var _animacion_de_vida: Tween
 
 func _ready() -> void:
 	_vida_propia.max_value = REGLAS.VIDA_PROTAGONISTA
-	_estilo_de_senal = _senal.get_theme_stylebox("panel").duplicate() as StyleBoxFlat
+	_estilo_de_senal = _senal.get_theme_stylebox("panel").duplicate() as StyleBox
 	_senal.add_theme_stylebox_override(&"panel", _estilo_de_senal)
 	_atacar.pressed.connect(_al_atacar)
 	_defender.pressed.connect(_al_defender)
@@ -263,8 +263,12 @@ func _anunciar_rival() -> void:
 func _mostrar_senal(texto: String, color: Color) -> void:
 	_pronostico.text = texto
 	_pronostico.add_theme_color_override(&"font_color", color)
-	_estilo_de_senal.border_color = color.darkened(0.30)
-	_estilo_de_senal.bg_color = Color("1b252d").lerp(color, 0.10)
+	# El marco toma el color de la intención del rival (pixel art o plano).
+	if _estilo_de_senal is StyleBoxTexture:
+		(_estilo_de_senal as StyleBoxTexture).modulate_color = Color.WHITE.lerp(color, 0.55)
+	elif _estilo_de_senal is StyleBoxFlat:
+		(_estilo_de_senal as StyleBoxFlat).border_color = color.darkened(0.30)
+		(_estilo_de_senal as StyleBoxFlat).bg_color = Color("1b252d").lerp(color, 0.10)
 
 
 func _actualizar_certero() -> void:

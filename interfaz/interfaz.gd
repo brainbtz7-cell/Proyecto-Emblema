@@ -8,6 +8,8 @@ signal dispositivo_cambiado
 @export_range(0.0, 0.4, 0.01) var duracion_de_entrada := 0.16
 ## Segundos que se mantiene cada aviso de encargo durante la exploración.
 @export_range(2.0, 6.0, 0.1) var duracion_del_aviso := 3.5
+## Segundos que queda a la vista el nombre del lugar al entrar.
+@export_range(1.0, 6.0, 0.1) var duracion_del_lugar := 2.6
 
 const MARGEN_TRAS_CIERRE := 200
 const MARGEN_DEL_GUARDADO := 24.0
@@ -38,6 +40,8 @@ var _tiempo_del_aviso := 0.0
 var _explorando := true
 var _tiempo_de_guardado := 0.0
 var _error_de_guardado := false
+var _ultimo_lugar := ""
+var _animacion_del_lugar: Tween
 
 @onready var dialogo: Dialogo = $Dialogo
 @onready var combate: CombateDePrueba = $Combate
@@ -55,6 +59,9 @@ var _error_de_guardado := false
 @onready var _titulo_del_aviso: Label = $Notificacion/Columna/Titulo
 @onready var _estado_guardado: PanelContainer = $EstadoGuardado
 @onready var _texto_guardado: Label = $EstadoGuardado/Texto
+@onready var _lugar: Control = $Lugar
+@onready var _rotulos: Control = $Rotulos
+@onready var _nombre_del_lugar: Label = $Lugar/Columna/Nombre
 
 
 func _ready() -> void:
@@ -69,8 +76,10 @@ func _ready() -> void:
 	Guardado.resultado.connect(_mostrar_resultado_guardado)
 	_estado_guardado.minimum_size_changed.connect(ajustar_alto.bind(_estado_guardado, MARGEN_DEL_GUARDADO).call_deferred)
 	_notificacion.minimum_size_changed.connect(ajustar_alto.bind(_notificacion).call_deferred)
-	for boton: Button in [_mapa, _diario, _boton_pausa]:
-		boton.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	# Marcos, iconos y fuente son pixel art: se amplían sin suavizado.
+	for hijo in get_children():
+		if hijo is CanvasItem:
+			hijo.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	_mapa.icon = preload("res://interfaz/iconos/mapa.svg")
 	_diario.icon = preload("res://interfaz/iconos/diario.svg")
 	_boton_pausa.icon = preload("res://interfaz/iconos/pausa.svg")
@@ -148,6 +157,25 @@ func establecer_mapa_disponible(disponible: bool) -> void:
 
 func establecer_ubicacion(nombre: String, primer_paso: String) -> void:
 	_seguimiento.establecer_ubicacion(nombre, primer_paso)
+	if nombre != _ultimo_lugar:
+		_ultimo_lugar = nombre
+		_mostrar_lugar(nombre)
+
+
+# Cartel breve con el nombre del lugar al entrar; después se desvanece.
+func _mostrar_lugar(nombre: String) -> void:
+	if _animacion_del_lugar and _animacion_del_lugar.is_valid():
+		_animacion_del_lugar.kill()
+	_nombre_del_lugar.text = nombre
+	_lugar.modulate.a = 0.0
+	_lugar.visible = _explorando and not nombre.is_empty()
+	if not _lugar.visible:
+		return
+	_animacion_del_lugar = _lugar.create_tween()
+	_animacion_del_lugar.tween_property(_lugar, "modulate:a", 1.0, 0.35)
+	_animacion_del_lugar.tween_interval(duracion_del_lugar)
+	_animacion_del_lugar.tween_property(_lugar, "modulate:a", 0.0, 0.6)
+	_animacion_del_lugar.tween_callback(_lugar.hide)
 
 
 func mostrar_aviso(accion: String) -> void:
@@ -210,6 +238,9 @@ func _actualizar_hud() -> void:
 	_aviso.visible = _explorando and not _accion.text.is_empty()
 	_notificacion.visible = _explorando and _tiempo_del_aviso > 0.0
 	_estado_guardado.visible = _explorando and (_error_de_guardado or _tiempo_de_guardado > 0.0)
+	_rotulos.visible = _explorando
+	if not _explorando:
+		_lugar.hide()
 
 
 func _actualizar_atajos() -> void:

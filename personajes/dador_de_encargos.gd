@@ -10,6 +10,8 @@ extends StaticBody3D
 @export var girar_al_hablar := true
 ## Encargos que ofrece, en orden. No ofrece el siguiente hasta completar el anterior.
 @export var encargos: Array[Encargo] = []
+## Si la interfaz muestra su nombre sobre la cabeza cuando el protagonista está cerca.
+@export var mostrar_nombre := true
 
 var _altura_del_globo := 0.0
 var _tiempo := 0.0
@@ -25,6 +27,12 @@ func _ready() -> void:
 		_zona.accion = "Hablar · " + nombre
 	_zona.usado.connect(_al_hablar)
 	Encargos.cambiado.connect(_actualizar)
+	# El nombre lo dibuja la interfaz con la fuente pixel (interfaz/rotulos_de_personajes.gd);
+	# los rótulos 3D de la escena quedan ocultos.
+	add_to_group(&"personajes_con_nombre")
+	for hijo in get_children():
+		if hijo is Label3D:
+			hijo.hide()
 	_actualizar()
 	_apoyar_en_el_suelo()
 

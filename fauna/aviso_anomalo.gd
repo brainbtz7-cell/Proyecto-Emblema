@@ -30,6 +30,7 @@ func _init() -> void:
 	_panel = PanelContainer.new()
 	_panel.theme = TEMA
 	_panel.theme_type_variation = &"PanelHUD"
+	_panel.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_panel.anchor_left = 0.5
 	_panel.anchor_right = 0.5

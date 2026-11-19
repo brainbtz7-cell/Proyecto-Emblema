@@ -217,6 +217,34 @@ encargo) y muestra el encargo local antes que la misión dorada.
   Con ventana y `-- <carpeta_de_salida>` guarda capturas del patio, el cayo, el
   acompañante y la visión.
 
+## Interfaz (estilo minimalista pixel)
+
+Referencias: *A Short Hike* (3D pixelado, casi sin HUD) y *Sea of Stars*
+(paneles chicos y finos, letra pixel). Lo que se ve al explorar:
+
+- **Seguimiento** arriba a la izquierda: encargo, objetivo, barra y una
+  indicación que se ve unos segundos cada vez que cambia (el diario la tiene
+  siempre). Acento dorado con La Voz.
+- **Cartel del lugar** arriba al centro: aparece al entrar a una zona y se va.
+- **Nombres** sobre los habitantes cercanos, con la misma fuente (reemplazan a
+  los rótulos 3D, que se veían como garabatos).
+- **Aviso** con la tecla dibujada ([E] Hablar…), avisos de encargo arriba a la
+  derecha y atajos abajo a la derecha.
+
+Cómo está hecho:
+
+- Fuente: `interfaz/fuentes/pixelify_sans.ttf` (Pixelify Sans, licencia OFL en
+  `pixelify_sans.OFL.txt`), importada sin suavizado. **Solo es nítida en
+  múltiplos de 20 px**: 20 para todo y 40 para títulos.
+- Marcos pixel art en `interfaz/marcos/`, generados con
+  `python3 herramientas/generar_marcos.py` (necesita Pillow) y usados por
+  `interfaz/tema.tres`.
+- La interfaz se amplía en pasos enteros (`Pixelado`, `_escalar_interfaz`) para
+  que cada píxel de letra ocupe lo mismo en pantalla.
+- Captura de muestra: `godot --path . -s herramientas/captura_hud.gd -- <carpeta> [ancho alto]`
+  (con `2560 1440` se ve como en una pantalla Retina).
+- Inter y Cormorant Garamond quedan en `interfaz/fuentes/` pero ya no se usan.
+
 ## Sonido
 
 Efectos provisionales sintetizados por código: pasos (pasto, arena, roca,
@@ -260,9 +288,11 @@ cazarlo da una Ficha Anómala y queda anotado en la colección.
 - **Los conceptos de personajes de Salbruma son propuestas visuales.**
   Las ilustraciones del protagonista, el jefe pesquero y el capitán Klaimyr
   se guardan como referencias en `arte_fuente/conceptos_personajes_v1/`.
-- **La presentación de la interfaz es provisional.** La paleta, la tipografía,
-  los paneles y las transiciones son propuestas para probar legibilidad y uso.
-  El seguimiento usa límites aproximados a partir del trazado jugable.
+- **La presentación de la interfaz es provisional.** El estilo minimalista
+  pixel (fuente, paleta, marcos, cartel del lugar, nombres sobre los habitantes
+  y la indicación que se oculta sola) es una propuesta elegida por el equipo
+  para probar; el documento solo fija que lo de La Voz va en dorado. El
+  seguimiento usa límites aproximados a partir del trazado jugable.
 - **La primera tanda de Albor usa detalles de prueba.** Los diálogos, los
   nombres “Barquero” y “Pescadora”, los tres montículos de arena, completar
   la gruta al alcanzar el fondo, la forma del cayo y sus muelles, y el modelo

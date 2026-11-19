@@ -6,10 +6,21 @@
 [ext_resource type="PackedScene" path="res://interfaz/combate.tscn" id="4"]
 [ext_resource type="PackedScene" path="res://interfaz/pausa.tscn" id="5"]
 [ext_resource type="Theme" path="res://interfaz/tema.tres" id="6"]
+[ext_resource type="Script" path="res://interfaz/rotulos_de_personajes.gd" id="7"]
 
 [node name="Interfaz" type="CanvasLayer"]
 process_mode = 3
 script = ExtResource("1")
+
+[node name="Rotulos" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("7")
 
 [node name="Seguimiento" type="PanelContainer" parent="."]
 offset_left = 24.0
@@ -17,7 +28,7 @@ offset_top = 24.0
 offset_right = 362.0
 offset_bottom = 24.0
 mouse_filter = 2
-theme_type_variation = &"PanelHUD"
+theme_type_variation = &"PanelSeguimiento"
 theme = ExtResource("6")
 script = ExtResource("2")
 
@@ -27,12 +38,14 @@ mouse_filter = 2
 theme_override_constants/separation = 5
 
 [node name="Ubicacion" type="Label" parent="Seguimiento/Columna"]
+visible = false
 layout_mode = 2
 autowrap_mode = 3
 theme_type_variation = &"Nombre"
 text = "Isla de pruebas"
 
 [node name="Division" type="HSeparator" parent="Seguimiento/Columna"]
+visible = false
 layout_mode = 2
 
 [node name="Titulo" type="Label" parent="Seguimiento/Columna"]
@@ -45,7 +58,7 @@ layout_mode = 2
 autowrap_mode = 3
 
 [node name="Progreso" type="ProgressBar" parent="Seguimiento/Columna"]
-custom_minimum_size = Vector2(0, 5)
+custom_minimum_size = Vector2(0, 6)
 layout_mode = 2
 mouse_filter = 2
 show_percentage = false
@@ -110,14 +123,14 @@ mouse_filter = 2
 theme_override_constants/separation = 12
 
 [node name="Tecla" type="PanelContainer" parent="Aviso/Caja/Fila"]
-custom_minimum_size = Vector2(32, 0)
+custom_minimum_size = Vector2(28, 0)
 layout_mode = 2
 mouse_filter = 2
 theme_type_variation = &"PanelTecla"
 
 [node name="Texto" type="Label" parent="Aviso/Caja/Fila/Tecla"]
 layout_mode = 2
-theme_type_variation = &"Etiqueta"
+theme_type_variation = &"TextoTecla"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -174,6 +187,33 @@ theme = ExtResource("6")
 layout_mode = 2
 autowrap_mode = 3
 theme_type_variation = &"Confirmado"
+
+[node name="Lugar" type="CenterContainer" parent="."]
+visible = false
+anchor_right = 1.0
+offset_top = 40.0
+offset_bottom = 100.0
+mouse_filter = 2
+theme = ExtResource("6")
+
+[node name="Columna" type="VBoxContainer" parent="Lugar"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="Nombre" type="Label" parent="Lugar/Columna"]
+layout_mode = 2
+theme_type_variation = &"Lugar"
+text = "Puerto Albor"
+horizontal_alignment = 1
+uppercase = true
+
+[node name="Subrayado" type="ColorRect" parent="Lugar/Columna"]
+custom_minimum_size = Vector2(0, 2)
+layout_mode = 2
+mouse_filter = 2
+color = Color(0.89, 0.72, 0.39, 0.85)
 
 [node name="Dialogo" parent="." instance=ExtResource("3")]
 

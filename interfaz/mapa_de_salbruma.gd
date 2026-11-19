@@ -7,9 +7,8 @@ const EMBOSCADA := preload("res://encargos/puerto_junco_guardia_emboscada.tres")
 const RESCATE := preload("res://encargos/puerto_junco_tablon_rescate.tres")
 const MAREA := preload("res://encargos/puerto_junco_ultima_marea.tres")
 const IMPOSTOR := preload("res://encargos/la_voz_desenmascara_al_impostor.tres")
-const LETRA := preload("res://interfaz/fuentes/inter_regular.ttf")
-const NEGRITA := preload("res://interfaz/fuentes/inter_semibold.ttf")
-const SERIF := preload("res://interfaz/fuentes/cormorant_garamond.ttf")
+## Fuente pixel de toda la interfaz: nítida en múltiplos de 20 px.
+const PIXEL := preload("res://interfaz/fuentes/pixelify_sans.ttf")
 const REGION := Rect2(-196, -185, 392, 257)
 const PANEL := Vector2(1150, 676)
 const LAMINA := Rect2(24, 84, 796, 522)
@@ -153,7 +152,9 @@ func _cerrar() -> void:
 
 
 func _escala() -> float:
-	return minf((size.x - 30.0) / PANEL.x, (size.y - 24.0) / PANEL.y)
+	# En pasos enteros, como el resto de la interfaz, para que la fuente pixel quede pareja.
+	var escala := minf((size.x - 30.0) / PANEL.x, (size.y - 24.0) / PANEL.y)
+	return floorf(escala) if escala >= 1.0 else escala
 
 
 func _origen_del_panel() -> Vector2:
@@ -168,8 +169,8 @@ func _draw() -> void:
 	draw_set_transform(_origen_del_panel(), 0.0, Vector2.ONE * _escala())
 	draw_style_box(get_theme_stylebox(&"panel", &"PanelContainer"), Rect2(Vector2.ZERO, PANEL))
 
-	draw_string(SERIF, Vector2(24, 55), "Tierras de Salbruma", HORIZONTAL_ALIGNMENT_LEFT, -1, 42, MARFIL)
-	draw_string(LETRA, Vector2(706, 53), "Puerto Junco y Puerto Albor", HORIZONTAL_ALIGNMENT_RIGHT, 420, 16, CLARO)
+	draw_string(PIXEL, Vector2(24, 58), "Tierras de Salbruma", HORIZONTAL_ALIGNMENT_LEFT, -1, 40, MARFIL)
+	draw_string(PIXEL, Vector2(706, 56), "Puerto Junco y Puerto Albor", HORIZONTAL_ALIGNMENT_RIGHT, 420, 20, CLARO)
 	draw_texture_rect(_base, LAMINA, false)
 	_cuadricula()
 	draw_rect(LAMINA, Color("746e58"), false, 1.0)
@@ -179,14 +180,14 @@ func _draw() -> void:
 	_pintar_camino(TRAZADO.CAMINO, SENDERO, 3.2)
 	_pintar_camino(TRAZADO.RIBERA, SENDERO, 3.2)
 
-	_rotulo(TRAZADO.LLEGADA, Vector2(-21, 34), "Llegada", 19, &"llegada")
-	_rotulo(TRAZADO.BAJIOS, Vector2(-73, 47), "Bajíos de Salbruma", 24, &"bajios")
-	_rotulo(TRAZADO.PUERTO, Vector2(-54, 47), "Puerto Junco", 27, &"pueblo")
-	_rotulo(TRAZADO.CALETA, Vector2(-185, -20), "Caleta de las Redes Rotas", 22, &"caleta")
-	_rotulo(TRAZADO.MARISMAS, Vector2(-112, -25), "Marismas del Caparazón", 23, &"bajios")
-	_rotulo(TRAZADO.FAROS, Vector2(-91, 40), "Sendero de los Faros", 23)
-	_rotulo(TRAZADO.PUERTO_ALBOR, Vector2(17, -13), "Puerto Albor", 27, &"pueblo")
-	_escribir(_en_plano(Vector2(116, -6)), "Gran Río", 22, Color("b9eaec"))
+	_rotulo(TRAZADO.LLEGADA, Vector2(-21, 34), "Llegada", 20, &"llegada")
+	_rotulo(TRAZADO.BAJIOS, Vector2(-73, 42), "Bajíos de Salbruma", 20, &"bajios")
+	_rotulo(TRAZADO.PUERTO, Vector2(-54, 42), "PUERTO JUNCO", 20, &"pueblo")
+	_rotulo(TRAZADO.CALETA, Vector2(-185, -20), "Caleta de las Redes Rotas", 20, &"caleta")
+	_rotulo(TRAZADO.MARISMAS, Vector2(-112, -25), "Marismas del Caparazón", 20, &"bajios")
+	_rotulo(TRAZADO.FAROS, Vector2(-91, 38), "Sendero de los Faros", 20)
+	_rotulo(TRAZADO.PUERTO_ALBOR, Vector2(17, -13), "PUERTO ALBOR", 20, &"pueblo")
+	_escribir(_en_plano(Vector2(116, -6)), "Gran Río", 20, Color("b9eaec"))
 	_norte()
 	_dibujar_tercera_tanda()
 	_dibujar_encargos()
@@ -216,43 +217,45 @@ func _escala_en_metros() -> void:
 	draw_line(punto, punto + Vector2(longitud, 0), LATON, 2.0)
 	for x in [0.0, longitud * 0.5, longitud]:
 		draw_line(punto + Vector2(x, -4), punto + Vector2(x, 4), LATON, 1.4)
-	draw_string(LETRA, punto + Vector2(longitud + 10, 6), "50 m", HORIZONTAL_ALIGNMENT_LEFT, -1, 14, CLARO)
+	draw_string(PIXEL, punto + Vector2(longitud + 10, 7), "50 m", HORIZONTAL_ALIGNMENT_LEFT, -1, 20, CLARO)
 
 
 func _dibujar_contexto() -> void:
 	draw_style_box(get_theme_stylebox(&"panel", &"PanelBitacora"), CONTEXTO)
 	var x := CONTEXTO.position.x + 18.0
 	var ancho := CONTEXTO.size.x - 36.0
-	draw_string(NEGRITA, Vector2(x, 115), "Ubicación", HORIZONTAL_ALIGNMENT_LEFT, -1, 14, LATON)
-	draw_multiline_string(SERIF, Vector2(x, 145), _ubicacion, HORIZONTAL_ALIGNMENT_LEFT, ancho, 29, 2, MARFIL)
+	draw_string(PIXEL, Vector2(x, 118), "Ubicación", HORIZONTAL_ALIGNMENT_LEFT, -1, 20, LATON)
+	draw_multiline_string(PIXEL, Vector2(x, 148), _ubicacion, HORIZONTAL_ALIGNMENT_LEFT, ancho, 20, 2, MARFIL)
 	draw_line(Vector2(x, 190), Vector2(x + ancho, 190), Color("53615e"))
-	draw_string(NEGRITA, Vector2(x, 221), "Encargos en curso", HORIZONTAL_ALIGNMENT_LEFT, -1, 14, LATON)
+	draw_string(PIXEL, Vector2(x, 222), "Encargos en curso", HORIZONTAL_ALIGNMENT_LEFT, -1, 20, LATON)
 	var abiertos := Encargos.en_curso()
 	var y := 248.0
 	if abiertos.is_empty():
-		draw_multiline_string(LETRA, Vector2(x, y), "Los encargos aceptados se marcan en el plano.", HORIZONTAL_ALIGNMENT_LEFT, ancho, 15, 2, CLARO)
+		draw_multiline_string(PIXEL, Vector2(x, y), "Los encargos aceptados se marcan en el plano.", HORIZONTAL_ALIGNMENT_LEFT, ancho, 20, 3, CLARO)
 	for encargo in abiertos.slice(0, 3):
 		var cumplido := Encargos.estado_de(encargo) == Encargos.Estado.CUMPLIDO
 		var avance := "Volvé con %s" % encargo.entregar_a if cumplido else "%d/%d  ·  %s" % [
 			Encargos.avance_de(encargo), encargo.cantidad, encargo.objetivo
 		]
 		var color := get_theme_color(&"font_color", &"EnfasisDeLaVoz") if encargo.de_la_voz else MARFIL
-		draw_multiline_string(NEGRITA, Vector2(x, y), encargo.titulo, HORIZONTAL_ALIGNMENT_LEFT, ancho, 15, 2, color)
-		draw_multiline_string(LETRA, Vector2(x, y + 36), avance, HORIZONTAL_ALIGNMENT_LEFT, ancho, 14, 2, CLARO)
-		y += 76.0
+		# Cada bloque baja según cuántas líneas ocupen el título y el avance.
+		var alto_titulo := PIXEL.get_multiline_string_size(encargo.titulo, HORIZONTAL_ALIGNMENT_LEFT, ancho, 20, 2).y
+		draw_multiline_string(PIXEL, Vector2(x, y), encargo.titulo, HORIZONTAL_ALIGNMENT_LEFT, ancho, 20, 2, color)
+		draw_multiline_string(PIXEL, Vector2(x, y + alto_titulo), avance, HORIZONTAL_ALIGNMENT_LEFT, ancho, 20, 2, CLARO)
+		y += alto_titulo + PIXEL.get_multiline_string_size(avance, HORIZONTAL_ALIGNMENT_LEFT, ancho, 20, 2).y + 14.0
 	var fila := CONTEXTO.end.y - 57.0
 	draw_line(Vector2(x, fila - 20), Vector2(x + ancho, fila - 20), Color("53615e"))
 	_marcador(Vector2(x + 10, fila), Vector2.UP)
-	draw_string(LETRA, Vector2(x + 28, fila + 5), "Tu posición", HORIZONTAL_ALIGNMENT_LEFT, -1, 15, MARFIL)
+	draw_string(PIXEL, Vector2(x + 28, fila + 7), "Tu posición", HORIZONTAL_ALIGNMENT_LEFT, -1, 20, MARFIL)
 	_diamante(Vector2(x + 10, fila + 29))
-	draw_string(LETRA, Vector2(x + 28, fila + 34), "Destino de encargo", HORIZONTAL_ALIGNMENT_LEFT, -1, 15, MARFIL)
+	draw_string(PIXEL, Vector2(x + 28, fila + 36), "Destino de encargo", HORIZONTAL_ALIGNMENT_LEFT, -1, 20, MARFIL)
 
 
 func _norte() -> void:
 	var punto := Vector2(781, 127)
 	var punta := PackedVector2Array([punto + Vector2(0, -18), punto + Vector2(-7, 5), punto + Vector2(0, 1), punto + Vector2(7, 5)])
 	draw_colored_polygon(punta, MARFIL)
-	_escribir(punto + Vector2(-7, 23), "N", 17, MARFIL)
+	_escribir(punto + Vector2(-6, 25), "N", 20, MARFIL)
 
 
 func _pintar_camino(tramo: Array[Vector2], color: Color, grosor: float) -> void:
@@ -270,7 +273,7 @@ func _en_plano(punto: Vector2) -> Vector2:
 func _rotulo(punto: Vector2, margen: Vector2, texto: String, alto: int, simbolo: StringName = &"") -> void:
 	var marca := _en_plano(punto)
 	var rotulo := marca + margen
-	var ancho := SERIF.get_string_size(texto, HORIZONTAL_ALIGNMENT_LEFT, -1, alto).x
+	var ancho := PIXEL.get_string_size(texto, HORIZONTAL_ALIGNMENT_LEFT, -1, alto).x
 	var enlace := Vector2(clampf(marca.x, rotulo.x, rotulo.x + ancho), rotulo.y - (alto if margen.y > 0 else 0))
 	draw_line(marca, enlace, Color(0.93, 0.86, 0.70, 0.60), 1.0, true)
 	_dibujar_hito(marca, simbolo)
@@ -304,8 +307,8 @@ func _dibujar_hito(marca: Vector2, simbolo: StringName) -> void:
 
 
 func _escribir(punto: Vector2, texto: String, alto: int, color: Color) -> void:
-	draw_string_outline(SERIF, punto, texto, HORIZONTAL_ALIGNMENT_LEFT, -1, alto, 5, Color(0.06, 0.11, 0.13, 0.86))
-	draw_string(SERIF, punto, texto, HORIZONTAL_ALIGNMENT_LEFT, -1, alto, color)
+	draw_string_outline(PIXEL, punto, texto, HORIZONTAL_ALIGNMENT_LEFT, -1, alto, 4, Color(0.06, 0.11, 0.13, 0.9))
+	draw_string(PIXEL, punto, texto, HORIZONTAL_ALIGNMENT_LEFT, -1, alto, color)
 
 
 func _marcador(punto: Vector2, hacia: Vector2) -> void:

@@ -88,3 +88,11 @@ de Puerto Albor".
   seguimiento reconoce el Cayo de Salcristal.
 - `herramientas/prueba_intriga_albor.gd` pasa sin ventana y con ventana; todas
   las pruebas anteriores también.
+
+## Interfaz rediseñada — 19/11/2026 (Claude)
+
+El usuario pidió que el HUD no fuera feo y eligió el estilo "minimalista pixel"
+(referencias: A Short Hike y Sea of Stars). Todo el juego usa ahora la fuente
+Pixelify Sans y marcos pixel art; ver `LEEME.md`, sección "Interfaz". Si tocás
+pantallas, usá tamaños de letra múltiplos de 20 y los estilos del tema en vez de
+fuentes o cajas propias.
