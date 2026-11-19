@@ -5,14 +5,15 @@ const TRAZADO := preload("res://mundo/salbruma/trazado_salbruma.gd")
 const EMBOSCADA := preload("res://encargos/puerto_junco_guardia_emboscada.tres")
 const RESCATE := preload("res://encargos/puerto_junco_tablon_rescate.tres")
 const MAREA := preload("res://encargos/puerto_junco_ultima_marea.tres")
+const IMPOSTOR := preload("res://encargos/la_voz_desenmascara_al_impostor.tres")
 const LETRA := preload("res://interfaz/fuentes/inter_regular.ttf")
 const NEGRITA := preload("res://interfaz/fuentes/inter_semibold.ttf")
 const SERIF := preload("res://interfaz/fuentes/cormorant_garamond.ttf")
-const REGION := Rect2(-158, -137, 326, 214)
+const REGION := Rect2(-196, -185, 392, 257)
 const PANEL := Vector2(1150, 676)
 const LAMINA := Rect2(24, 84, 796, 522)
 const CONTEXTO := Rect2(840, 84, 286, 522)
-const CERRAR := Rect2(941, 620, 185, 38)
+const CERRAR := Rect2(930, 620, 196, 38)
 const TINTA := Color("172027")
 const MARFIL := Color("f2e5c5")
 const LATON := Color("d5b783")
@@ -141,12 +142,13 @@ func _draw() -> void:
 	draw_style_box(get_theme_stylebox(&"panel", &"PanelContainer"), Rect2(Vector2.ZERO, PANEL))
 
 	draw_string(SERIF, Vector2(24, 55), "Tierras de Salbruma", HORIZONTAL_ALIGNMENT_LEFT, -1, 42, MARFIL)
-	draw_string(LETRA, Vector2(706, 53), "Puerto Junco y alrededores", HORIZONTAL_ALIGNMENT_RIGHT, 420, 16, CLARO)
+	draw_string(LETRA, Vector2(706, 53), "Puerto Junco y Puerto Albor", HORIZONTAL_ALIGNMENT_RIGHT, 420, 16, CLARO)
 	draw_texture_rect(_base, LAMINA, false)
 	_cuadricula()
 	draw_rect(LAMINA, Color("746e58"), false, 1.0)
 
 	_pintar_camino(TRAZADO.HACIA_MARISMAS, SENDERO, 3.2)
+	_pintar_camino(TRAZADO.HACIA_ALBOR, SENDERO, 3.2)
 	_pintar_camino(TRAZADO.CAMINO, SENDERO, 3.2)
 	_pintar_camino(TRAZADO.RIBERA, SENDERO, 3.2)
 
@@ -155,6 +157,8 @@ func _draw() -> void:
 	_rotulo(TRAZADO.PUERTO, Vector2(-54, 47), "Puerto Junco", 27, &"pueblo")
 	_rotulo(TRAZADO.CALETA, Vector2(-185, -20), "Caleta de las Redes Rotas", 22, &"caleta")
 	_rotulo(TRAZADO.MARISMAS, Vector2(-112, -25), "Marismas del Caparazón", 23, &"bajios")
+	_rotulo(TRAZADO.FAROS, Vector2(-91, 40), "Sendero de los Faros", 23)
+	_rotulo(TRAZADO.PUERTO_ALBOR, Vector2(17, -13), "Puerto Albor", 27, &"pueblo")
 	_escribir(_en_plano(Vector2(116, -6)), "Gran Río", 22, Color("b9eaec"))
 	_norte()
 	_dibujar_tercera_tanda()
@@ -170,10 +174,11 @@ func _draw() -> void:
 
 func _cuadricula() -> void:
 	var tono := Color("17272b27")
-	for este in range(-150, 151, 25):
+	var paso := 25
+	for este in range(ceili(REGION.position.x / paso) * paso, ceili(REGION.end.x), paso):
 		var x := _en_plano(Vector2(este, 0)).x
 		draw_line(Vector2(x, LAMINA.position.y), Vector2(x, LAMINA.end.y), tono, 1.0)
-	for norte in range(-125, 76, 25):
+	for norte in range(ceili(REGION.position.y / paso) * paso, ceili(REGION.end.y), paso):
 		var y := _en_plano(Vector2(0, norte)).y
 		draw_line(Vector2(LAMINA.position.x, y), Vector2(LAMINA.end.x, y), tono, 1.0)
 
@@ -286,7 +291,9 @@ func _marcador(punto: Vector2, hacia: Vector2) -> void:
 func _dibujar_encargos() -> void:
 	var volver_a_junco := false
 	for encargo in Encargos.en_curso():
-		if Encargos.estado_de(encargo) == Encargos.Estado.CUMPLIDO:
+		if encargo == IMPOSTOR:
+			_diamante(_en_plano(TRAZADO.PUERTO_ALBOR) + Vector2(15, 15))
+		elif Encargos.estado_de(encargo) == Encargos.Estado.CUMPLIDO:
 			volver_a_junco = true
 		elif OTROS_DESTINOS.has(encargo.id):
 			_diamante(_en_plano(OTROS_DESTINOS[encargo.id]) + Vector2(14, -13))
@@ -310,8 +317,6 @@ func _dibujar_tercera_tanda() -> void:
 			_diamante(_en_plano(TRAZADO.PUERTO) + Vector2(14, -13))
 	if Encargos.estado_de(MAREA) == Encargos.Estado.ACTIVO:
 		_rotulo(TRAZADO.ULTIMA_MAREA, Vector2(-157, -18), "Capitán Klaimyr", 20, &"encargo")
-	elif Encargos.estado_de(MAREA) == Encargos.Estado.COMPLETADO:
-		_rotulo(TRAZADO.HACIA_MARISMAS.back(), Vector2(25, 5), "Hacia Puerto Albor", 20, &"encargo")
 
 
 func _diamante(punto: Vector2) -> void:

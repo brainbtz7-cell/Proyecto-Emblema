@@ -156,6 +156,8 @@ Al entregar *La última marea*, La Voz da la misión dorada *Desenmascara al
 impostor*. El camino sigue al norte de las marismas, cruza la loma por un paso
 (Sendero de los Faros, con Uscita y lagartos) y llega a Puerto Albor, río
 arriba, con su muelle. Al entrar al pueblo se cumple el tramo del viaje.
+El plano de **M** muestra el trayecto desde Junco hasta Albor y marca el destino
+mientras la misión esté en curso.
 
 - Trazado: `HACIA_ALBOR`, `FAROS` y `PUERTO_ALBOR` en `mundo/salbruma/trazado_salbruma.gd`.
 - Misión: `encargos/la_voz_desenmascara_al_impostor.tres` y `mundo/salbruma/mision_de_la_voz.gd`.
@@ -163,7 +165,7 @@ arriba, con su muelle. Al entrar al pueblo se cumple el tramo del viaje.
 - **Provisional:** el texto de la visión (solo la descripción funcional del
   documento), los faros y las casas genéricas, y que el encargo se cierre al
   llegar. Falta la investigación en el pueblo (encargos de Albor, gruta, isla
-  y profeta) y marcar Albor en el plano.
+  y profeta).
 
 ## Sonido
 
