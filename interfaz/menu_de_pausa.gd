@@ -110,11 +110,11 @@ func _actualizar_diario() -> void:
 
 func _agregar_encargo(encargo: Encargo) -> void:
 	var ficha := PanelContainer.new()
-	ficha.theme_type_variation = &"PanelBitacora"
+	ficha.theme_type_variation = &"PanelBitacoraDeLaVoz" if encargo.de_la_voz else &"PanelBitacora"
 	var columna := VBoxContainer.new()
 	columna.add_theme_constant_override(&"separation", 5)
 	var estado := Encargos.estado_de(encargo)
-	var nombre := _rotulo(encargo.titulo, &"Enfasis")
+	var nombre := _rotulo(encargo.titulo, &"EnfasisDeLaVoz" if encargo.de_la_voz else &"Enfasis")
 	var resumen := _rotulo("", &"Secundario")
 	var nota := ""
 	match estado:
@@ -132,6 +132,8 @@ func _agregar_encargo(encargo: Encargo) -> void:
 	columna.add_child(resumen)
 	if estado == Encargos.Estado.ACTIVO:
 		var progreso := ProgressBar.new()
+		if encargo.de_la_voz:
+			progreso.theme_type_variation = &"ProgresoDeLaVoz"
 		progreso.custom_minimum_size.y = 5.0
 		progreso.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		progreso.show_percentage = false

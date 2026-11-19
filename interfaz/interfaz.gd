@@ -107,6 +107,7 @@ func _process(delta: float) -> void:
 		var estado: int = _avisos_pendientes[encargo]
 		_avisos_pendientes.erase(encargo)
 		_titulo_del_aviso.text = encargo.titulo
+		_titulo_del_aviso.theme_type_variation = &"EnfasisDeLaVoz" if encargo.de_la_voz else &"Enfasis"
 		match estado:
 			Encargos.Estado.ACTIVO:
 				_estado_del_aviso.text = "Encargo aceptado"

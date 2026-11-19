@@ -50,12 +50,14 @@ func _actualizar() -> void:
 	if elegido:
 		var cumplido := Encargos.estado_de(elegido) == Encargos.Estado.CUMPLIDO
 		_titulo.text = elegido.titulo
+		_titulo.theme_type_variation = &"EnfasisDeLaVoz" if elegido.de_la_voz else &"Enfasis"
 		_objetivo.text = "Volvé con %s" % elegido.entregar_a if cumplido else "%s   %d/%d" % [
 			elegido.objetivo, Encargos.avance_de(elegido), elegido.cantidad
 		]
 		_objetivo.theme_type_variation = &"Confirmado" if cumplido else &"Label"
 		_progreso.max_value = elegido.cantidad
 		_progreso.value = Encargos.avance_de(elegido)
+		_progreso.theme_type_variation = &"ProgresoDeLaVoz" if elegido.de_la_voz else &"ProgressBar"
 		_progreso.visible = not cumplido
 		_indicacion.text = "" if cumplido else elegido.indicacion
 	else:

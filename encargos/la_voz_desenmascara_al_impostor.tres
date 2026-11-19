@@ -6,6 +6,7 @@
 script = ExtResource("1_encargo")
 id = &"la_voz_desenmascara_al_impostor"
 titulo = "Desenmascara al impostor"
+de_la_voz = true
 oferta = "Viaja al siguiente pueblo e investiga por qué perdieron el contacto."
 objetivo = "Llegar a Puerto Albor"
 indicacion = "Seguí el camino al norte de las marismas y cruzá el Sendero de los Faros."

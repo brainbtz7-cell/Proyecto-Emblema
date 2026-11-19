@@ -9,6 +9,8 @@ extends Resource
 @export var id: StringName
 ## Nombre con el que aparece en pantalla.
 @export var titulo := ""
+## Distingue en dorado las misiones de La Voz.
+@export var de_la_voz := false
 ## Lo que dice quien lo ofrece.
 @export_multiline var oferta := ""
 ## Qué se está contando, por ejemplo "Lomos de Uscita".

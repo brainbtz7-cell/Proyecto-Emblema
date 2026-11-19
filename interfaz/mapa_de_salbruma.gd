@@ -232,7 +232,8 @@ func _dibujar_contexto() -> void:
 		var avance := "Volvé con %s" % encargo.entregar_a if cumplido else "%d/%d  ·  %s" % [
 			Encargos.avance_de(encargo), encargo.cantidad, encargo.objetivo
 		]
-		draw_multiline_string(NEGRITA, Vector2(x, y), encargo.titulo, HORIZONTAL_ALIGNMENT_LEFT, ancho, 15, 2, MARFIL)
+		var color := get_theme_color(&"font_color", &"EnfasisDeLaVoz") if encargo.de_la_voz else MARFIL
+		draw_multiline_string(NEGRITA, Vector2(x, y), encargo.titulo, HORIZONTAL_ALIGNMENT_LEFT, ancho, 15, 2, color)
 		draw_multiline_string(LETRA, Vector2(x, y + 36), avance, HORIZONTAL_ALIGNMENT_LEFT, ancho, 14, 2, CLARO)
 		y += 76.0
 	var fila := CONTEXTO.end.y - 57.0

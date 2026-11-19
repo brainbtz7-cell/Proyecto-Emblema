@@ -27,6 +27,21 @@ shadow_color = Color(0.00000, 0.00000, 0.00000, 0.32941)
 shadow_size = 7
 shadow_offset = Vector2(0, 4)
 
+[sub_resource type="StyleBoxFlat" id="panel_dialogo_de_la_voz"]
+content_margin_left = 22.0
+content_margin_top = 16.0
+content_margin_right = 22.0
+content_margin_bottom = 16.0
+bg_color = Color(0.15, 0.124, 0.091, 0.98)
+border_color = Color(0.84, 0.67, 0.36, 1)
+border_width_left = 1
+border_width_top = 2
+border_width_right = 1
+border_width_bottom = 1
+shadow_color = Color(0, 0, 0, 0.33)
+shadow_size = 7
+shadow_offset = Vector2(0, 4)
+
 [sub_resource type="StyleBoxFlat" id="hud"]
 content_margin_left = 17.0
 content_margin_top = 13.0
@@ -77,6 +92,18 @@ corner_radius_top_left = 0
 corner_radius_top_right = 0
 corner_radius_bottom_left = 0
 corner_radius_bottom_right = 0
+
+[sub_resource type="StyleBoxFlat" id="bitacora_de_la_voz"]
+content_margin_left = 14.0
+content_margin_top = 12.0
+content_margin_right = 14.0
+content_margin_bottom = 12.0
+bg_color = Color(0.174, 0.149, 0.116, 1)
+border_color = Color(0.65, 0.51, 0.29, 1)
+border_width_left = 2
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
 
 [sub_resource type="StyleBoxFlat" id="tecla"]
 content_margin_left = 8.0
@@ -271,6 +298,9 @@ corner_radius_top_right = 0
 corner_radius_bottom_left = 0
 corner_radius_bottom_right = 0
 
+[sub_resource type="StyleBoxFlat" id="barra_de_la_voz"]
+bg_color = Color(0.94, 0.75, 0.41, 1)
+
 [sub_resource type="StyleBoxFlat" id="barra_rival"]
 bg_color = Color(0.85490, 0.56078, 0.45098, 1.00000)
 border_color = Color(0.85490, 0.56078, 0.45098, 1.00000)
@@ -327,12 +357,16 @@ Atajo/styles/normal = SubResource("atajo")
 Atajo/styles/pressed = SubResource("presionado")
 Atajo/styles/hover = SubResource("atajo_sobre")
 PanelContainer/styles/panel = SubResource("panel")
+PanelDialogoDeLaVoz/base_type = &"PanelContainer"
+PanelDialogoDeLaVoz/styles/panel = SubResource("panel_dialogo_de_la_voz")
 PanelHUD/base_type = &"PanelContainer"
 PanelHUD/styles/panel = SubResource("hud")
 PanelSenal/base_type = &"PanelContainer"
 PanelSenal/styles/panel = SubResource("senal")
 PanelBitacora/base_type = &"PanelContainer"
 PanelBitacora/styles/panel = SubResource("bitacora")
+PanelBitacoraDeLaVoz/base_type = &"PanelBitacora"
+PanelBitacoraDeLaVoz/styles/panel = SubResource("bitacora_de_la_voz")
 PanelTecla/base_type = &"PanelContainer"
 PanelTecla/styles/panel = SubResource("tecla")
 Titulo/base_type = &"Label"
@@ -343,10 +377,16 @@ Nombre/base_type = &"Label"
 Nombre/font_sizes/font_size = 28
 Nombre/fonts/font = SubResource("serif_titulo")
 Nombre/colors/font_color = Color(0.94902, 0.89804, 0.78824, 1.00000)
+NombreDeLaVoz/base_type = &"Nombre"
+NombreDeLaVoz/colors/font_color = Color(1.0, 0.81, 0.46, 1)
+TextoDeLaVoz/base_type = &"Label"
+TextoDeLaVoz/colors/font_color = Color(0.97, 0.87, 0.65, 1)
 Enfasis/base_type = &"Label"
 Enfasis/font_sizes/font_size = 17
 Enfasis/fonts/font = ExtResource("fuerte")
 Enfasis/colors/font_color = Color(0.93333, 0.91373, 0.85098, 1.00000)
+EnfasisDeLaVoz/base_type = &"Enfasis"
+EnfasisDeLaVoz/colors/font_color = Color(1.0, 0.81, 0.46, 1)
 Etiqueta/base_type = &"Label"
 Etiqueta/font_sizes/font_size = 14
 Etiqueta/fonts/font = ExtResource("fuerte")
@@ -361,6 +401,8 @@ Confirmado/fonts/font = ExtResource("fuerte")
 Confirmado/colors/font_color = Color(0.65882, 0.83922, 0.70980, 1.00000)
 ProgressBar/styles/background = SubResource("barra_fondo")
 ProgressBar/styles/fill = SubResource("barra_llena")
+ProgresoDeLaVoz/base_type = &"ProgressBar"
+ProgresoDeLaVoz/styles/fill = SubResource("barra_de_la_voz")
 VidaRival/base_type = &"ProgressBar"
 VidaRival/styles/fill = SubResource("barra_rival")
 VScrollBar/styles/grabber = SubResource("barra_desplazamiento")

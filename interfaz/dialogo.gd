@@ -13,6 +13,8 @@ signal _texto_completo
 signal _avanzado
 signal _elegido(indice: int)
 
+const NOMBRE_DE_LA_VOZ := "La Voz"
+
 ## Letras que se escriben por segundo.
 @export var rapidez := 45.0
 
@@ -26,6 +28,7 @@ var _letras := 0.0
 var _salida := -1
 var _raton_anterior := Input.MOUSE_MODE_VISIBLE
 
+@onready var _caja: PanelContainer = $Caja
 @onready var _nombre: Label = $Caja/Columna/Nombre
 @onready var _texto: Label = $Caja/Columna/Texto
 @onready var _opciones: HBoxContainer = $Caja/Columna/Opciones
@@ -36,8 +39,7 @@ func _ready() -> void:
 	visible = false
 	_seguir.pressed.connect(_seguir_dialogo)
 	Interfaz.dispositivo_cambiado.connect(_actualizar_pie)
-	var caja: Control = $Caja
-	caja.minimum_size_changed.connect(Interfaz.ajustar_alto.bind(caja).call_deferred)
+	_caja.minimum_size_changed.connect(Interfaz.ajustar_alto.bind(_caja).call_deferred)
 
 
 ## Muestra un texto y espera a que el jugador lo pase.
@@ -131,6 +133,10 @@ func _mostrar(quien: String, texto: String) -> void:
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	_nombre.text = quien
 	_nombre.visible = quien != ""
+	var de_la_voz := quien == NOMBRE_DE_LA_VOZ
+	_caja.theme_type_variation = &"PanelDialogoDeLaVoz" if de_la_voz else &"PanelContainer"
+	_nombre.theme_type_variation = &"NombreDeLaVoz" if de_la_voz else &"Nombre"
+	_texto.theme_type_variation = &"TextoDeLaVoz" if de_la_voz else &"Label"
 	_salida = -1
 	_texto.text = texto
 	_texto.visible_characters = 0
